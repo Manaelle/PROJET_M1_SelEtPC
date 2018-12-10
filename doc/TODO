@@ -1,0 +1,24 @@
+
+backend.org:  
+  . reprendre un peu les explications en distinguant les deux phases
+  comme c'est fait dans l'article (allocation de registre dans ASML, 
+   puis generation d'arm en une passe) 
+  . parler de l'allocation dans le tas
+ => j'ai commencé à le faire dans backend-bis.md mais ce n'est pas fini.
+    si je n'ai pas le temps de finir, je redonne backend.org
+  . donner des exemples de code genere
+  
+document debugging.md
+
+index:
+  specifier exactement ce qui est attendu dans les rendus et les 
+  soutenances
+ 
+closure:
+. ajouter quelques exemples pratiques d'utilisation des clotures, 
+. Un exemple de cloture en java 1.8 et python
+
+Expliquer les float (ou les laisser tomber...)
+
+
+integrer la faq dans le reste des documents
