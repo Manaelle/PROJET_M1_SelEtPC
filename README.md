@@ -2,12 +2,12 @@
 
 ## Membres du groupe
 
+* Florian ARGAUD
 * Manal BENAISSA
-* Fabien LEFEBVRE
-* Guillaume CAILHE
-* Florien ARGAUD
-* Faris BOUCAKHSOUMI
 * Nadia BENMOUSSA
+* Faris BOULAKHSOUMI
+* Guillaume CAILHE
+* Fabien LEFEBVRE
 
 ## A compléter
 
