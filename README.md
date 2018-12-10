@@ -2,7 +2,7 @@
 
 ## Membres du groupe
 
-* Florien ARGAUD
+* Florian ARGAUD
 * Manal BENAISSA
 * Nadia BENMOUSSA
 * Faris BOULAKHSOUMI
