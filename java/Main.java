@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    
   static public void main(String argv[]) {    
     try {
       Parser p = new Parser(new Lexer(new FileReader(argv[0])));
@@ -12,6 +13,7 @@ public class Main {
       System.out.println("------ AST ------");
       expression.accept(new PrintVisitor());
       System.out.println();
+      
 
       System.out.println("------ Height of the AST ----");
       int height = Height.computeHeight(expression);
