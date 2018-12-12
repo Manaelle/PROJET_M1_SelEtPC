@@ -19,7 +19,7 @@ class TUnit extends Type {
 	return "unit";
 	}
     
-    public boolean equals(Object o){
+    public boolean isUnit(Object o){
         return(o instanceof TUnit );
     }
 }
@@ -29,7 +29,7 @@ class TBool extends Type {
     public String toString(){
 	return "bool";
     }
-    public boolean equals(Object o){
+    public boolean isBool(Object o){
         return(o instanceof TBool );
     }
 }
@@ -39,7 +39,8 @@ class TInt extends Type {
     public String toString(){
 	return "int";
     }
-    public boolean equals(Object o){
+    
+    public boolean isInt(Object o){
         return(o instanceof TInt );
     }
         
@@ -50,7 +51,7 @@ class TFloat extends Type {
     public String toString(){
 	return "float";
     }
-    public boolean equals(Object o){
+    public boolean isFloat(Object o){
         return(o instanceof TFloat );
     }
 }
@@ -81,7 +82,7 @@ class TFun extends Type {
       return s;  
     }
     
-    public boolean equals(Object o){
+    public boolean isFun(Object o){
         if(!(o instanceof TFun)){
             return false ; 
             
@@ -122,7 +123,7 @@ class TTuple extends Type {
        
     }
     
-   public boolean equals(Object o){
+   public boolean isTuple(Object o){
        if(!(o instanceof TTuple)){
            return false; 
        }else{
@@ -143,7 +144,7 @@ class TArray extends Type {
         return "array of("+this.type+")";
     }
     
-    public boolean equals(Object o){
+    public boolean isArray(Object o){
         if(!(o instanceof TArray )){
             return false ;
         }else {
