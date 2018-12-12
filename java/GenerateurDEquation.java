@@ -20,9 +20,20 @@ public class GenerateurDEquation {
     }
     
     //Voir Doc Typing.ml : Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
-    public Type GenererEquations(Environnement env, Exp e, Type t){
+    public void GenererEquations(Environnement env, Exp e, Type t){
         //TODO 
-        return t;
+        
+        // Cas simples 
+        if (e instanceof Int) // A ne pas montrer à M.Tchounikine
+            listeEquation.add(new Equation(new TInt(), t));
+        else if (e instanceof Bool)
+            listeEquation.add(new Equation(new TBool(), t));
+        else if (e instanceof Float) 
+            listeEquation.add(new Equation(new TFloat(), t));
+        else if (e instanceof Unit) 
+             listeEquation.add(new Equation(new TUnit(), t));
+        
+        // A faire avec tout les noeuds possible de l'AST
     }
     
 }

@@ -12,7 +12,7 @@
 //-------------------------------------------------------
 //Tuple <variable, type> à ajouter dans l'environnement
 public class VarEnv {
-    String v; //variable v de type T
+    String v; //variable v de type T -- Pourquoi pas de type Var ? (F)
     String t; //type de v
     
     VarEnv(String v, String t){
