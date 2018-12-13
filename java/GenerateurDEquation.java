@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,6 +20,9 @@ public class GenerateurDEquation {
         listeEquation = new ArrayList<>();
     }
     
+    public ArrayList<Equation> getListeEquation(){
+        return this.listeEquation;
+    }
     //Voir Doc Typing.ml : Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
     public void GenererEquations(Environnement env, Exp e, Type t){
         //TODO 
@@ -93,6 +97,8 @@ public class GenerateurDEquation {
             GenererEquations(env,((Eq) e).e2,t);     
         }
         
+
+        
         
         // le plus dur
         else if (e instanceof Let){ //A completer         
@@ -109,6 +115,32 @@ public class GenerateurDEquation {
             GenererEquations(env, ((If) e).e3, t); 
         }
         
+        
+        // Partie pour les tableaux
+        else if (e instanceof Array){
+            listeEquation.add(new Equation(new TArray(t), t));
+            GenererEquations(env,((Array) e).e1,new TInt()); // taille du tableau
+            GenererEquations(env,((Array) e).e2,t); // premier element du tableau     
+        }
+        else if (e instanceof Get){ // Ne modifie pas la liste des equations de type
+            GenererEquations(env,((Get) e).e1,new TArray(t)); // taille du tableau
+            GenererEquations(env,((Get) e).e2,new TInt()); // index  
+        }
+        else if (e instanceof Put){ 
+            //TODO
+        }
+        
+        // Partie pour les tuples
+        else if (e instanceof Tuple){ // Jui pas du tout sur de ce que ça donne :/
+            List<Type> l = null; 
+            
+            for(int i =0;i<((Tuple) e).es.size();i++){
+                Type tTuple = Type.gen();
+                GenererEquations(env, ((Tuple) e).es.get(i),tTuple);
+                l.add(tTuple);
+            }
+            listeEquation.add(new Equation(new TTuple(l), t));   
+        }
     }
     
 }

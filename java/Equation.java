@@ -17,5 +17,10 @@ public class Equation {
         this.typeDepart=typeDepart;
         this.typeArrive=typeArrive;
     }
+
+    @Override
+    public String toString() {
+        return "{" + typeDepart + "," + typeArrive + '}';
+    }
     
 }
