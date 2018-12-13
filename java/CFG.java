@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- *
+ *	Crée un graphe de flot de controle facilitant l'optimisation
  * @author lefebfab
  */
 public class CFG {
@@ -22,11 +22,10 @@ public class CFG {
         IF, // If => 2 nouveaux blocs
         ELSE,
         NVL_FCT, // nouvelle fonction
-        FLT, // définission de float
+        FLT, // definition de float
         AUTRES; // Autres (affectation, calcul...) => dans le bloc actuel
     }
 
-    
     private HashMap<String, Bloc> labels; // Permet  de récuperer la ligne d'un label
 
     public CFG(String code){
@@ -50,10 +49,10 @@ public class CFG {
     
     
     /**
-     * 
-     * @param instructions Les instructions 
-     * @param blocActuel
-     * @return Les instructions restantes après ce bloc 
+     * Fonction récursive permettant de créer le CFG de la fonction/flottant actuelle.
+     * @param instructions Les instructions à lire
+     * @param blocActuel Le bloc du CFG dans lequel on se situe à l'exécution de la fonction
+     * @return Les instructions restantes après ce traitement
     */
     private ArrayList<String> construireCFG(ArrayList<String> instructions, Bloc blocActuel){
         if(!(instructions.isEmpty())){
@@ -78,11 +77,11 @@ public class CFG {
                 instructions.remove(0);
                 break;
             case AUTRES:
-                if(!instr.equals(")")){ // fin d'un if then else
+                if(!instr.equals(")")){ 
                     blocActuel.addInstruction(instr);
                     instructions.remove(0);
                     construireCFG(instructions, blocActuel);
-                } else {
+                } else { // fin d'un if then else : ce n'est pas une instruction donc on ne la garde pas
                     instructions.remove(0);
                 }
                 break;
@@ -91,6 +90,12 @@ public class CFG {
         return instructions;
     }
     
+    /**
+    * Permet de connaître le type d'une fonction fournie.
+    * /!\ Ne doit pas être utilisé pour autre chose que construireCFG() /!\
+    * @param instruction L'instruction dont il faut trouver le type
+    * @return Le type de l'instruction
+    **/
     private TypeInstruction getTypeInstruction(String instruction){
         if(instruction.startsWith("if")){
             return TypeInstruction.IF;
