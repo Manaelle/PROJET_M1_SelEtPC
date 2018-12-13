@@ -43,9 +43,26 @@ public class EnvironnementType {
     }
     
     //Vérifie si la variable est dans l'environnement
-    public Boolean check(String v){
-        
+    public Boolean check(String v){   
         return true;
+    }
+    // des types prédéfinies dans l'env
+    public void predef(){
+        gamma = new ArrayList<VarEnv>();
+        ArrayList<Type> arguments  = new ArrayList<Type>();
+        TInt inte = new TInt();
+        arguments.add(inte);
+        gamma.add(new VarEnv("print_int",new TFun(arguments,new TUnit())));
+        //fonction qui prend un entier et renvoie un float 
+        gamma.add(new VarEnv("float_of_int",new TFun(arguments,new TFloat())));
+        
+        arguments = new ArrayList<Type>();
+        TFloat floatt = new TFloat();
+        arguments.add(floatt);
+        //fonction qui prend un float et renvoie un entier 
+        gamma.add(new VarEnv("int_of_float",new TFun(arguments,new TInt())));
+         
+    
     }
 
 }
