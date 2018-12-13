@@ -18,6 +18,16 @@ public class Equation {
         this.typeArrive=typeArrive;
     }
 
+    public Type getDepart() {
+        return typeDepart;
+    }
+
+    public Type getArrive() {
+        return typeArrive;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "{" + typeDepart + "," + typeArrive + '}';
