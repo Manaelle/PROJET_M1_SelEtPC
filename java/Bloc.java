@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *
+ * Un Bloc (Basic Block) est une portion de code source servant au CFG
  * @author lefebfab
  */
 public class Bloc {
@@ -23,7 +23,7 @@ public class Bloc {
         this.profondeur = profondeur;
         this.instructions = new ArrayList<String>();
     }
-
+    
     public ArrayList<String> getInstructions() {
         return instructions;
     }
