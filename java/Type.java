@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 
 abstract class Type {
@@ -10,57 +11,64 @@ abstract class Type {
     static Type gen() {
         return new TVar("?" + x++);
     }
+    public abstract String ToString();
     
 }
 
 class TUnit extends Type { 
-    
-    public String toString(){
-	return "unit";
-	}
-    
     public boolean isUnit(Object o){
         return(o instanceof TUnit );
     }
+
+    @Override
+    public String ToString() {
+	return "unit";
+    }
+
+  
 }
 
 class TBool extends Type {
     
-    public String toString(){
-	return "bool";
-    }
     public boolean isBool(Object o){
         return(o instanceof TBool );
+    }
+
+    @Override
+    public String ToString() {
+        return "bool";  
     }
 }
 
 class TInt extends Type { 
-    
-    public String toString(){
-	return "int";
-    }
-    
     public boolean isInt(Object o){
         return(o instanceof TInt );
+    }
+
+    @Override
+    public String ToString() {
+        return "int";
     }
         
 }
 
 class TFloat extends Type { 
-    
-    public String toString(){
-	return "float";
-    }
+ 
     public boolean isFloat(Object o){
         return(o instanceof TFloat );
+    }
+
+    @Override
+    public String ToString() {
+	return "float";
     }
 }
 
 class TFun extends Type {
-    public List<Type> arguments;
+    public ArrayList<Type> arguments;
     public Type typeRetour;
     
-    public TFun(List<Type> arguments ,Type typeRetour){
+    public TFun(ArrayList<Type> arguments ,Type typeRetour){
         this.arguments= arguments;
         this.typeRetour = typeRetour;
         
@@ -70,18 +78,7 @@ class TFun extends Type {
         this.arguments = arguments ; 
     }
     */
-    
-    public String ToString(Object o){
-      String s = "(fun : ";
-      int i = 0 ;
-      while(i<arguments.size()){
-          s= s + arguments.get(i) + "->" ;
-          i++;
-      }
-      s = s + ")";
-      return s;  
-    }
-    
+ 
     public boolean isFun(Object o){
         if(!(o instanceof TFun)){
             return false ; 
@@ -92,17 +89,31 @@ class TFun extends Type {
         
         
     }
+    @Override
+    public String ToString() {
+        String s = "(fun : ";
+        int i = 0 ;
+        while(i<arguments.size()){
+            s= s + arguments.get(i) + "->" ;
+            i++;
+          }
+        s = s + ")";
+        return s;     
+    }
+    public ArrayList<Type> getArgument(){
+        return this.arguments;
+    }
     
     
 }
 
 class TTuple extends Type { 
-    public List<Type> list; 
+    public ArrayList<Type> list; 
     /**
      * constructeur de List de type 
      * @param list 
      */
-    public TTuple(List<Type> list){
+    public TTuple(ArrayList<Type> list){
         this.list = list;
     }
     /**
@@ -130,6 +141,10 @@ class TTuple extends Type {
            return this.list.equals(((TTuple)o).list);   
        }
     }
+    public ArrayList<Type> getList(){
+	return list;
+    }
+	
     
 }
 
@@ -141,7 +156,7 @@ class TArray extends Type {
         
     }
     public String  ToString(){
-        return "array of("+this.type+")";
+        return "array of("+this.type.ToString()+")";
     }
     
     public boolean isArray(Object o){
@@ -151,6 +166,9 @@ class TArray extends Type {
             return this.type.equals(((TArray)o).type);
         }
     }
+    public Type getType(){
+        return this.type;
+    }
 }
 
 class TVar extends Type {
@@ -158,9 +176,9 @@ class TVar extends Type {
     TVar(String v) {
         this.v = v;
     }
+    
     @Override
-    public String toString() {
+    public String ToString() {
         return v; 
     }
 }
-
