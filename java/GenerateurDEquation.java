@@ -123,7 +123,7 @@ public class GenerateurDEquation {
             GenererEquations(env,((Get) e).e1,new TArray(t)); // taille du tableau
             GenererEquations(env,((Get) e).e2,new TInt()); // index  
         }
-        else if (e instanceof Put){ 
+        else if (e instanceof Put){
             //TODO
         }
         
@@ -156,8 +156,8 @@ public class GenerateurDEquation {
         
         
         // le meme type 
-        if(ctype1 == ctype2){
-            if((type1.ToString()=="int")||(type1.ToString()=="float")||(type1.ToString()=="bool")||(type1.ToString() =="unit")){
+        if(ctype1.equals(ctype2)){
+            if((type1.ToString()=="int")||(type1.ToString()=="float")||(type1.ToString()=="bool")||(type1.ToString()=="unit")){
                 resoudreEquation(listeEquation);  
             }
             // type Tvar 
@@ -222,9 +222,50 @@ public class GenerateurDEquation {
            }
       
         
-        }else{// des types differents 
+        }else{// des types differents + TVAR 
+            if(type2 instanceof TVar){
+               TVar  type3;
+               type3 = new TVar((TVar)type2);
+               type2 = type1;
+               type1 = type3;    
+            }
+            if(type1 instanceof TVar ){
+                // des remplacements 
+                
+                
+            }
+            
+            
+            
+            
+            
             
         }   
     }
+    
+    
+    
+    public Type remplacer(Type type1 , Type type2 , TVar tvar ){
+        if(type1.equals(tvar)){
+            return type2;
+        }else if(type1 instanceof TTuple){
+            ArrayList<Type> list1 = ((TTuple)type1).getList(); 
+            ArrayList<Type> list2 = new ArrayList<Type>();
+            int taille = list1.size();
+            for(int i = 0; i<taille ; i++){
+                if(list1.get(i).equals(tvar)){
+                    list2.add(type2);
+                }else{
+                    list2.add(list1.get(i));
+                }
+             
+            }
+            return new TTuple(list2);
+            
+        }else{
+            return type1;
+        } // c'est pas fini 
+        
+    } 
     
 }
