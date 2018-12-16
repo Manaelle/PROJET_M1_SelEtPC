@@ -24,7 +24,7 @@ public class GenerateurDEquation {
         return this.listeEquation;
     }
     //Voir Doc Typing.ml : Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
-    public void GenererEquations(Environnement env, Exp e, Type t){
+    public void GenererEquations(EnvironnementType env, Exp e, Type t){
         //TODO 
         
         // Cas simples 
@@ -35,14 +35,12 @@ public class GenerateurDEquation {
         else if (e instanceof Float) 
             listeEquation.add(new Equation(new TFloat(), t));
         else if (e instanceof Unit) 
-             listeEquation.add(new Equation(new TUnit(), t));
-        
+             listeEquation.add(new Equation(new TUnit(), t));     
         // A faire avec tout les noeuds possible de l'AST
         else if (e instanceof Not){
             listeEquation.add(new Equation(new TBool(), t));
             GenererEquations(env,((Not) e).e,new TBool());
-        }
-        
+        }       
         //Operation sur entier
         else if (e instanceof Add){ 
             listeEquation.add(new Equation(new TInt(), t));
@@ -53,14 +51,12 @@ public class GenerateurDEquation {
             listeEquation.add(new Equation(new TInt(), t));
             GenererEquations(env,((Sub) e).e1,new TInt());
             GenererEquations(env,((Sub) e).e2,new TInt());
-        }
-        
+        }      
 //        else if (e instanceof Mul){ // pas d'expression de multiplication ni de div pour les entiers (wtf)
 //            listeEquation.add(new Equation(new TInt(), t));
 //            GenererEquations(env,((Mul) e).e1,t);
 //            GenererEquations(env,((Mul) e).e2,t);
-//        }
-        
+//        }        
         //Operation sur floats
         else if (e instanceof FAdd){ 
             listeEquation.add(new Equation(new TFloat(), t));
@@ -82,15 +78,12 @@ public class GenerateurDEquation {
             GenererEquations(env,((FDiv) e).e1,new TFloat());
             GenererEquations(env,((FDiv) e).e2,new TFloat());
         }
-        
-
         //Little equals et equals
         else if (e instanceof LE){
             listeEquation.add(new Equation(new TBool(), t));
             GenererEquations(env,((LE) e).e1,t);
             GenererEquations(env,((LE) e).e2,t);     
-        }
-        
+        }       
         else if (e instanceof Eq){
             listeEquation.add(new Equation(new TBool(), t));
             GenererEquations(env,((Eq) e).e1,t);
@@ -98,11 +91,22 @@ public class GenerateurDEquation {
         }
   
         // le plus dur
-        else if (e instanceof Let){ //A completer         
-            GenererEquations(env, ((Let) e).e1, t);
+        else if (e instanceof Let){   // ex:    let x = 1 + 1 in let y = 2 + x in y 
+                                      // e1 -> x = 1 + 1 in || e2 -> let y = 2 +x in y d'aprés ce que j'ai compris
+            GenererEquations(env, ((Let) e).e1, ((Let) e).t);
+            VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
+            env.add(newVar); // Mise a jour de l'environnement
             GenererEquations(env, ((Let) e).e2, t);          
         }
-        else if (e instanceof Var){} // TODO
+        else if (e instanceof Var){
+            if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
+                Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
+                listeEquation.add(new Equation(typeCorrespondant, t));
+            }
+            else 
+                System.out.println("Problème typage"); // Si non, erreur typage on stop la compil                      
+        } 
+        
         else if (e instanceof LetRec){} // TODO
         else if (e instanceof App){} // TODO
         
@@ -224,10 +228,10 @@ public class GenerateurDEquation {
         
         }else{// des types differents + TVAR 
             if(type2 instanceof TVar){
-               TVar  type3;
-               type3 = new TVar((TVar)type2);
-               type2 = type1;
-               type1 = type3;    
+//               TVar  type3;
+//               type3 = new TVar((TVar)type2); ne compile pas
+//               type2 = type1;
+//               type1 = type3;    
             }
             if(type1 instanceof TVar ){
                 // des remplacements 

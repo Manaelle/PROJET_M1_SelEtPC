@@ -22,9 +22,7 @@ public class EnvironnementType {
     }
     
     //Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent
-    public void add(String v, Type t){
-        
-        VarEnv C = new VarEnv(v, t);
+    public void add(VarEnv C){
         
         Boolean ok = true; //restera vrai si C peut être ajouté à Gamma
         
@@ -46,6 +44,18 @@ public class EnvironnementType {
     public Boolean check(String v){   
         return true;
     }
+    
+    //Pour une variable v dans l'environnement renvoit le type associé
+    public Type correspondanceVarType(String v){ // A completer
+        Type tResultat = null;
+        for(VarEnv vEnv : gamma){
+            if(vEnv.v.equals(v)){
+                tResultat = vEnv.t; // VarEnv.t de type string => Pourquoi pas de type Type ?
+            }
+        } 
+        return tResultat;
+    }
+    
     // des types prédéfinies dans l'env
     public void predef(){
         gamma = new ArrayList<VarEnv>();
