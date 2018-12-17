@@ -166,6 +166,7 @@ public class GenerateurDEquation {
         }
         // la premiere equation 
         Equation e = listeEquation.get(0);
+        System.out.println(e.getDepart()+"-------------------------"+e.getArrive());
         Type type1 = e.getDepart();
 	Type type2 = e.getArrive(); 
         // supprimer la premiere equation 
@@ -179,7 +180,8 @@ public class GenerateurDEquation {
         // quand on fait if(ctype1.equals(c.type2)) ca retourne toujours false 
         Class c1 = type1.getClass();
         Class c2 = type2.getClass();
-        if(c1.equals(c2)){
+        System.out.println(c1+" ========== "+c2);
+        if((c1.equals(c2)) || (c2.getName().equals("TUnit"))){
             if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
                 resoudreEquation(listeEquation);  
             }
@@ -255,7 +257,7 @@ public class GenerateurDEquation {
       
         
         }else{// des types differents + TVAR 
-            System.out.println("je suis la  types diff");
+            System.out.println("je suis la  : types diff");
             
             if(type2 instanceof TVar){
                 System.out.println("on permute ");
