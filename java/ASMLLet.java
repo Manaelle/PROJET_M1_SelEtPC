@@ -1,0 +1,63 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package prototypeasml;
+
+import prototypeasml.ASMLOperande.TypeOperande;
+
+/**
+ *
+ * @author Pepefab
+ */
+public class ASMLLet implements ASMLExp {
+    
+    private ASMLOperande op1;
+    private ASMLExp op2;
+
+    public ASMLLet(String instruction){
+        String[] donnees = instruction.split(" ");
+        op1 = new ASMLOperande(donnees[1], 
+                               donnees[1].matches("[0-9]+") ? TypeOperande.IMM : TypeOperande.VAR);
+        
+        String exp = "";
+        for(int i = 3; i < donnees.length - 1; i++){
+            exp = exp + donnees[i] + " ";
+        }
+        exp = exp.trim();
+        System.out.println(exp);
+        switch(TypeInstruction.getTypeInstruction(exp)) {
+            case INT:
+                op2 = new ASMLOperande(exp, TypeOperande.IMM);
+                break;
+            case IDENT:
+                op2 = new ASMLOperande(exp, TypeOperande.VAR);
+                break;
+            case CALL:
+                op2 = new ASMLCall(exp);
+                break;
+                /*case MEM:
+                op2 = new ASMLMem(exp);*/
+            case ADD:
+                op2 = new ASMLArith(exp);
+                break;
+            case SUB:
+                op2 = new ASMLArith(exp);
+                break;
+            case FSUB:
+                op2 = new ASMLArith(exp);
+                break;
+            case FADD:
+                op2 = new ASMLArith(exp);
+                break;
+        }
+    }
+    
+    @Override
+    public void renommerVariable(String ancien, String nouveau) {
+        op1.renommerVariable(ancien, nouveau);
+        op2.renommerVariable(ancien, nouveau);
+    }
+    
+}
