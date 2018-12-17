@@ -122,7 +122,32 @@ public class GenerateurDEquation {
                 System.out.println("Problème typage"); // Si non, erreur typage on stop la compil                      
         } 
         
-        else if (e instanceof LetRec){} // TODO
+        else if (e instanceof LetRec){// TODO
+            FunDef fun = ((LetRec) e).fd;
+            Exp exp = ((LetRec) e).e;
+            EnvironnementType envPourFun = env;
+            EnvironnementType envPourExp = env;
+            Type retour = Type.gen();
+            if(fun.args.size()==0){
+                VarEnv newVar = new VarEnv(fun.id.toString(), new TFun(new ArrayList<Type>(),retour)); // On ajoute un nouvel element à l'environnement contenant 
+                envPourFun.add(newVar);                                                                // le nom de la fonction et le type Tfun sans argument               
+                envPourExp.add(newVar); 
+            }
+            else{
+                ArrayList<Type> listeArgument = new ArrayList<>();
+                for(int i=0;i<fun.args.size();i++){ // On ajoute tout les arguments dans l'environnement
+                    Type ti = Type.gen();
+                    listeArgument.add(ti);
+                    VarEnv newVar = new VarEnv(fun.args.get(i).toString(), ti);
+                    envPourExp.add(newVar);
+                }
+                VarEnv v = new VarEnv(fun.id.toString(), new TFun(listeArgument, retour));
+                envPourFun.add(v);
+                envPourExp.add(v);
+            }
+            GenererEquations(envPourExp, fun.e, retour);
+            GenererEquations(envPourFun, exp, t);
+        } 
         else if (e instanceof App){} // TODO
         
         else if (e instanceof If){
