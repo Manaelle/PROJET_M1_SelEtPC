@@ -23,6 +23,12 @@ public class GenerateurDEquation {
     public ArrayList<Equation> getListeEquation(){
         return this.listeEquation;
     }
+
+    public boolean isBienTypee() {
+        return bienTypee;
+    }
+    
+    
     //Voir Doc Typing.ml : Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
     public void GenererEquations(EnvironnementType env, Exp e, Type t){
         //TODO 
@@ -157,20 +163,33 @@ public class GenerateurDEquation {
         listeEquation.remove(0);
         String ctype1 = type1.toString();
         String ctype2 = type2.toString();
+        System.out.println("les types sont " +ctype1+"  "+ctype2);
         
         
-        // le meme type 
-        if(ctype1.equals(ctype2)){
-            if((type1.ToString()=="int")||(type1.ToString()=="float")||(type1.ToString()=="bool")||(type1.ToString()=="unit")){
+        // le meme type  a modifié car c'est moche et avec le ToString ca ne marche pas 
+        // quand on fait if(ctype1.equals(c.type2)) ca retourne toujours false 
+        Class c1 = type1.getClass();
+        Class c2 = type2.getClass();
+        if(c1.equals(c2)){
+            if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
                 resoudreEquation(listeEquation);  
             }
             // type Tvar 
             if(type1 instanceof TVar){
-                if(((TVar)type1).equals(((TVar)type2))){
-                // 
+                if(((TVar)type1).equals(((TVar)type2))){ 
                     resoudreEquation(listeEquation);
                  }else{
-                     // remplacement !  
+                    ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
+                    // remplacer toutes les equations 
+                    // remplacement !  
+                    int taille = listeEquation.size();
+                    for(int i = 0 ; i< taille ; i++){
+                        Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                        Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
+                        l.add(new Equation(t1,t2));
+                    }
+                    listeEquation = l;
+                     
                 }
            }else if (type1 instanceof TArray){
                TArray array1  = (TArray)type1;
@@ -227,28 +246,92 @@ public class GenerateurDEquation {
       
         
         }else{// des types differents + TVAR 
+            System.out.println("je suis la  types diff");
+            
             if(type2 instanceof TVar){
-//               TVar  type3;
-//               type3 = new TVar((TVar)type2); ne compile pas
-//               type2 = type1;
-//               type1 = type3;    
+                System.out.println("on permute ");
+                TVar  type3;
+                type3 = new TVar((TVar)type2);
+                type2 = type1;
+                type1 = type3;    
             }
-            if(type1 instanceof TVar ){
-                // des remplacements 
-                
-                
-            }
-            
-            
-            
-            
-            
+            if(type1 instanceof TVar){
+                System.out.println("TVar");
+                if(type2 instanceof TArray ){
+                    if((((TArray)type2).getType() instanceof TVar)){
+                        listeEquation.add(e);
+                    }else{
+                        
+                        ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
+                        // remplacer toutes les equations 
+                        // remplacement !  
+                        int taille = listeEquation.size();
+                        for(int i = 0 ; i< taille ; i++){
+                            Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                            Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
+                            l.add(new Equation(t1,t2));
+                        }
+                        listeEquation = l;     
+                    }
+
+                }else if(type2 instanceof TFun ){
+                    if(((TFun)type2).contientTvar()){
+                        // je pense je dois creer une fonction pour ce bout de code je l'ai copie coller plusieurs fois 
+                        ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
+                        // remplacer toutes les equations 
+                        // remplacement !  
+                        int taille = listeEquation.size();
+                        for(int i = 0 ; i< taille ; i++){
+                            Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                            Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
+                            l.add(new Equation(t1,t2));
+                        }
+                        listeEquation = l;     
+                        
+                    }else{
+                        listeEquation.add(e);
+                    } 
+                    
+                }else if(type2 instanceof TTuple){
+                     if(((TTuple)type2).contientTvar()){
+                         ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
+                        // remplacer toutes les equations 
+                        // remplacement !  
+                        int taille = listeEquation.size();
+                        for(int i = 0 ; i< taille ; i++){
+                            Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                            Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
+                            l.add(new Equation(t1,t2));
+                        }
+                        listeEquation = l;    
+                         
+                     }else{
+                         listeEquation.add(e);
+                     } 
+   
+                }else{
+                    //je sais pas si je dois remplacer ou non
+                    ArrayList<Equation> l = new ArrayList<Equation>();
+                     int taille = listeEquation.size();
+                        for(int i = 0 ; i< taille ; i++){
+                            Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                            Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
+                            l.add(new Equation(t1,t2));
+                        }
+                        listeEquation = l;    
+                    
+                }
+            resoudreEquation(listeEquation);  
+            }else{
+                System.out.println("une erreur d'unification");
+                this.bienTypee = false ;
+            }  
             
         }   
     }
     
     
-    
+    // remplacer toutes les occurences de tvar  dans type1 par type2   
     public Type remplacer(Type type1 , Type type2 , TVar tvar ){
         if(type1.equals(tvar)){
             return type2;
@@ -262,13 +345,40 @@ public class GenerateurDEquation {
                 }else{
                     list2.add(list1.get(i));
                 }
-             
             }
             return new TTuple(list2);
             
+        }else if (type1 instanceof TArray){
+            if(((TArray)type1).getType().equals(tvar)){
+                TArray t = new TArray();
+                return t;
+            }else{
+                return type1;
+            }
+        }else if(type1 instanceof TFun){
+            Type typeRetour; 
+            ArrayList<Type> list = new ArrayList<Type>();
+            ArrayList<Type> args = ((TFun)type1).getArgument();
+            Type typeRetourAncien  = ((TFun)type1).typeRetour;
+            int taille  = args.size();
+            for(int i=0 ; i<taille; i++ ){
+                if(args.get(i).equals(tvar)){
+                    list.add(type2);
+                }else{
+                    list.add(args.get(i));
+                }
+            }
+            
+            if(typeRetourAncien.equals(tvar)){
+                typeRetour = type2;
+            }else{
+                typeRetour = typeRetourAncien;
+            }
+            return new TFun(list,typeRetour);      
         }else{
-            return type1;
-        } // c'est pas fini 
+          return type1;   
+        }
+       
         
     } 
     
