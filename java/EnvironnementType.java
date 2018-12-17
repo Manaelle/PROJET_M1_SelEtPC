@@ -42,7 +42,13 @@ public class EnvironnementType {
     
     //Vérifie si la variable est dans l'environnement
     public Boolean check(String v){   
-        return true;
+        Boolean found = false;
+        for(VarEnv vEnv : gamma){
+            if(vEnv.v.equals(v)){
+                found = true; 
+            }
+        } 
+        return found;
     }
     
     //Pour une variable v dans l'environnement renvoit le type associé

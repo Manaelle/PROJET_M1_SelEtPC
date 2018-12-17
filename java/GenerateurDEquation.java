@@ -23,6 +23,15 @@ public class GenerateurDEquation {
     public ArrayList<Equation> getListeEquation(){
         return this.listeEquation;
     }
+    
+    public String toString(){
+        String resultat= "[";
+        for(Equation e : listeEquation){
+            resultat+= e.toString();
+        }
+        resultat+="]";
+        return resultat;
+    }
 
     public boolean isBienTypee() {
         return bienTypee;

@@ -30,7 +30,7 @@ public class Equation {
 
     @Override
     public String toString() {
-        return "{" + typeDepart + "," + typeArrive + '}';
+        return '(' + typeDepart.ToString() + "," + typeArrive.ToString() + ')';
     }
     
 }
