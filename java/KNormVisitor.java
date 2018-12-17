@@ -193,19 +193,26 @@ class KNormVisitor implements ObjVisitor<Exp> {
     @Override
     public Exp visit(LetRec e){
         //TO DO
-        return null;
+        FunDef fd = new FunDef(e.fd.id, e.fd.type, e.fd.args, e.fd.e);
+        LetRec res = new LetRec(fd,e);
+        return res;
     }
 
     @Override
     public Exp visit(App e){
         //TO DO
+        //Brouillon
+        Id new_var1 = Id.gen();
+        Type new_type1 = Type.gen();
+        //def une array list
+        //retourne la fonction App avec une fonction rec_app dedans qu'elle est chiante et longue
         return null;
     }
 
     @Override
     public Tuple visit(Tuple e){
         //TO DO
-        
+        List<Exp> es = e.es;
         return null;
     }
 
@@ -233,7 +240,19 @@ class KNormVisitor implements ObjVisitor<Exp> {
     @Override
     public Let visit(Get e){
         //TO DO
-        return null; 
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
+        
+        Id new_var1 = Id.gen();
+        Type new_type1 = Type.gen();
+        Id new_var2 = Id.gen();
+        Type new_type2 = Type.gen();
+        
+        Let res = 
+        new Let(new_var1, new_type1, e1,
+          new Let(new_var2, new_type2, e2,
+              new Get(new Var(new_var1), new Var(new_var2))));
+        return res;
     }
 
     @Override

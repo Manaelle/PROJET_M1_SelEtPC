@@ -1,4 +1,4 @@
-	import java_cup.runtime.*;
+import java_cup.runtime.*;
 import java.io.*;
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class Main {
       Exp knorm = expression.accept(new KNormVisitor());
       knorm.accept(new PrintVisitor());
       System.out.println();
-      
+       
       System.out.println("------ AST ------");
       expression.accept(new PrintVisitor());
       System.out.println();
