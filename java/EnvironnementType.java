@@ -18,7 +18,20 @@ public class EnvironnementType {
     ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
     
     public EnvironnementType(){
-        gamma = new ArrayList();
+        this.predef();
+    }
+
+    public ArrayList<VarEnv> getGamma() {
+        return gamma;
+    }
+    
+    public String toString() {
+        String res = "Environnement : ";
+        for(VarEnv v : gamma){
+            res+=v.v + " , ";
+        }
+        res+=".";
+        return res;
     }
     
     //Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent

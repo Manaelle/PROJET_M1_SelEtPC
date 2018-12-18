@@ -121,8 +121,11 @@ public class GenerateurDEquation {
                 Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
                 listeEquation.add(new Equation(typeCorrespondant, t));
             }
-            else 
-                System.out.println("Problème typage"); // Si non, erreur typage on stop la compil                      
+            else{
+                System.out.println("Problème typage"); // Si non, erreur typage on stop la compil   
+                System.out.println(((Var) e).id.id);
+                System.out.println(env.toString());
+            }
         } 
         
         else if (e instanceof LetRec){// LetRec x = M in N
