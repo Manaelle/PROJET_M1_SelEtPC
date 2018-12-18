@@ -94,7 +94,7 @@ class TFun extends Type {
         String s = "(fun : ";
         int i = 0 ;
         while(i<arguments.size()){
-            s= s + arguments.get(i) + "->" ;
+            s= s + arguments.get(i).ToString() + "->" ;
             i++;
           }
         s = s + ")";
@@ -112,7 +112,13 @@ class TFun extends Type {
                 
             }
         }
-        return !(this.typeRetour instanceof TVar);
+        System.out.println();
+        System.out.println();
+        System.out.println(" contien le Tvar ok ou non "+(this.typeRetour instanceof TVar));
+        System.out.println();
+        System.out.println();
+
+        return (this.typeRetour instanceof TVar);
     }
     
     
