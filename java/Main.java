@@ -14,6 +14,12 @@ public class Main {
       expression.accept(new PrintVisitor());
       System.out.println();
       
+      System.out.println("------ Liste des Types ------");
+      GenerateurDEquation ge = new GenerateurDEquation();
+      ge.GenererEquations(new EnvironnementType(), expression, new TUnit());
+      System.out.println(ge.toString());;
+      System.out.println();
+      
       System.out.println("------ KNORM ------");
       Exp knorm = expression.accept(new KNormVisitor());
       knorm.accept(new PrintVisitor());

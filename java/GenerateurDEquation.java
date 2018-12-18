@@ -96,22 +96,25 @@ public class GenerateurDEquation {
         //Little equals et equals
         else if (e instanceof LE){
             listeEquation.add(new Equation(new TBool(), t));
-            GenererEquations(env,((LE) e).e1,t);
-            GenererEquations(env,((LE) e).e2,t);     
+            Type T = Type.gen();
+            GenererEquations(env,((LE) e).e1,T);
+            GenererEquations(env,((LE) e).e2,T);     
         }       
         else if (e instanceof Eq){
             listeEquation.add(new Equation(new TBool(), t));
-            GenererEquations(env,((Eq) e).e1,t);
-            GenererEquations(env,((Eq) e).e2,t);     
+            Type T = Type.gen();
+            GenererEquations(env,((Eq) e).e1,T);
+            GenererEquations(env,((Eq) e).e2,T);     
         }
   
         // le plus dur
         else if (e instanceof Let){   // ex:    let x = 1 + 1 in let y = 2 + x in y 
-                                      // e1 -> x = 1 + 1 in || e2 -> let y = 2 +x in y d'aprés ce que j'ai compris
-            GenererEquations(env, ((Let) e).e1, ((Let) e).t);
+                                      // e1 -> x = 1 + 1 in || e2 -> let y = 2 +x in y 
+            EnvironnementType newEnv = env;
             VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
-            env.add(newVar); // Mise a jour de l'environnement
-            GenererEquations(env, ((Let) e).e2, t);          
+            newEnv.add(newVar);// Mise a jour de l'environnement
+            GenererEquations(env, ((Let) e).e1, ((Let) e).t);
+            GenererEquations(newEnv, ((Let) e).e2, t);          
         }
         else if (e instanceof Var){
             if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
@@ -122,33 +125,47 @@ public class GenerateurDEquation {
                 System.out.println("Problème typage"); // Si non, erreur typage on stop la compil                      
         } 
         
-        else if (e instanceof LetRec){// TODO
+        else if (e instanceof LetRec){// LetRec x = M in N
             FunDef fun = ((LetRec) e).fd;
-            Exp exp = ((LetRec) e).e;
-            EnvironnementType envPourFun = env;
-            EnvironnementType envPourExp = env;
             Type retour = Type.gen();
-            if(fun.args.size()==0){
+            Exp M = fun.e;
+            Exp N = ((LetRec) e).e;
+            EnvironnementType env1 = env;
+            EnvironnementType env2 = env;
+            ArrayList<Type> listeArgument = new ArrayList<>();
+            if(fun.args.isEmpty()){
                 VarEnv newVar = new VarEnv(fun.id.toString(), new TFun(new ArrayList<Type>(),retour)); // On ajoute un nouvel element à l'environnement contenant 
-                envPourFun.add(newVar);                                                                // le nom de la fonction et le type Tfun sans argument               
-                envPourExp.add(newVar); 
+                env1.add(newVar);                                                                      // le nom de la fonction et le type Tfun sans argument               
+                env2.add(newVar); 
             }
             else{
-                ArrayList<Type> listeArgument = new ArrayList<>();
                 for(int i=0;i<fun.args.size();i++){ // On ajoute tout les arguments dans l'environnement
                     Type ti = Type.gen();
                     listeArgument.add(ti);
                     VarEnv newVar = new VarEnv(fun.args.get(i).toString(), ti);
-                    envPourExp.add(newVar);
+                    env2.add(newVar);
                 }
-                VarEnv v = new VarEnv(fun.id.toString(), new TFun(listeArgument, retour));
-                envPourFun.add(v);
-                envPourExp.add(v);
+                VarEnv v = new VarEnv(fun.id.toString(), new TFun(listeArgument, retour)); // Ajout du type de la fonction 
+                env1.add(v);
+                env2.add(v);
             }
-            GenererEquations(envPourExp, fun.e, retour);
-            GenererEquations(envPourFun, exp, t);
+            GenererEquations(env2, M, retour);
+            GenererEquations(env1, N, t);
         } 
-        else if (e instanceof App){} // TODO
+        else if (e instanceof App){
+         
+          if (((App)e).es.isEmpty()) {
+            GenererEquations(env, ((App)e).e, new TFun(new ArrayList<Type>(), t));// si pas de parametre alors checker e de type fonction sans parametre
+          } else {
+            ArrayList<Type> listeTypes = new ArrayList();
+            for (int i = 0; i < ((App)e).es.size(); i++){       
+              Type t1 = Type.gen();
+              listeTypes.add(t1);
+              GenererEquations(env, ((App)e).es.get(i), t1); // On check tout les parametres comme pour letrec
+            }
+            GenererEquations(env, ((App)e).e, new TFun(listeTypes, t)); 
+        }
+        }
         
         else if (e instanceof If){
             GenererEquations(env, ((If) e).e1, new TBool()); // on sait que e1 sera de type bool
@@ -161,14 +178,17 @@ public class GenerateurDEquation {
         else if (e instanceof Array){
             listeEquation.add(new Equation(new TArray(t), t));
             GenererEquations(env,((Array) e).e1,new TInt()); // taille du tableau
-            GenererEquations(env,((Array) e).e2,t); // premier element du tableau     
+            GenererEquations(env,((Array) e).e2,Type.gen()); // premier element du tableau , on ne sait pas son type    
         }
         else if (e instanceof Get){ // Ne modifie pas la liste des equations de type
-            GenererEquations(env,((Get) e).e1,new TArray(t)); // taille du tableau
+            GenererEquations(env,((Get) e).e1,new TArray(t)); // Tableau
             GenererEquations(env,((Get) e).e2,new TInt()); // index  
         }
         else if (e instanceof Put){
-            //TODO
+            Type tx = Type.gen();
+            GenererEquations(env, ((Put)e).e1, new TArray(tx)); //Tableau
+            GenererEquations(env, ((Put)e).e2, new TInt()); // index
+            GenererEquations(env, ((Put)e).e3, tx); //element a ajouter dont on ne connait pas le type  
         }
         
         // Partie pour les tuples

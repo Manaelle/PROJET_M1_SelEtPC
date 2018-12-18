@@ -29,7 +29,7 @@ public class EnvironnementType {
         for  (VarEnv x : gamma) {
             if (x.getVar().equals(C.getVar())){
                 if(!x.getType().toString().equals(C.getType().toString())){
-                    System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType());
+                    System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType().ToString());
                 }
                 ok = false; //inutile de l'ajouter si il est déjà présent
             }
