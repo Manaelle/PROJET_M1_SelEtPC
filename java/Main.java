@@ -17,7 +17,7 @@ public class Main {
       System.out.println("------ Liste des Types ------");
       GenerateurDEquation ge = new GenerateurDEquation();
       ge.GenererEquations(new EnvironnementType(), expression, new TUnit());
-      System.out.println(ge.toString());;
+      System.out.println(ge.toString());
       System.out.println();
       
       System.out.println("------ KNORM ------");
