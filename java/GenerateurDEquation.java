@@ -1,4 +1,5 @@
 
+import com.sun.javafx.font.t2k.T2KFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class GenerateurDEquation {
             listeEquation.add(new Equation(new TBool(), t));
             Type T = Type.gen();
             GenererEquations(env,((Eq) e).e1,T);
-            GenererEquations(env,((Eq) e).e2,T);     
+            GenererEquations(env,((Eq) e).e2,T);
         }
   
         // le plus dur
@@ -119,6 +120,7 @@ public class GenerateurDEquation {
         else if (e instanceof Var){
             if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
                 Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
+                
                 listeEquation.add(new Equation(typeCorrespondant, t));
             }
             else{
@@ -133,15 +135,16 @@ public class GenerateurDEquation {
             Type retour = Type.gen();
             Exp M = fun.e;
             Exp N = ((LetRec) e).e;
-            EnvironnementType env1 = env;
-            EnvironnementType env2 = env;
+            EnvironnementType env1 = new EnvironnementType();
+            EnvironnementType env2 = new EnvironnementType();
             ArrayList<Type> listeArgument = new ArrayList<>();
             if(fun.args.isEmpty()){
-                VarEnv newVar = new VarEnv(fun.id.toString(), new TFun(new ArrayList<Type>(),retour)); // On ajoute un nouvel element à l'environnement contenant 
+                VarEnv newVar = new VarEnv(fun.id.toString(), new TFun(new ArrayList<>(),retour)); // On ajoute un nouvel element à l'environnement contenant 
                 env1.add(newVar);                                                                      // le nom de la fonction et le type Tfun sans argument               
-                env2.add(newVar); 
+                env2.add(newVar);     
             }
             else{
+                
                 for(int i=0;i<fun.args.size();i++){ // On ajoute tout les arguments dans l'environnement
                     Type ti = Type.gen();
                     listeArgument.add(ti);
@@ -152,22 +155,50 @@ public class GenerateurDEquation {
                 env1.add(v);
                 env2.add(v);
             }
+            
+            
             GenererEquations(env2, M, retour);
             GenererEquations(env1, N, t);
         } 
         else if (e instanceof App){
-         
           if (((App)e).es.isEmpty()) {
-            GenererEquations(env, ((App)e).e, new TFun(new ArrayList<Type>(), t));// si pas de parametre alors checker e de type fonction sans parametre
+            GenererEquations(env, ((App)e).e, new TFun(new ArrayList<>(), t));// si pas de parametre alors checker e de type fonction sans parametre
           } else {
             ArrayList<Type> listeTypes = new ArrayList();
-            for (int i = 0; i < ((App)e).es.size(); i++){       
-              Type t1 = Type.gen();
-              listeTypes.add(t1);
-              GenererEquations(env, ((App)e).es.get(i), t1); // On check tout les parametres comme pour letrec
-            }
+            for (int i = 0; i < ((App)e).es.size(); i++){ // On check tout les parametres comme pour letrec
+                Type t1 = Type.gen();
+                
+                System.out.println(((App) e).es.get(i));
+                String v = ((App) e).es.get(i).toString();
+                String[] newV = v.split("\\@");
+                v = newV[0];
+                Type typeTraduit; 
+                
+                switch(v){
+                    case "Int":
+                        GenererEquations(env, ((App)e).es.get(i), new TInt());
+                        listeTypes.add(new TInt());
+                        break;
+                    case "Bool":
+                        GenererEquations(env, ((App)e).es.get(i), new TBool());
+                        listeTypes.add(new TBool());
+                        break;
+                    case "Float":
+                        GenererEquations(env, ((App)e).es.get(i), new TFloat());
+                        listeTypes.add(new TFloat());
+                        break;
+                    case "Unit" : 
+                        GenererEquations(env, ((App)e).es.get(i), new TUnit());
+                        listeTypes.add(new TUnit());
+                        break;
+                    default:
+                        listeTypes.add(t1);
+                        GenererEquations(env, ((App)e).es.get(i), t1);  
+                        
+                    }                             
+                }
             GenererEquations(env, ((App)e).e, new TFun(listeTypes, t)); 
-        }
+            }   
         }
         
         else if (e instanceof If){
@@ -175,8 +206,8 @@ public class GenerateurDEquation {
             GenererEquations(env, ((If) e).e2, t); 
             GenererEquations(env, ((If) e).e3, t); 
         }
-        
-        
+
+
         // Partie pour les tableaux
         else if (e instanceof Array){
             listeEquation.add(new Equation(new TArray(t), t));

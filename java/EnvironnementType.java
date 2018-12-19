@@ -15,7 +15,7 @@ import java.util.ArrayList;
 //-------------------------------------------------------
 //ENVIRONNEMENT : Construction d'un environnement de type
 public class EnvironnementType {
-    ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
+    private ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
     
     public EnvironnementType(){
         this.predef();
@@ -24,11 +24,15 @@ public class EnvironnementType {
     public ArrayList<VarEnv> getGamma() {
         return gamma;
     }
+
+    public void setGamma(ArrayList<VarEnv> gamma) {
+        this.gamma = gamma;
+    }
     
     public String toString() {
         String res = "Environnement : ";
-        for(VarEnv v : gamma){
-            res+=v.v + " , ";
+        for(VarEnv v : this.gamma){
+            res+=v.v + v.t.ToString() + " , ";
         }
         res+=".";
         return res;
@@ -39,7 +43,7 @@ public class EnvironnementType {
         
         Boolean ok = true; //restera vrai si C peut être ajouté à Gamma
         
-        for  (VarEnv x : gamma) {
+        for  (VarEnv x : this.gamma) {
             if (x.getVar().equals(C.getVar())){
                 if(!x.getType().toString().equals(C.getType().toString())){
                     System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType().ToString());
@@ -49,7 +53,7 @@ public class EnvironnementType {
         }
         
         if(ok){
-            gamma.add(C);
+            this.gamma.add(C);
         } 
     }
     
