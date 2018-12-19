@@ -178,11 +178,13 @@ class KNormVisitor implements ObjVisitor<Exp> {
     @Override
     public Let visit(Let e) {
         //TO DO
-        Id new_var1 = Id.gen();
+        /*Id new_var1 = Id.gen();
         Type new_type1 = Type.gen();
         Exp e1 = e.e1.accept(this);
         Exp e2 = e.e2.accept(this);
-        return new Let(new_var1, new_type1, e1, e2);
+        return new Let(new_var1, new_type1, e1, e2);*/
+        Let res = new Let(e.id, e.t, e.e1.accept(this), e.e2.accept(this));
+        return res;
     }
 
     @Override
@@ -198,15 +200,38 @@ class KNormVisitor implements ObjVisitor<Exp> {
         return res;
     }
 
+    Exp rec_app(List<Exp> llet, List<Exp> la, Exp e) {
+        if (llet.isEmpty()) {
+            return new App(e, la);
+        } else {
+            Id i = Id.gen();
+            Type t = Type.gen();
+            la.add(new Var(i));
+            Exp elt = llet.remove(0);
+            Let l = new Let(i, t, elt, rec_app(llet, la, e));
+            return l;
+        }
+    }
+    
+    List<Exp> rec_list(List<Exp> l) {
+        List<Exp> new_list = new LinkedList<>();
+        new_list.clear();
+        if (l.isEmpty()) {
+            new_list.add(new Unit());
+        }
+        Iterator<Exp> it = l.iterator();
+        while (it.hasNext()) {
+            new_list.add(it.next().accept(this));
+        }
+        return new_list;
+    }
+        
     @Override
     public Exp visit(App e){
         //TO DO
-        //Brouillon
-        Id new_var1 = Id.gen();
-        Type new_type1 = Type.gen();
-        //def une array list
-        //retourne la fonction App avec une fonction rec_app dedans qu'elle est chiante et longue
-        return null;
+        List<Exp> list = new LinkedList<>();
+        Exp res = rec_app(rec_list(e.es), list, e.e);
+        return res;
     }
 
     @Override
