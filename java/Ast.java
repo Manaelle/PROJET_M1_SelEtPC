@@ -18,6 +18,7 @@ class Unit extends Exp {
 
 class Bool extends Exp {
     final boolean b;
+    
 
     Bool(boolean b) {
         this.b = b;

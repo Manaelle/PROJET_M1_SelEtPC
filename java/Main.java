@@ -1,4 +1,4 @@
-	import java_cup.runtime.*;
+import java_cup.runtime.*;
 import java.io.*;
 import java.util.*;
 
@@ -13,14 +13,27 @@ public class Main {
       System.out.println("------ AST ------");
       expression.accept(new PrintVisitor());
       System.out.println();
+
+      System.out.println("------ Liste des Types ------");
+      GenerateurDEquation ge = new GenerateurDEquation();
+      ge.GenererEquations(new EnvironnementType(), expression, new TUnit());
+      System.out.println(ge.toString());
+      System.out.println();
+      System.out.println();
+      System.out.println("------ Resolution des types  ------");
+      System.out.println(ge.toString());
+      ge.resoudreEquation(ge.getListeEquation());
+      System.out.println("bien typé est : " +ge.isBienTypee());
+      System.out.println();
+      System.out.println();
+       
+      System.out.println("------ AST ------");
+      expression.accept(new PrintVisitor());
+      System.out.println();
       
       System.out.println("------ KNORM ------");
       Exp knorm = expression.accept(new KNormVisitor());
       knorm.accept(new PrintVisitor());
-      System.out.println();
-      
-      System.out.println("------ AST ------");
-      expression.accept(new PrintVisitor());
       System.out.println();
 
       System.out.println("------ Height of the AST ----");

@@ -15,10 +15,27 @@ import java.util.ArrayList;
 //-------------------------------------------------------
 //ENVIRONNEMENT : Construction d'un environnement de type
 public class EnvironnementType {
-    ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
+    private ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
     
     public EnvironnementType(){
-        gamma = new ArrayList();
+        this.predef();
+    }
+
+    public ArrayList<VarEnv> getGamma() {
+        return gamma;
+    }
+
+    public void setGamma(ArrayList<VarEnv> gamma) {
+        this.gamma = gamma;
+    }
+    
+    public String toString() {
+        String res = "Environnement : ";
+        for(VarEnv v : this.gamma){
+            res+=v.v + v.t.ToString() + " , ";
+        }
+        res+=".";
+        return res;
     }
     
     //Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent
@@ -26,23 +43,29 @@ public class EnvironnementType {
         
         Boolean ok = true; //restera vrai si C peut être ajouté à Gamma
         
-        for  (VarEnv x : gamma) {
+        for  (VarEnv x : this.gamma) {
             if (x.getVar().equals(C.getVar())){
                 if(!x.getType().toString().equals(C.getType().toString())){
-                    System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType());
+                    System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType().ToString());
                 }
                 ok = false; //inutile de l'ajouter si il est déjà présent
             }
         }
         
         if(ok){
-            gamma.add(C);
+            this.gamma.add(C);
         } 
     }
     
     //Vérifie si la variable est dans l'environnement
     public Boolean check(String v){   
-        return true;
+        Boolean found = false;
+        for(VarEnv vEnv : gamma){
+            if(vEnv.v.equals(v)){
+                found = true; 
+            }
+        } 
+        return found;
     }
     
     //Pour une variable v dans l'environnement renvoit le type associé

@@ -94,7 +94,7 @@ class TFun extends Type {
         String s = "(fun : ";
         int i = 0 ;
         while(i<arguments.size()){
-            s= s + arguments.get(i) + "->" ;
+            s= s + arguments.get(i).ToString() + "->" ;
             i++;
           }
         s = s + ")";
@@ -102,6 +102,23 @@ class TFun extends Type {
     }
     public ArrayList<Type> getArgument(){
         return this.arguments;
+    }
+
+    boolean contientTvar() {
+        int taille =  getArgument().size();
+        for(int i = 0; i<taille ; i++){
+            if(getArgument().get(i) instanceof TVar){
+                return false;
+                
+            }
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println(" contien le Tvar ok ou non "+(this.typeRetour instanceof TVar));
+        System.out.println();
+        System.out.println();
+
+        return (this.typeRetour instanceof TVar);
     }
     
     
@@ -144,6 +161,17 @@ class TTuple extends Type {
     public ArrayList<Type> getList(){
 	return list;
     }
+
+    boolean contientTvar() {
+       int taille =  this.list.size();
+       for(int i = 0 ; i< taille ; i++){
+           if(this.list.get(i) instanceof TVar){
+               return false ;
+           }
+       }
+       return true; 
+       
+    }
 	
     
 }
@@ -154,6 +182,10 @@ class TArray extends Type {
     public TArray(Type type){
         this.type = type; 
         
+    }
+
+    TArray() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public String  ToString(){
         return "array of("+this.type.ToString()+")";
@@ -172,9 +204,14 @@ class TArray extends Type {
 }
 
 class TVar extends Type {
+    Type t; 
     String v;
     TVar(String v) {
         this.v = v;
+    }
+
+    public TVar(Type t) {
+        this.t = t;
     }
     
     @Override
