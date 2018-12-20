@@ -38,8 +38,6 @@ public enum TypeInstruction {
         switch(instruction.substring(0,3)){
             case "nop":
                 return TypeInstruction.NOP;
-            case "???":
-                return TypeInstruction.LABEL;
             case "neg":
                 return TypeInstruction.NEG;
             case "fne":
@@ -85,6 +83,8 @@ public enum TypeInstruction {
                     return TypeInstruction.INT;
                 } else if(instruction.matches("[a-z0-9]+\\s*")){
                     return TypeInstruction.IDENT;
+                } else if(instruction.startsWith("_")){
+                    return TypeInstruction.LABEL;
                 } else if(instruction.startsWith("(")){
                     return getTypeInstruction(instruction.substring(1,instruction.length()-2).trim());
                 } else if(instruction.startsWith(")")) { 

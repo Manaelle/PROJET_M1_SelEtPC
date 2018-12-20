@@ -7,6 +7,7 @@ package prototypeasml;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  *
@@ -69,13 +70,33 @@ public class ASMLArbre {
                 break;
             case NOP:
                 break;
+            case MEM:
+                brancheActuelle.ajouterInstruction(new ASMLMem(instruction));
+                break;
             // TODO : gérer les autres cas
         }  
         
         return brancheActuelle;
     }
     
+    public void registerAllocation_Spill(){  
+        for(ASMLLabel label : labels){
+            if(label instanceof ASMLFonction){
+                // paramètres
+                ((ASMLFonction)label).allocationRegistre_Spill();
+            }
+        }
+        
+    }
     
+    @Override
+    public String toString(){
+        String res = "-------- ARBRE ----------\n";
+        for(ASMLLabel a : labels){
+            res += a.toString();
+        }
+        return res;
+    }
     
     
 }

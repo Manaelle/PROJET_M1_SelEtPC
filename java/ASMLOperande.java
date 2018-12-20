@@ -5,6 +5,8 @@
  */
 package prototypeasml;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Pepefab
@@ -32,11 +34,35 @@ public class ASMLOperande implements ASMLExp {
         return type == TypeOperande.VAR;
     }
     
+    public TypeOperande getType(){
+        return this.type;
+    }
+    
     @Override
     public void renommerVariable(String ancien, String nouveau) {
         if(nom.equals(ancien)){
             nom = nouveau;
         }
+    }
+    
+    @Override
+    public ArrayList<ASMLOperande> getOperandes() {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(this);
+        return a;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        if(this.type == type){
+            a.add(this);
+        }
+        return a;
+    }
+    
+    public String toString(){
+        return this.nom;
     }
     
 }

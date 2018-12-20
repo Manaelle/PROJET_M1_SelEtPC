@@ -60,6 +60,38 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
     public void setConstructionThen(boolean constructionThen) {
         this.constructionThen = constructionThen;
     }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes() {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        a.add(op2);
+        for(ASMLExp exp : expThen){
+            a.addAll(exp.getOperandes());
+        }
+        for(ASMLExp exp : expElse){
+            a.addAll(exp.getOperandes());
+        }
+        return a;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        if(op1.getType() == type){
+            a.add(op1);
+        }
+        if(op2.getType() == type){
+            a.add(op2);
+        }
+        for(ASMLExp exp : expThen){
+            a.addAll(exp.getOperandes());
+        }
+        for(ASMLExp exp : expElse){
+            a.addAll(exp.getOperandes());
+        }
+        return a;
+    }
     
     
 }

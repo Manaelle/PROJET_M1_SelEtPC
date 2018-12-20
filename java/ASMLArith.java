@@ -5,6 +5,7 @@
  */
 package prototypeasml;
 
+import java.util.ArrayList;
 import prototypeasml.ASMLOperande.TypeOperande;
 
 /**
@@ -29,6 +30,29 @@ public class ASMLArith implements ASMLExp {
     public void renommerVariable(String ancien, String nouveau) {
         op1.renommerVariable(ancien, nouveau);
         op2.renommerVariable(ancien, nouveau);
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes() {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        a.add(op2);
+        return a;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        if(op2.getType() == type){
+           a.add(op2);
+        }
+        return a;
+    }
+    
+    public String toString(){
+        String res = operateur + " " + op1 + " " + op2;
+        return res;
     }
     
 }
