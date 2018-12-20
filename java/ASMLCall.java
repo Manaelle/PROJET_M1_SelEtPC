@@ -33,6 +33,26 @@ public class ASMLCall implements ASMLExp {
             op.renommerVariable(ancien, nouveau);
         }
     }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes() {
+        return parametres;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        for(ASMLOperande op : parametres){
+            if(op.getType() == type){
+                a.add(op);
+            }
+        }
+        return a;
+    }
+    
+    public String toString(){
+        return "call " + this.labelFonction;
+    }
     
     
 }
