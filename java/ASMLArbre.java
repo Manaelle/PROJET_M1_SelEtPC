@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class ASMLArbre {
     
-    private ArrayList<ASMLLabel> labels;
+    private ArrayList<ASMLFunDefs> labels;
 
     public ASMLArbre(String code){
         labels = new ArrayList<>();
@@ -80,7 +80,7 @@ public class ASMLArbre {
     }
     
     public void registerAllocation_Spill(){  
-        for(ASMLLabel label : labels){
+        for(ASMLFunDefs label : labels){
             if(label instanceof ASMLFonction){
                 // paramètres
                 ((ASMLFonction)label).allocationRegistre_Spill();
@@ -92,7 +92,7 @@ public class ASMLArbre {
     @Override
     public String toString(){
         String res = "-------- ARBRE ----------\n";
-        for(ASMLLabel a : labels){
+        for(ASMLFunDefs a : labels){
             res += a.toString();
         }
         return res;

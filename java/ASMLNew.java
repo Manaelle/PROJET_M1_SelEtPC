@@ -42,4 +42,8 @@ public class ASMLNew implements ASMLExp{
         return a;
     }
     
+    public String toString(){
+        return "new " + this.op;
+    }
+    
 }

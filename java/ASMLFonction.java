@@ -12,7 +12,7 @@ import prototypeasml.ASMLOperande.TypeOperande;
  *
  * @author Pepefab
  */
-public class ASMLFonction extends ASMLBranche implements ASMLLabel {
+public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
 
     private String nom;
     private ArrayList<ASMLOperande> parametres;

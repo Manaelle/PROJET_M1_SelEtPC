@@ -52,8 +52,8 @@ public class ASMLLet implements ASMLExp {
             case FADD:
                 op2 = new ASMLArith(exp);
                 break;
-            case LABEL: // A MODIFIER
-                op2 = new ASMLOperande(exp, TypeOperande.VAR);
+            case LABEL: 
+                op2 = new ASMLLabel(exp);
                 break;
             case NEW:
                 op2 = new ASMLNew(exp);

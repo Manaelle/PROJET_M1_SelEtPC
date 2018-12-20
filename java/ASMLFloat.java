@@ -11,15 +11,19 @@ import prototypeasml.ASMLOperande.TypeOperande;
  *
  * @author Pepefab
  */
-public class ASMLFloat implements ASMLLabel {
+public class ASMLFloat implements ASMLFunDefs {
     
     private ASMLOperande op;
     private float valeur;
 
     public ASMLFloat(String instruction){
-        this.op = new ASMLOperande(instruction.substring(instruction.indexOf(" _"),instruction.indexOf(" =")),
-                                   TypeOperande.IMM);
-        this.valeur = Float.parseFloat(instruction.substring(instruction.indexOf(" = ") + 3));
+        String[] donnees = instruction.split(" ");
+        this.op = new ASMLOperande(donnees[1],TypeOperande.VAR);
+        this.valeur = Float.parseFloat(donnees[3]);            
+    }
+    
+    public String toString(){
+        return "FLOAT : let " + this.op + " = " + this.valeur + "\n";
     }
     
 }
