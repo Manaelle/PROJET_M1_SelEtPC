@@ -25,5 +25,10 @@ public class ASMLFloat implements ASMLFunDefs {
     public String toString(){
         return "FLOAT : let " + this.op + " = " + this.valeur + "\n";
     }
+
+    @Override
+    public String genererAssembleur() {
+        return "FLOAT NON IMPLEMENTE";
+    }
     
 }

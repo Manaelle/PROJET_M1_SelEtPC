@@ -21,10 +21,6 @@ public class ASMLNew implements ASMLExp{
         op = new ASMLOperande(donnee, donnee.matches("[0-9]+") ? TypeOperande.IMM : TypeOperande.VAR);
     }
 
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op.renommerVariable(ancien, nouveau);
-    }
 
     @Override
     public ArrayList<ASMLOperande> getOperandes() {
@@ -44,6 +40,11 @@ public class ASMLNew implements ASMLExp{
     
     public String toString(){
         return "new " + this.op;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        return "NEW NON IMPLEMENTE";
     }
     
 }

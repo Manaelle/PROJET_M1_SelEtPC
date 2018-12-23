@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class ASMLOperande implements ASMLExp {
 
+
     public enum TypeOperande{
         VAR,
         IMM
@@ -38,11 +39,9 @@ public class ASMLOperande implements ASMLExp {
         return this.type;
     }
     
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        if(nom.equals(ancien)){
-            nom = nouveau;
-        }
+
+    public void renommerVariable(String nouveau){
+        this.nom = nouveau;
     }
     
     @Override
@@ -63,6 +62,16 @@ public class ASMLOperande implements ASMLExp {
     
     public String toString(){
         return this.nom;
+    }
+    
+    @Override
+    public String genererAssembleur() {
+        if(nom.startsWith("r")){
+            return "LD r12, " + nom + "\n";
+        } else { // gérer si valeur immédiate ou en mémoire
+            return "";
+        }
+        
     }
     
 }

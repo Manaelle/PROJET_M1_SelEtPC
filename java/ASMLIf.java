@@ -35,18 +35,6 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
         expThen = new ArrayList<>(); // remplissage lors de la 
         expElse = new ArrayList<>(); // lecture des autres instructions
     }
-    
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op1.renommerVariable(ancien, nouveau);
-        op2.renommerVariable(ancien, nouveau);
-        for(ASMLExp exp : expThen){
-            exp.renommerVariable(ancien, nouveau);
-        }
-        for(ASMLExp exp : expElse){
-            exp.renommerVariable(ancien, nouveau);
-        }
-    }
 
     @Override
     public void ajouterInstruction(ASMLExp expression) {
@@ -91,6 +79,11 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
             a.addAll(exp.getOperandes());
         }
         return a;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

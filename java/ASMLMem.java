@@ -28,14 +28,6 @@ public class ASMLMem implements ASMLExp {
         }
     }
     
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op1.renommerVariable(ancien, nouveau);
-        op2.renommerVariable(ancien, nouveau);
-        if(op3 != null){
-            op2.renommerVariable(ancien, nouveau);
-        }
-    }
 
     @Override
     public ArrayList<ASMLOperande> getOperandes() {
@@ -65,6 +57,11 @@ public class ASMLMem implements ASMLExp {
             res += " <- " + op3;
         }
         return res;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        return "MEM NON IMPLEMENTE";
     }
     
 }

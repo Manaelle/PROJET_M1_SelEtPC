@@ -11,5 +11,6 @@ package prototypeasml;
  */
 public interface ASMLFunDefs{
    
+    public String genererAssembleur();
     
 }

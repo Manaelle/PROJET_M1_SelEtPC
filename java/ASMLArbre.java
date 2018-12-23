@@ -86,7 +86,14 @@ public class ASMLArbre {
                 ((ASMLFonction)label).allocationRegistre_Spill();
             }
         }
-        
+    }
+    
+    public String genererAssembleur(){
+        String code = "";
+        for(ASMLFunDefs a : labels){
+            code += a.genererAssembleur();
+        }
+        return code;
     }
     
     @Override

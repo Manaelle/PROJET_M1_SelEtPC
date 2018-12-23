@@ -63,12 +63,7 @@ public class ASMLLet implements ASMLExp {
                 break;
         }
     }
-    
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op1.renommerVariable(ancien, nouveau);
-        op2.renommerVariable(ancien, nouveau);
-    }
+   
 
     @Override
     public ArrayList<ASMLOperande> getOperandes() {
@@ -89,6 +84,18 @@ public class ASMLLet implements ASMLExp {
     public String toString(){
         String res = "let " + op1 + " = " + op2;
         return res;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        String code = "";
+        code += op2.genererAssembleur();
+        if(op1.getNom().startsWith("r")){
+            code += "LD " + op1 + ", r12\n";
+        } else {
+            // il faut mettre r12 à l'emplacement mémoire de op1
+        }
+        return code;
     }
     
 }

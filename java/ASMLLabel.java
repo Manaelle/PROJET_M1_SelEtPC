@@ -18,10 +18,6 @@ public class ASMLLabel implements ASMLExp {
     public ASMLLabel(String instruction){
         this.nom = instruction;
     }
-    
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {        
-    }
 
     @Override
     public ArrayList<ASMLOperande> getOperandes() {
@@ -35,6 +31,11 @@ public class ASMLLabel implements ASMLExp {
     
     public String toString(){
         return this.nom;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        return "LABEL NON IMPLEMENTE";
     }
     
 }

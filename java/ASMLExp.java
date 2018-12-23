@@ -13,12 +13,11 @@ import prototypeasml.ASMLOperande.TypeOperande;
  * @author Pepefab
  */
 public interface ASMLExp {
- 
-    public void renommerVariable(String ancien, String nouveau);
-    
+     
     public ArrayList<ASMLOperande> getOperandes();
     
     public ArrayList<ASMLOperande> getOperandes(TypeOperande type);
     
+    public String genererAssembleur();
 
 }

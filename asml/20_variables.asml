@@ -1,0 +1,25 @@
+let _f a b c d e f =
+	add a = b
+	
+let _ =
+	let a = 0 in
+	let b = 1 in
+	let c = 2 in
+	let d = 3 in
+	let e = 4 in
+	let f = 5 in
+	let g = 6 in
+	let h = 7 in 
+	let i = 8 in 
+	let j = 9 in
+	let k = 10 in
+	let l = 11 in
+	let m = 12 in
+	let n = 13 in
+	let o = 14 in
+	let p = 15 in
+	let q = 16 in
+	let r = 17 in
+	let s = 18 in
+	let t = 19 in
+	call _f a b q r s t
