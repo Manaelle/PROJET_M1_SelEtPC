@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -124,7 +125,7 @@ public class LetReduction implements ObjVisitor<Exp> {
         
         if(e1 instanceof Let ){
             // let x = (let y = e1 in e2) in e3 ---> let y = e1 in let x = e2 in e3
-            System.out.println("je suis dans le let ");
+            //System.out.println("je suis dans le let ");
             Let let = (Let) e1;
             Type type = let.t;
             Id i = let.id;
@@ -134,7 +135,7 @@ public class LetReduction implements ObjVisitor<Exp> {
             return new Let(i,type,e2,new Let(id,t, e3,e4).accept(this));
    
         }else if(e1 instanceof LetRec){
-            System.out.println("je suis dans le letRec ");
+            //System.out.println("je suis dans le letRec ");
             //a verifier 
             LetRec lrec = (LetRec)e1;
             Exp e2 = lrec.e;
@@ -143,7 +144,7 @@ public class LetReduction implements ObjVisitor<Exp> {
             return new LetRec(f,new Let(id,t,e2,e3).accept(this));
             
         }else if(e1 instanceof LetTuple){
-            System.out.println("je suis dans le let tuple ");
+            //System.out.println("je suis dans le let tuple ");
             LetTuple ltuple = (LetTuple)e1; 
             Exp e2 = ltuple.e1;
             Exp e3 = ltuple.e2;
@@ -151,7 +152,7 @@ public class LetReduction implements ObjVisitor<Exp> {
             return new LetTuple(ltuple.ids,ltuple.ts,e2,new Let(id,t,e3,e4));
                
         }else{
-            System.out.println("else");
+            //System.out.println("else");
             return new Let(id,t,e1,e.e2.accept(this)); 
             //return null ; 
         }
@@ -176,13 +177,19 @@ public class LetReduction implements ObjVisitor<Exp> {
 
     @Override
     public Exp visit(App e) {
-        Var e1 = (Var)e.e.accept(this);
-        List<Exp> list = e.es;
         
-        
-        //todo
-        return null;
-    }
+        Exp e1 = e.e.accept(this);
+        List<Exp> list= new ArrayList<Exp>(); 
+        if(e.es.isEmpty()){
+            list = new ArrayList<Exp>();
+        }else{
+            for(Exp var : e.es){
+                Exp ex = var.accept(this);
+                list.add(ex);
+            }
+        }
+        return new App(e1,list);
+    }   
 
     @Override
     public Exp visit(Tuple e) {

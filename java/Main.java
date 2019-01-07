@@ -104,6 +104,8 @@ public class Main {
                 Exp knorm = expression.accept(new KNormVisitor());
                 knorm.accept(new PrintVisitor());
                 System.out.println();
+                Exp letred = expression.accept(new LetReduction());
+                letred.accept(new PrintVisitor());
             }
             if (alphaC == true){
                 
