@@ -226,15 +226,24 @@ public class GenerateurDEquation {
         }
         
         // Partie pour les tuples
-        else if (e instanceof Tuple){ // Jui pas du tout sur de ce que ça donne :/
-            List<Type> l = null; 
+        else if (e instanceof Tuple){ 
+            ArrayList<Type> l = null; 
             
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
                 GenererEquations(env, ((Tuple) e).es.get(i),tTuple);
                 l.add(tTuple);
             }
-            //listeEquation.add(new Equation(new TTuple(l), t));   
+            listeEquation.add(new Equation(new TTuple(l), t));   
+        }
+        else if (e instanceof LetTuple){
+            EnvironnementType env1 = new EnvironnementType();
+            for(int i=0;i<((LetTuple) e).ids.size();i++){
+                VarEnv newVar = new VarEnv(((LetTuple) e).ids.get(i).toString(), Type.gen());
+                env1.add(newVar);
+                GenererEquations(env, ((LetTuple) e).e1, Type.gen());
+        }
+            GenererEquations(env1, ((LetTuple) e).e2, t);
         }
     }
     
