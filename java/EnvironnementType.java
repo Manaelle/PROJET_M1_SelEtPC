@@ -94,8 +94,17 @@ public class EnvironnementType {
         arguments.add(floatt);
         //fonction qui prend un float et renvoie un entier 
         gamma.add(new VarEnv("int_of_float",new TFun(arguments,new TInt())));
-         
-    
+        arguments = new ArrayList<Type>();
+        arguments.add(new TFloat());
+        gamma.add(new VarEnv("sin",new TFun(arguments, new TFloat()))) ;
+        gamma.add(new VarEnv("cos",new TFun(arguments, new TFloat()))) ;
+        gamma.add(new VarEnv("sqrt",new TFun(arguments, new TFloat()))) ;
+        gamma.add(new VarEnv("sin",new TFun(arguments, new TFloat()))) ;
+        gamma.add(new VarEnv("truncate",new TFun(arguments, new TInt()))) ;
+        gamma.add(new VarEnv("abs_float",new TFun(arguments, new TFloat()))) ;
+
+
+
     }
 
 }
