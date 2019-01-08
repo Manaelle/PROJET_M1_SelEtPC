@@ -122,13 +122,13 @@ do
 							
 							for test_case in tests/typechecking/invalid/*.ml
 							do	
-		
+									name_file=$(echo $test_case | cut -d'/' -f4)
 									$MINCAMLC "-t" $test_case  1>/dev/null 2>test 
 									if [ ! -s test ] 
 									then
 											echo '\n--------------------\n'
-											printf "\033[31m %-30s :\033[0m \n" $test_case
-											printf "\033[34m CODE : \033[0m \n" $test_case
+											printf "\033[31m %-30s :\033[0m \n" $name_file
+											printf "\033[34m CODE : \033[0m \n"
 											cat $test_case
 											
 									fi
