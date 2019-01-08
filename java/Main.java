@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    
     static public void main(String argv[]) { 
         
         String fichier = new String();
@@ -33,7 +34,13 @@ public class Main {
                     System.out.println(ge.toString());
                     System.out.println("-------- Resolution des types  --------");
                     ge.resoudreEquation(ge.getListeEquation());
-                    System.out.println("bien typé est : " +ge.isBienTypee());
+                    if(ge.isBienTypee()){
+                        System.out.println("Equation bien typé !");
+                    }
+                    else{
+                        System.err.println("Erreur de typage !");
+                    }
+                    
                 
                 }
             
@@ -60,7 +67,10 @@ public class Main {
                 
                 //A-CONVERSION (option -ar)
                 if( argv[0].equals("-ar")  ){
-                    //A COMPLETER
+                    System.out.println("------------- A-CONV --------------");
+                    Exp alphaC = expression.accept(new AlphaConversionVisitor());
+                    alphaC.accept(new PrintVisitor());
+                    System.out.println();
                 }
                 
                 //B-REDUCTION (option -br)
@@ -98,14 +108,23 @@ public class Main {
                     System.out.println(ge.toString());
                     System.out.println("-------- Resolution des types  --------");
                     ge.resoudreEquation(ge.getListeEquation());
-                    System.out.println("bien typé est : " +ge.isBienTypee());
+                    if(ge.isBienTypee()){
+                        System.out.println("Equation bien typé !");
+                    }
+                    else{
+                        System.err.println("Erreur de typage !");
+                    }
                     
                     System.out.println("------------- K-NORM --------------");
                     Exp knorm = expression.accept(new KNormVisitor());
                     knorm.accept(new PrintVisitor());
                     System.out.println();
                     
-                    //A-CONVERSION : A COMPLETER
+                    //A-CONVERSION : 
+                    System.out.println("------------- A-CONV --------------");
+                    Exp alphaC = expression.accept(new AlphaConversionVisitor());
+                    alphaC.accept(new PrintVisitor());
+                    System.out.println();
                     
                     //B-REDUCTION : A COMPLETER
                     

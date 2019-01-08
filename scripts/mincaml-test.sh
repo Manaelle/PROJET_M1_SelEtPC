@@ -5,6 +5,7 @@ cd "$(dirname "$0")"/.. || exit 1
 # it to your PATH. Use the appropriate option to run the parser as soon
 # as it is implemented
 MINCAMLC=java/mincamlc
+chmod +x $MINCAMLC
 # run all test cases in syntax/valid and make sure they are parsed without error
 # run all test cases in syntax/invalid and make sure the parser returns an error
 
@@ -53,7 +54,7 @@ do
 							for test_case in tests/syntax/valid/*.ml
 							do	
 		
-									$MINCAMLC "-p" $test_case 2>test #1>/dev/null 
+									$MINCAMLC "-p" $test_case  1>/dev/null 2>test 
 									if [ ! -s test ] 
 									then
 											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case 
@@ -65,7 +66,7 @@ do
 							echo "\n \n \033[90m TEST DE SYNTAXE [CAS INVALIDE] \033[0m:"
 							for test_case in tests/syntax/invalid/*.ml
 							do	
-									$MINCAMLC "-p" $test_case 2>test #1>/dev/null
+									$MINCAMLC "-p" $test_case 2>test 1>/dev/null
 									if [ -s test ] 
 									then
 											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case
@@ -76,6 +77,35 @@ do
 							echo '\n---------------FIN DES TESTS------------------ \n'
 							;;
 
+"-t" | "t") echo '\n---------------TEST TYPECHECKING ------------------'
+							printf "\n \033[90m TEST DE TYPECHECKING [CAS VALIDE]: \033[0m \n"
+
+							#si $MINCAMLC $test_case est redirigé vers STDERR (fichier test) : on test si test est vide ensuite 
+							for test_case in tests/typechecking/valid/*.ml
+							do	
+		
+									$MINCAMLC "-t" $test_case  1>/dev/null 2>test 
+									if [ ! -s test ] 
+									then
+											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case 
+									else 
+											printf "%-50s : \033[31m [ERROR] \033[0m \n" $test_case
+									fi
+							done
+
+							echo "\n \n \033[90m TEST DE TYPECHECKING [CAS INVALIDE] \033[0m:"
+							for test_case in tests/typechecking/invalid/*.ml
+							do	
+									$MINCAMLC "-t" $test_case 2>test 1>/dev/null
+									if [ -s test ] 
+									then
+											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case
+									else 
+											printf "%-50s : \033[31m [ERROR] \033[0m \n" $test_case
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							;;
 
 	*) 					echo "Commande invalide, veuillez consulter l'aide pour en savoir plus."
 							;;
