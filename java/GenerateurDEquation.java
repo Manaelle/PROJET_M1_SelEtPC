@@ -219,12 +219,15 @@ public class GenerateurDEquation {
             GenererEquations(env,((Array) e).e2,T); // premier element du tableau , on ne sait pas son type    
         }
         else if (e instanceof Get){ // Ne modifie pas la liste des equations de type
+            System.out.println("GET");
             GenererEquations(env,((Get) e).e1,new TArray(t)); // Tableau
             GenererEquations(env,((Get) e).e2,new TInt()); // index  
         }
         else if (e instanceof Put){
+            System.out.println("PUT");
             Type tx = Type.gen();
             GenererEquations(env, ((Put)e).e1, new TArray(tx)); //Tableau
+            listeEquation.add(new Equation(new TUnit(), t));
             GenererEquations(env, ((Put)e).e2, new TInt()); // index
             GenererEquations(env, ((Put)e).e3, tx); //element a ajouter dont on ne connait pas le type  
         }
