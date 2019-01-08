@@ -234,7 +234,7 @@ public class GenerateurDEquation {
         
         // Partie pour les tuples
         else if (e instanceof Tuple){ 
-            ArrayList<Type> l = null; 
+            ArrayList<Type> l = new ArrayList(); 
             
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
@@ -278,7 +278,7 @@ public class GenerateurDEquation {
             if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
                 resoudreEquation(listeEquation);  
             }else if(type1 instanceof TVar){
-                if(((TVar)type1).equals(((TVar)type2))){ //?t = ?t 
+                if(((TVar)type1).equals((type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
                  }else{ ////?t = ?s 
                     ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
