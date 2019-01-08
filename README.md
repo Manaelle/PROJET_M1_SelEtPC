@@ -29,3 +29,40 @@
 - faire un make sur la console (éventuellement donner les droits : chmod +x jflex/bin/jflex)
 - fini !
 
+## Test
+### Liste de ce qu'il faut tester
+#### Constantes
+- int
+- float
+- bool
+- unit
+- var
+- tuple
+- array
+
+#### Opérations arithmétiques
+- neg
+- add
+- sub
+- fneg
+- fadd
+- fsub
+- fmul
+- fdiv
+
+#### Conditions & opérations booléennes
+- not
+- eq
+- le
+- if
+
+#### Fonctions
+- let
+- letrec
+- app
+- lettuple
+- get
+- put
+
+
+
