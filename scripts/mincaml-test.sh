@@ -34,12 +34,16 @@ do
 
 							echo "-p : test de la syntaxe (parsing)."
 							echo "-t : test du typage."
+							
+							echo "-kn : test de la K-normalisation."
+							echo "-ar : test pour A-conversion."
+							echo "-br : test pour B-reduction."
 
 							echo "-asml : test de conversion en fichier .asml."
 							echo "-o : test de conversion en fichier .s (assembleur)."
 							;;
 			
-	"-v" | "v") echo "0.0.0"
+	"-v" | "v") echo "1.0.0"
 							;;
 						
 	"-p" | "p") echo '\n---------------TEST SYNTAXE ------------------'
@@ -49,7 +53,7 @@ do
 							for test_case in tests/syntax/valid/*.ml
 							do	
 		
-									$MINCAMLC $test_case 1>/dev/null 2>test
+									$MINCAMLC "-p" $test_case 2>test #1>/dev/null 
 									if [ ! -s test ] 
 									then
 											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case 
@@ -61,7 +65,7 @@ do
 							echo "\n \n \033[90m TEST DE SYNTAXE [CAS INVALIDE] \033[0m:"
 							for test_case in tests/syntax/invalid/*.ml
 							do	
-									$MINCAMLC $test_case 1>/dev/null 2>test
+									$MINCAMLC "-p" $test_case 2>test #1>/dev/null
 									if [ -s test ] 
 									then
 											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case
