@@ -34,7 +34,13 @@ public class Main {
                     System.out.println(ge.toString());
                     System.out.println("-------- Resolution des types  --------");
                     ge.resoudreEquation(ge.getListeEquation());
-                    System.out.println("bien typé est : " +ge.isBienTypee());
+                    if(ge.isBienTypee()){
+                        System.out.println("Equation bien typé !");
+                    }
+                    else{
+                        System.err.println("Erreur de typage !");
+                    }
+                    
                 
                 }
             
@@ -61,7 +67,7 @@ public class Main {
                 
                 //A-CONVERSION (option -ar)
                 if( argv[0].equals("-ar")  ){
-                    System.out.println("------ AlphaConv ------");
+                    System.out.println("------------- A-CONV --------------");
                     Exp alphaC = expression.accept(new AlphaConversionVisitor());
                     alphaC.accept(new PrintVisitor());
                     System.out.println();
@@ -102,7 +108,12 @@ public class Main {
                     System.out.println(ge.toString());
                     System.out.println("-------- Resolution des types  --------");
                     ge.resoudreEquation(ge.getListeEquation());
-                    System.out.println("bien typé est : " +ge.isBienTypee());
+                    if(ge.isBienTypee()){
+                        System.out.println("Equation bien typé !");
+                    }
+                    else{
+                        System.err.println("Erreur de typage !");
+                    }
                     
                     System.out.println("------------- K-NORM --------------");
                     Exp knorm = expression.accept(new KNormVisitor());
@@ -110,7 +121,7 @@ public class Main {
                     System.out.println();
                     
                     //A-CONVERSION : 
-                    System.out.println("------ AlphaConv ------");
+                    System.out.println("------------- A-CONV --------------");
                     Exp alphaC = expression.accept(new AlphaConversionVisitor());
                     alphaC.accept(new PrintVisitor());
                     System.out.println();

@@ -249,7 +249,6 @@ public class GenerateurDEquation {
     
     public void resoudreEquation(ArrayList<Equation> listeEquation){
         if(listeEquation.isEmpty()){
-            System.out.println(" equation vide");
             return;
         }
         // la premiere equation 
