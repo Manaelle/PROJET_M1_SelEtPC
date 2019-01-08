@@ -219,19 +219,22 @@ public class GenerateurDEquation {
             GenererEquations(env,((Array) e).e2,T); // premier element du tableau , on ne sait pas son type    
         }
         else if (e instanceof Get){ // Ne modifie pas la liste des equations de type
+            System.out.println("GET");
             GenererEquations(env,((Get) e).e1,new TArray(t)); // Tableau
             GenererEquations(env,((Get) e).e2,new TInt()); // index  
         }
         else if (e instanceof Put){
+            System.out.println("PUT");
             Type tx = Type.gen();
             GenererEquations(env, ((Put)e).e1, new TArray(tx)); //Tableau
+            listeEquation.add(new Equation(new TUnit(), t));
             GenererEquations(env, ((Put)e).e2, new TInt()); // index
             GenererEquations(env, ((Put)e).e3, tx); //element a ajouter dont on ne connait pas le type  
         }
         
         // Partie pour les tuples
         else if (e instanceof Tuple){ 
-            ArrayList<Type> l = null; 
+            ArrayList<Type> l = new ArrayList(); 
             
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
@@ -275,7 +278,7 @@ public class GenerateurDEquation {
             if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
                 resoudreEquation(listeEquation);  
             }else if(type1 instanceof TVar){
-                if(((TVar)type1).equals(((TVar)type2))){ //?t = ?t 
+                if(((TVar)type1).equals((type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
                  }else{ ////?t = ?s 
                     ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
