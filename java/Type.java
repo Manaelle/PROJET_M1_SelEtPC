@@ -143,10 +143,11 @@ class TTuple extends Type {
         String s = "(";
         s = s + list.get(0);
         while(i<list.size()){
-            s= s + "* " + list.get(i); 
+            s= s + "," + list.get(i); 
             i++;
         }
         s = s + ")";
+        //System.out.println("\n\n"+s);
         return s;
        
     }

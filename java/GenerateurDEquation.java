@@ -56,11 +56,7 @@ public class GenerateurDEquation {
         else if (e instanceof Not){
             listeEquation.add(new Equation(new TBool(), t));
             GenererEquations(env,((Not) e).e,new TBool());
-        }
-        else if (e instanceof Neg){
-            listeEquation.add(new Equation(new TInt(), t));
-            GenererEquations(env, ((Neg) e).e, new TInt());
-        }
+        }       
         //Operation sur entier
         else if (e instanceof Add){ 
             listeEquation.add(new Equation(new TInt(), t));
@@ -110,6 +106,9 @@ public class GenerateurDEquation {
             Type T = Type.gen();
             GenererEquations(env,((Eq) e).e1,T);
             GenererEquations(env,((Eq) e).e2,T);
+        } else if (e instanceof Neg){
+            listeEquation.add(new Equation(new TInt(), t));
+            GenererEquations(env, ((Neg) e).e, new TInt());
         }
   
         // le plus dur
@@ -119,10 +118,11 @@ public class GenerateurDEquation {
             VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
             newEnv.add(newVar);// Mise a jour de l'environnement
             GenererEquations(env, ((Let) e).e1, ((Let) e).t);
-            GenererEquations(newEnv, ((Let) e).e2, t);          
+    
+
+            GenererEquations(newEnv, ((Let) e).e2, t); 
         }
         else if (e instanceof Var){
-            System.out.println("------>"+((Var) e).id.toString());
             if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
                 Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
                 listeEquation.add(new Equation(typeCorrespondant, t));
@@ -248,7 +248,7 @@ public class GenerateurDEquation {
             listeEquation.add(new Equation(new TTuple(l), t));   
         }
         else if (e instanceof LetTuple){
-            EnvironnementType env1 = new EnvironnementType();
+            EnvironnementType env1 =(EnvironnementType) env.clone();
             for(int i=0;i<((LetTuple) e).ids.size();i++){
                 VarEnv newVar = new VarEnv(((LetTuple) e).ids.get(i).toString(), Type.gen());
                 env1.add(newVar);
@@ -263,15 +263,19 @@ public class GenerateurDEquation {
             return;
         }
         // la premiere equation 
+        if((listeEquation.isEmpty())){
+            return;  
+        }
         Equation e = listeEquation.get(0);
         Type type1 = e.getDepart();
 	Type type2 = e.getArrive(); 
         // supprimer la premiere equation 
-        System.out.println(" "+listeEquation.toString());
-        listeEquation.remove(0);
-        String ctype1 = type1.toString();
-        String ctype2 = type2.toString();
-        
+        //System.out.println(" "+listeEquation.toString());
+  
+       
+       /* String ctype1 = type1.toString();
+        String ctype2 = type2.toString();*/
+         listeEquation.remove(0);
         
         // le meme type  a modifié car c'est moche et avec le ToString ca ne marche pas 
         // quand on fait if(ctype1.equals(c.type2)) ca retourne toujours false 
@@ -279,8 +283,9 @@ public class GenerateurDEquation {
         Class c2 = type2.getClass();
   
         if((c1.equals(c2)) || (c2.getName().equals("TUnit"))){
-            if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
+            if(((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit))){
                 resoudreEquation(listeEquation);  
+                
             }else if(type1 instanceof TVar){
                 if(((TVar)type1).equals((type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
@@ -352,7 +357,7 @@ public class GenerateurDEquation {
                }        
            }
         }else{// des types differents + TVAR 
-            
+            System.out.println("tVAR "+type1+" "+type2);
             if(type2 instanceof TVar){
             //    System.out.println("on permute ");
                 TVar  type3;
@@ -363,7 +368,8 @@ public class GenerateurDEquation {
             if(type1 instanceof TVar){
                 if(type2 instanceof TArray ){
                     if((((TArray)type2).getType() instanceof TVar)){
-                        listeEquation.add(e);
+                       
+                        //listeEquation.add(e);
                     }else{
                         
                         ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 

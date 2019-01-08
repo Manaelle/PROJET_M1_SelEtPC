@@ -108,8 +108,16 @@ public class EnvironnementType implements Cloneable {
         gamma.add(new VarEnv("abs_float",new TFun(arguments, new TFloat()))) ;
         arguments = new ArrayList<Type>();
         arguments.add(new TInt());
-        arguments.add(new TInt());
+        arguments.add(new TUnit());
         gamma.add(new VarEnv("Array.create",new TFun(arguments, new TVar(new TUnit())))) ;
+        arguments = new ArrayList<Type>();
+        arguments.add(new TUnit());
+        gamma.add(new VarEnv("print_newline",new TFun(arguments, new  TUnit()))) ;
+        
+        arguments = new ArrayList<Type>();
+        arguments.add(new TUnit());
+        gamma.add(new VarEnv("array_of",new TFun(arguments, new TArray(new TUnit())))) ;
+        
         
         //init : A COMPLETER
         //print_newline : A COMPLETER
