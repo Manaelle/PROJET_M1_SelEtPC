@@ -16,8 +16,6 @@ import java.util.List;
 public class GenerateurDEquation {
     
     private ArrayList<Equation> listeEquation;
-    EnvironnementType env1 = new EnvironnementType();
-    EnvironnementType env2 = new EnvironnementType();
     private boolean bienTypee = true;
     public GenerateurDEquation(){
         listeEquation = new ArrayList<>();
@@ -113,9 +111,11 @@ public class GenerateurDEquation {
         // le plus dur
         else if (e instanceof Let){   // ex:    let x = 1 + 1 in let y = 2 + x in y 
                                       // e1 -> x = 1 + 1 in || e2 -> let y = 2 +x in y 
-            EnvironnementType newEnv = env;
+            EnvironnementType newEnv = (EnvironnementType) env.clone();
             VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
             newEnv.add(newVar);// Mise a jour de l'environnement
+            System.out.println("1" + env.toString());
+            System.out.println("2" + newEnv.toString());
             GenererEquations(env, ((Let) e).e1, ((Let) e).t);
             GenererEquations(newEnv, ((Let) e).e2, t);          
         }
@@ -138,6 +138,8 @@ public class GenerateurDEquation {
             Type retour = Type.gen();
             Exp M = fun.e;
             Exp N = ((LetRec) e).e;
+            EnvironnementType env1 = (EnvironnementType) env.clone();
+            EnvironnementType env2 = (EnvironnementType) env.clone();
            
             ArrayList<Type> listeArgument = new ArrayList<>();
             if(fun.args.isEmpty()){

@@ -14,11 +14,27 @@ import java.util.ArrayList;
 
 //-------------------------------------------------------
 //ENVIRONNEMENT : Construction d'un environnement de type
-public class EnvironnementType {
+public class EnvironnementType implements Cloneable {
     private ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
     
     public EnvironnementType(){
         this.predef();
+    }
+    
+    public Object clone(){
+        EnvironnementType newEnv = null;
+		try {
+			// On récupère l'instance à renvoyer par l'appel de la 
+			// méthode super.clone()
+			newEnv = (EnvironnementType) super.clone();
+                        newEnv.gamma = (ArrayList<VarEnv>) gamma.clone();
+		} catch(CloneNotSupportedException cnse) {
+			// Ne devrait jamais arriver car nous implémentons 
+			// l'interface Cloneable
+			cnse.printStackTrace(System.err);
+		}
+		// on renvoie le clone
+        return newEnv;
     }
 
     public ArrayList<VarEnv> getGamma() {

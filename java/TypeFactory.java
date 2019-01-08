@@ -8,7 +8,7 @@
  *
  * @author boulakhf
  */
-public class TypeFactory {
+public class TypeFactory { // Useless mais à garder au cas ou
  
     
     public Type stringToType(String v){
