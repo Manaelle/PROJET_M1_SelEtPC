@@ -1,3 +1,6 @@
+
+import java.util.Map;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,11 +8,16 @@
  */
 
 /**
- *
+ * creer un hashmap (on fait correspondre ancien nom avec nouveau nom)
+ * map(string, id) conv
+ * let/letrec > rajouter les nom de variables dans la hashmap
+ * alpha epsilon : var non connue / alpha epsilon x -> x' : x est l'ancienne variable qui correspond à la nouvelle : x' 
  * @author Guillaume
  */
 public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
-
+    
+    Map<String, Id> conv;
+    
     @Override
     public Exp visit(Unit e) {
         return e;
@@ -59,37 +67,37 @@ public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
 
     @Override
     public Exp visit(FAdd e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FAdd(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(FSub e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FSub(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(FMul e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FMul(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(FDiv e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FDiv(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(Eq e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Eq(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(LE e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new LE(e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
     public Exp visit(If e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new If(e.e1.accept(this), e.e2.accept(this), e.e3.accept(this));
     }
 
     @Override
