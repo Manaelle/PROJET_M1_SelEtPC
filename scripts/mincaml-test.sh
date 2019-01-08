@@ -83,25 +83,54 @@ do
 							#si $MINCAMLC $test_case est redirigé vers STDERR (fichier test) : on test si test est vide ensuite 
 							for test_case in tests/typechecking/valid/*.ml
 							do	
-		
+									name_file=$(echo $test_case | cut -d'/' -f4)
 									$MINCAMLC "-t" $test_case  1>/dev/null 2>test 
 									if [ ! -s test ] 
 									then
-											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case 
+											printf "%-30s : \033[32m [OK] \033[0m \n" $name_file 
 									else 
-											printf "%-50s : \033[31m [ERROR] \033[0m \n" $test_case
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
 									fi
 							done
 
 							echo "\n \n \033[90m TEST DE TYPECHECKING [CAS INVALIDE] \033[0m:"
 							for test_case in tests/typechecking/invalid/*.ml
 							do	
+									name_file=$(echo $test_case | cut -d'/' -f4)
 									$MINCAMLC "-t" $test_case 2>test 1>/dev/null
 									if [ -s test ] 
 									then
-											printf "%-50s : \033[32m [OK] \033[0m \n" $test_case
+											printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
 									else 
-											printf "%-50s : \033[31m [ERROR] \033[0m \n" $test_case
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+									fi
+							done
+							echo '\n----------- INDICATION DES ERREURS ------------\n'
+							for test_case in tests/typechecking/valid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4)
+									$MINCAMLC "-t" $test_case  1>/dev/null 2>test 
+									if [ -s test ] 
+									then
+											echo '\n--------------------\n'
+											printf "\033[31m %-30s :\033[0m \n" $name_file
+											printf "\033[34m CODE : \033[0m \n"
+											cat $test_case
+											
+									fi
+							done
+							
+							for test_case in tests/typechecking/invalid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4)
+									$MINCAMLC "-t" $test_case  1>/dev/null 2>test 
+									if [ ! -s test ] 
+									then
+											echo '\n--------------------\n'
+											printf "\033[31m %-30s :\033[0m \n" $name_file
+											printf "\033[34m CODE : \033[0m \n"
+											cat $test_case
+											
 									fi
 							done
 							echo '\n---------------FIN DES TESTS------------------ \n'
