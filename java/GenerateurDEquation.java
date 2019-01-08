@@ -56,7 +56,11 @@ public class GenerateurDEquation {
         else if (e instanceof Not){
             listeEquation.add(new Equation(new TBool(), t));
             GenererEquations(env,((Not) e).e,new TBool());
-        }       
+        }
+        else if (e instanceof Neg){
+            listeEquation.add(new Equation(new TInt(), t));
+            GenererEquations(env, ((Neg) e).e, new TInt());
+        }
         //Operation sur entier
         else if (e instanceof Add){ 
             listeEquation.add(new Equation(new TInt(), t));
