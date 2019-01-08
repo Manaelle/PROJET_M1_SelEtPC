@@ -101,10 +101,7 @@ class Height {
         }  else if (exp instanceof Put) {
             Put e = (Put) exp;
             res = Math.max(computeHeight(e.e1), Math.max(computeHeight(e.e2), computeHeight(e.e3))) + 1;
-        } else {
-            // shouldn't happen
-            assert(false);
-        }
+        } 
         return res;
     }
 }
