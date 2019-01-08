@@ -114,8 +114,6 @@ public class GenerateurDEquation {
             EnvironnementType newEnv = (EnvironnementType) env.clone();
             VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
             newEnv.add(newVar);// Mise a jour de l'environnement
-            System.out.println("1" + env.toString());
-            System.out.println("2" + newEnv.toString());
             GenererEquations(env, ((Let) e).e1, ((Let) e).t);
             GenererEquations(newEnv, ((Let) e).e2, t);          
         }
@@ -215,9 +213,10 @@ public class GenerateurDEquation {
 
         // Partie pour les tableaux
         else if (e instanceof Array){
-            listeEquation.add(new Equation(new TArray(t), t));
+            Type T = Type.gen();
+            listeEquation.add(new Equation(new TArray(T), t));
             GenererEquations(env,((Array) e).e1,new TInt()); // taille du tableau
-            GenererEquations(env,((Array) e).e2,Type.gen()); // premier element du tableau , on ne sait pas son type    
+            GenererEquations(env,((Array) e).e2,T); // premier element du tableau , on ne sait pas son type    
         }
         else if (e instanceof Get){ // Ne modifie pas la liste des equations de type
             GenererEquations(env,((Get) e).e1,new TArray(t)); // Tableau

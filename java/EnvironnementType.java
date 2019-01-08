@@ -56,22 +56,9 @@ public class EnvironnementType implements Cloneable {
     
     //Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent
     public void add(VarEnv C){
-        
-        Boolean ok = true; //restera vrai si C peut être ajouté à Gamma
-        
-        for  (VarEnv x : this.gamma) {
-            if (x.getVar().equals(C.getVar())){
-                if(!x.getType().toString().equals(C.getType().toString())){
-                    System.out.println("ERREUR TYPAGE: Variable "+C.getVar()+" déjà définie avec le type "+C.getType().ToString());
-                }
-                ok = false; //inutile de l'ajouter si il est déjà présent
-            }
-        }
-        
-        if(ok){
             this.gamma.add(C);
-        } 
-    }
+    } 
+    
     
     //Vérifie si la variable est dans l'environnement
     public Boolean check(String v){   
