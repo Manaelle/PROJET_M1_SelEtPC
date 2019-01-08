@@ -13,12 +13,11 @@ public class Main {
       System.out.println("------ AST ------");
       expression.accept(new PrintVisitor());
       System.out.println();
-
+      System.out.println();
       System.out.println("------ Liste des Types ------");
       GenerateurDEquation ge = new GenerateurDEquation();
       ge.GenererEquations(new EnvironnementType(), expression, new TUnit());
       System.out.println(ge.toString());
-      System.out.println();
       System.out.println();
       System.out.println("------ Resolution des types  ------");
       System.out.println(ge.toString());
@@ -26,23 +25,26 @@ public class Main {
       System.out.println("bien typé est : " +ge.isBienTypee());
       System.out.println();
       System.out.println();
-       
-      System.out.println("------ AST ------");
-      expression.accept(new PrintVisitor());
-      System.out.println();
+      System.out.println("------ Height of the AST ----");
+      int height = Height.computeHeight(expression);
+      System.out.println("using Height.computeHeight: " + height);
+      ObjVisitor<Integer> v = new HeightVisitor();
+      height = expression.accept(v);
+      System.out.println("using HeightVisitor: " + height);
       
+      System.out.println();
       System.out.println("------ KNORM ------");
       Exp knorm = expression.accept(new KNormVisitor());
       knorm.accept(new PrintVisitor());
       System.out.println();
-
-      System.out.println("------ Height of the AST ----");
-      int height = Height.computeHeight(expression);
-      System.out.println("using Height.computeHeight: " + height);
-
-      ObjVisitor<Integer> v = new HeightVisitor();
-      height = expression.accept(v);
-      System.out.println("using HeightVisitor: " + height);
+      System.out.println();
+      
+      System.out.println("------ AlphaConv ------");
+      Exp alphaC = expression.accept(new AlphaConversionVisitor());
+      alphaC.accept(new PrintVisitor());
+      System.out.println();
+      
+      
 
     } catch (Exception e) {
       e.printStackTrace();
