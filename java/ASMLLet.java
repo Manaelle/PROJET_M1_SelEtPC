@@ -5,6 +5,7 @@
  */
 package prototypeasml;
 
+import java.util.ArrayList;
 import prototypeasml.ASMLOperande.TypeOperande;
 
 /**
@@ -26,7 +27,6 @@ public class ASMLLet implements ASMLExp {
             exp = exp + donnees[i] + " ";
         }
         exp = exp.trim();
-        System.out.println(exp);
         switch(TypeInstruction.getTypeInstruction(exp)) {
             case INT:
                 op2 = new ASMLOperande(exp, TypeOperande.IMM);
@@ -37,8 +37,9 @@ public class ASMLLet implements ASMLExp {
             case CALL:
                 op2 = new ASMLCall(exp);
                 break;
-                /*case MEM:
-                op2 = new ASMLMem(exp);*/
+            case MEM:
+                op2 = new ASMLMem(exp);
+                break;
             case ADD:
                 op2 = new ASMLArith(exp);
                 break;
@@ -51,13 +52,50 @@ public class ASMLLet implements ASMLExp {
             case FADD:
                 op2 = new ASMLArith(exp);
                 break;
+            case LABEL: 
+                op2 = new ASMLLabel(exp);
+                break;
+            case NEW:
+                op2 = new ASMLNew(exp);
+                break;
+            default:
+                System.out.println("Erreur : " + instruction);
+                break;
         }
     }
-    
+   
+
     @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op1.renommerVariable(ancien, nouveau);
-        op2.renommerVariable(ancien, nouveau);
+    public ArrayList<ASMLOperande> getOperandes() {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        a.addAll(op2.getOperandes());
+        return a;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        a.addAll(op2.getOperandes(type));
+        return a;
+    }
+    
+    public String toString(){
+        String res = "let " + op1 + " = " + op2;
+        return res;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        String code = "";
+        code += op2.genererAssembleur();
+        if(op1.getNom().startsWith("r")){
+            code += "LD " + op1 + ", r12\n";
+        } else {
+            // il faut mettre r12 à l'emplacement mémoire de op1
+        }
+        return code;
     }
     
 }

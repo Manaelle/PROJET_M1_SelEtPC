@@ -120,11 +120,11 @@ public class GenerateurDEquation {
         else if (e instanceof Var){
             if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
                 Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
-                
                 listeEquation.add(new Equation(typeCorrespondant, t));
             }
             else{
                 System.out.println("Problème typage"); // Si non, erreur typage on stop la compil   
+                bienTypee= false;
                 System.out.println(((Var) e).id.id);
                 System.out.println(env.toString());
             }
@@ -168,12 +168,12 @@ public class GenerateurDEquation {
             for (int i = 0; i < ((App)e).es.size(); i++){ // On check tout les parametres comme pour letrec
                 Type t1 = Type.gen();
                 
-                System.out.println(((App) e).es.get(i));
+            //    System.out.println(((App) e).es.get(i));
                 String v = ((App) e).es.get(i).toString();
                 String[] newV = v.split("\\@");
                 v = newV[0];
                 Type typeTraduit; 
-                
+        
                 switch(v){
                     case "Int":
                         GenererEquations(env, ((App)e).es.get(i), new TInt());
@@ -226,15 +226,24 @@ public class GenerateurDEquation {
         }
         
         // Partie pour les tuples
-        else if (e instanceof Tuple){ // Jui pas du tout sur de ce que ça donne :/
-            List<Type> l = null; 
+        else if (e instanceof Tuple){ 
+            ArrayList<Type> l = null; 
             
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
                 GenererEquations(env, ((Tuple) e).es.get(i),tTuple);
                 l.add(tTuple);
             }
-            //listeEquation.add(new Equation(new TTuple(l), t));   
+            listeEquation.add(new Equation(new TTuple(l), t));   
+        }
+        else if (e instanceof LetTuple){
+            EnvironnementType env1 = new EnvironnementType();
+            for(int i=0;i<((LetTuple) e).ids.size();i++){
+                VarEnv newVar = new VarEnv(((LetTuple) e).ids.get(i).toString(), Type.gen());
+                env1.add(newVar);
+                GenererEquations(env, ((LetTuple) e).e1, Type.gen());
+        }
+            GenererEquations(env1, ((LetTuple) e).e2, t);
         }
     }
     
@@ -261,9 +270,7 @@ public class GenerateurDEquation {
         if((c1.equals(c2)) || (c2.getName().equals("TUnit"))){
             if((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit)){
                 resoudreEquation(listeEquation);  
-            }
-            // type Tvar 
-            if(type1 instanceof TVar){
+            }else if(type1 instanceof TVar){
                 if(((TVar)type1).equals(((TVar)type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
                  }else{ ////?t = ?s 
@@ -324,8 +331,8 @@ public class GenerateurDEquation {
                         i++;
                     } 
                 // ajouter le type de retour 
-                    System.out.println("type de retour de " +fun1.ToString()+" est "+fun1.typeRetour.ToString());
-                    System.out.println("type de retour de " +fun2.ToString()+" est "+fun2.typeRetour.ToString());
+                //   System.out.println("type de retour de " +fun1.ToString()+" est "+fun1.typeRetour.ToString());
+                //    System.out.println("type de retour de " +fun2.ToString()+" est "+fun2.typeRetour.ToString());
                     Equation e1 = new Equation(fun1.typeRetour,fun2.typeRetour);
                     listeEquation.add(e1);
                     resoudreEquation(listeEquation);
@@ -336,7 +343,7 @@ public class GenerateurDEquation {
         }else{// des types differents + TVAR 
             
             if(type2 instanceof TVar){
-                System.out.println("on permute ");
+            //    System.out.println("on permute ");
                 TVar  type3;
                 type3 = new TVar((TVar)type2);
                 type2 = type1;

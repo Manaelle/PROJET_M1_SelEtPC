@@ -26,12 +26,34 @@ public class ASMLCall implements ASMLExp {
                                             donnees[i].matches("[0-9]+") ? TypeOperande.IMM : TypeOperande.VAR));
         }
     }
-    
+
     @Override
-    public void renommerVariable(String ancien, String nouveau) {
+    public ArrayList<ASMLOperande> getOperandes() {
+        return parametres;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
         for(ASMLOperande op : parametres){
-            op.renommerVariable(ancien, nouveau);
+            if(op.getType() == type){
+                a.add(op);
+            }
         }
+        return a;
+    }
+    
+    public String toString(){
+        String res = "call " + this.labelFonction;
+        for(ASMLOperande p : parametres){
+            res += " " + p;
+        }
+        return res;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        return "CALL NON IMPLEMENTE";
     }
     
     

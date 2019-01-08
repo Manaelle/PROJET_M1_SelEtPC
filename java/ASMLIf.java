@@ -35,18 +35,6 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
         expThen = new ArrayList<>(); // remplissage lors de la 
         expElse = new ArrayList<>(); // lecture des autres instructions
     }
-    
-    @Override
-    public void renommerVariable(String ancien, String nouveau) {
-        op1.renommerVariable(ancien, nouveau);
-        op2.renommerVariable(ancien, nouveau);
-        for(ASMLExp exp : expThen){
-            exp.renommerVariable(ancien, nouveau);
-        }
-        for(ASMLExp exp : expElse){
-            exp.renommerVariable(ancien, nouveau);
-        }
-    }
 
     @Override
     public void ajouterInstruction(ASMLExp expression) {
@@ -59,6 +47,43 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
 
     public void setConstructionThen(boolean constructionThen) {
         this.constructionThen = constructionThen;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes() {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        a.add(op1);
+        a.add(op2);
+        for(ASMLExp exp : expThen){
+            a.addAll(exp.getOperandes());
+        }
+        for(ASMLExp exp : expElse){
+            a.addAll(exp.getOperandes());
+        }
+        return a;
+    }
+
+    @Override
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
+        ArrayList<ASMLOperande> a = new ArrayList<>();
+        if(op1.getType() == type){
+            a.add(op1);
+        }
+        if(op2.getType() == type){
+            a.add(op2);
+        }
+        for(ASMLExp exp : expThen){
+            a.addAll(exp.getOperandes());
+        }
+        for(ASMLExp exp : expElse){
+            a.addAll(exp.getOperandes());
+        }
+        return a;
+    }
+
+    @Override
+    public String genererAssembleur() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

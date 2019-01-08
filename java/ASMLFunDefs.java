@@ -5,19 +5,12 @@
  */
 package prototypeasml;
 
-import java.util.ArrayList;
-import prototypeasml.ASMLOperande.TypeOperande;
-
 /**
  *
  * @author Pepefab
  */
-public interface ASMLExp {
-     
-    public ArrayList<ASMLOperande> getOperandes();
-    
-    public ArrayList<ASMLOperande> getOperandes(TypeOperande type);
-    
+public interface ASMLFunDefs{
+   
     public String genererAssembleur();
-
+    
 }
