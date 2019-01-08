@@ -16,6 +16,8 @@ import java.util.List;
 public class GenerateurDEquation {
     
     private ArrayList<Equation> listeEquation;
+    EnvironnementType env1 = new EnvironnementType();
+    EnvironnementType env2 = new EnvironnementType();
     private boolean bienTypee = true;
     public GenerateurDEquation(){
         listeEquation = new ArrayList<>();
@@ -118,13 +120,14 @@ public class GenerateurDEquation {
             GenererEquations(newEnv, ((Let) e).e2, t);          
         }
         else if (e instanceof Var){
+            System.out.println("------>"+((Var) e).id.toString());
             if (env.check(((Var) e).id.toString())){ // On check si la variable est dans l'environnement, si oui on cherche son type et on l'ajoute dans la liste
                 Type typeCorrespondant = env.correspondanceVarType(((Var) e).id.toString());
                 listeEquation.add(new Equation(typeCorrespondant, t));
             }
             else{
                 System.out.println("Problème typage"); // Si non, erreur typage on stop la compil   
-                bienTypee= false;
+                bienTypee = false;
                 System.out.println(((Var) e).id.id);
                 System.out.println(env.toString());
             }
@@ -135,8 +138,7 @@ public class GenerateurDEquation {
             Type retour = Type.gen();
             Exp M = fun.e;
             Exp N = ((LetRec) e).e;
-            EnvironnementType env1 = new EnvironnementType();
-            EnvironnementType env2 = new EnvironnementType();
+           
             ArrayList<Type> listeArgument = new ArrayList<>();
             if(fun.args.isEmpty()){
                 VarEnv newVar = new VarEnv(fun.id.toString(), new TFun(new ArrayList<>(),retour)); // On ajoute un nouvel element à l'environnement contenant 
@@ -153,6 +155,7 @@ public class GenerateurDEquation {
                 }
                 VarEnv v = new VarEnv(fun.id.toString(), new TFun(listeArgument, retour)); // Ajout du type de la fonction 
                 env1.add(v);
+                //System.out.println("//////"+env1);
                 env2.add(v);
             }
             
@@ -248,8 +251,7 @@ public class GenerateurDEquation {
     }
     
     public void resoudreEquation(ArrayList<Equation> listeEquation){
-        if(listeEquation.isEmpty()){
-            System.out.println(" equation vide");
+        if((listeEquation.isEmpty())||(bienTypee == false)){
             return;
         }
         // la premiere equation 
@@ -257,6 +259,7 @@ public class GenerateurDEquation {
         Type type1 = e.getDepart();
 	Type type2 = e.getArrive(); 
         // supprimer la premiere equation 
+        System.out.println(" "+listeEquation.toString());
         listeEquation.remove(0);
         String ctype1 = type1.toString();
         String ctype2 = type2.toString();
