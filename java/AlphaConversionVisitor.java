@@ -40,12 +40,12 @@ public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
 
     @Override
     public Exp visit(Not e) {
-        return e.e.accept(this);
+        return new Not(e.e.accept(this));
     }
 
     @Override
     public Exp visit(Neg e) {
-        return e;
+        return new FNeg(e.e.accept(this));
     }
 
     @Override
