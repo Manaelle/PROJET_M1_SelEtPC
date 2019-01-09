@@ -237,10 +237,9 @@ public class GenerateurDEquation {
         // Partie pour les tuples
         else if (e instanceof Tuple){ 
             ArrayList<Type> l = new ArrayList(); 
-              GenererEquations(env, ((Tuple) e).es.get(0),Type.gen());
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
-              
+                GenererEquations(env, ((Tuple) e).es.get(i),Type.gen());
                 l.add(tTuple);
             }
             listeEquation.add(new Equation(new TTuple(l), t));   
