@@ -45,7 +45,7 @@ public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
 
     @Override
     public Exp visit(Neg e) {
-        return new FNeg(e.e.accept(this));
+        return new Neg(e.e.accept(this));
     }
 
     @Override
