@@ -118,8 +118,6 @@ public class GenerateurDEquation {
             VarEnv newVar = new VarEnv(((Let) e).id.toString(), ((Let) e).t);
             newEnv.add(newVar);// Mise a jour de l'environnement
             GenererEquations(env, ((Let) e).e1, ((Let) e).t);
-    
-
             GenererEquations(newEnv, ((Let) e).e2, t); 
         }
         else if (e instanceof Var){
@@ -210,8 +208,8 @@ public class GenerateurDEquation {
         
         else if (e instanceof If){
             GenererEquations(env, ((If) e).e1, new TBool()); // on sait que e1 sera de type bool
-            GenererEquations(env, ((If) e).e2, t); 
-            GenererEquations(env, ((If) e).e3, t); 
+            GenererEquations(env, ((If) e).e2,t); 
+            GenererEquations(env, ((If) e).e3, t);
         }
 
 
@@ -239,10 +237,10 @@ public class GenerateurDEquation {
         // Partie pour les tuples
         else if (e instanceof Tuple){ 
             ArrayList<Type> l = new ArrayList(); 
-            
+              GenererEquations(env, ((Tuple) e).es.get(0),Type.gen());
             for(int i =0;i<((Tuple) e).es.size();i++){
                 Type tTuple = Type.gen();
-                GenererEquations(env, ((Tuple) e).es.get(i),tTuple);
+              
                 l.add(tTuple);
             }
             listeEquation.add(new Equation(new TTuple(l), t));   
@@ -278,14 +276,13 @@ public class GenerateurDEquation {
          listeEquation.remove(0);
         
         // le meme type  a modifié car c'est moche et avec le ToString ca ne marche pas 
-        // quand on fait if(ctype1.equals(c.type2)) ca retourne toujours false 
-        Class c1 = type1.getClass();
-        Class c2 = type2.getClass();
-  
-        if((c1.equals(c2)) || (c2.getName().equals("TUnit"))){
+        // quand on fait if(ctype1.equals(ctype2)) ca retourne toujours false 
+        Class<?> c1 = type1.getClass();
+        Class<?> c2 = type2.getClass();
+       // System.out.println("type1 = "+type1+"type2="+type2);
+        if((c1.equals(c2)) || (c2.getName().toString().equals("TUnit"))){
             if(((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit))){
                 resoudreEquation(listeEquation);  
-                
             }else if(type1 instanceof TVar){
                 if(((TVar)type1).equals((type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
@@ -303,14 +300,14 @@ public class GenerateurDEquation {
                     resoudreEquation(listeEquation);
                      
                 }
-           }else if (type1 instanceof TArray){
+           }else if ((type1 instanceof TArray)){
                TArray array1  = (TArray)type1;
                TArray array2 =(TArray)type2;
                Equation e1 = new Equation(array1.getType() ,array2.getType());
                listeEquation.add(e1);
                resoudreEquation(listeEquation); 
                // tuple ou struct 
-           }else if(type1 instanceof TTuple){
+           }else if((type1 instanceof TTuple)&&(!(c2.getName().toString().equals("TUnit")))){
                TTuple tuple1 = (TTuple) type1;
                TTuple tuple2 = (TTuple) type2;
                ArrayList<Type> list1 = tuple1.getList();
@@ -327,6 +324,7 @@ public class GenerateurDEquation {
                     i++;
                 }
                Equation e1 = new Equation(list1.get(i),list2.get(i));
+               listeEquation.add(e1);
                resoudreEquation(listeEquation);
                }else{
                    this.bienTypee = false ;
@@ -356,10 +354,11 @@ public class GenerateurDEquation {
                    this.bienTypee = false ;
                }        
            }
-        }else{// des types differents + TVAR 
-            System.out.println("tVAR "+type1+" "+type2);
+        }else{    
+            // des types differents + TVAR 
+           // System.out.println("tVAR "+type1+" "+type2);
             if(type2 instanceof TVar){
-            //    System.out.println("on permute ");
+                //System.out.println("on permute ");
                 TVar  type3;
                 type3 = new TVar((TVar)type2);
                 type2 = type1;
@@ -368,7 +367,6 @@ public class GenerateurDEquation {
             if(type1 instanceof TVar){
                 if(type2 instanceof TArray ){
                     if((((TArray)type2).getType() instanceof TVar)){
-                       
                         //listeEquation.add(e);
                     }else{
                         
@@ -414,6 +412,7 @@ public class GenerateurDEquation {
                         listeEquation = l;    
                          
                      }else{
+                         //System.out.println("***"+e);
                          listeEquation.add(e);
                      } 
    
