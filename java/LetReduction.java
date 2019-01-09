@@ -193,7 +193,17 @@ public class LetReduction implements ObjVisitor<Exp> {
 
     @Override
     public Exp visit(Tuple e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        List<Exp> list= new ArrayList<Exp>(); 
+        if(e.es.isEmpty()){
+            list = new ArrayList<Exp>();
+        }else{
+            for(Exp var : e.es){
+                Exp ex = var.accept(this);
+                list.add(ex);
+            }
+        }
+        return new Tuple(list);
     }
 
     @Override
