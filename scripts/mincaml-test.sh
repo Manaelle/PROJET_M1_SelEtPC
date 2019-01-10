@@ -31,7 +31,7 @@ echo "-q : quitter"
 
 read mode
 
-while [ "$mode" != "q" ]
+while [ "$mode" != "q" ] && [ "$mode" != "-q" ]
 do
 	case $mode in 
 	"-h" | "h") echo '\n------------------ AIDE ----------------------'

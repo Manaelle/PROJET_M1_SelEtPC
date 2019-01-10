@@ -1,1 +1,2 @@
-let a = Array.create 1 3 in 4
+let ar = Array.create 100 42 in
+print_int ar.(10)
