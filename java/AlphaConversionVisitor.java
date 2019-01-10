@@ -1,5 +1,6 @@
 
-import java.util.Map;
+import java.util.HashMap;
+import java.util.Stack;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,8 +16,7 @@ import java.util.Map;
  * @author Guillaume
  */
 public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
-    
-    Map<String, Id> conv;
+    private HashMap<String, Stack> env = new HashMap<String, Stack> ();
     
     @Override
     public Exp visit(Unit e) {
@@ -60,9 +60,7 @@ public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
 
     @Override
     public Exp visit(FNeg e) {
-        Id id = Id.gen();
-        Type type = Type.gen();
-        return new Let(id, type, e.e.accept(this), new FNeg(e));
+        return new FNeg(e.e.accept(this));
     }
 
     @Override
@@ -102,7 +100,19 @@ public class AlphaConversionVisitor implements ObjVisitor<Exp>  {
 
     @Override
     public Exp visit(Let e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Var generatedVariable = new Var(e.id.gen());
+        Stack stack = env.get(e.id.toString());
+        
+        // cas où la variable n'existe pas dans l'environnement
+        if(stack == null){
+            stack = new Stack();
+            env.put(e.id.toString(), stack);
+        }
+        
+        stack.push(generatedVariable.id.toString()); // on rajoute la variable dans la pile 
+        
+        
+        return new Let(generatedVariable.id, e.t, e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
