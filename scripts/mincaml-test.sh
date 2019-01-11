@@ -145,8 +145,39 @@ do
 							done
 							echo '\n---------------FIN DES TESTS------------------ \n'
 							rm knorm.txt
+							rm test.txt
 							;;
+"-ac" | "ac")   echo '\n----------------TEST A-CONV ------------------'
+							printf "\n \033[90m TEST DE LA K-NORMALISTION [CAS VALIDE]: \033[0m \n"
 
+							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
+							for test_case in tests/aconv/valid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
+									name_file_knorm=tests/aconv/valid_correct/$name_file.aconv
+									
+									$MINCAMLC "-kn" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									
+									#extraction du code dans knorm.txt
+									sed '1d' test.txt > aconv.txt
+									
+									
+									if diff -q $name_file_knorm aconv.txt 1>/dev/null;
+									then		 
+											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
+									else 
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+											printf "\033[34m CODE OBTENU\033[0m \n" 
+											cat aconv.txt
+											
+											printf "\033[34m CODE ATTENDU\033[0m \n" 
+											cat $name_file_knorm
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							rm aconv.txt
+							rm test.txt
+							;;
 	*) 					echo "Commande invalide, veuillez consulter l'aide pour en savoir plus."
 							;;
 							
