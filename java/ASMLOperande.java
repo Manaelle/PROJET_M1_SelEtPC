@@ -67,9 +67,14 @@ public class ASMLOperande implements ASMLExp {
     @Override
     public String genererAssembleur() {
         if(nom.startsWith("r")){
-            return "LD r12, " + nom + "\n";
+            return "\tLDR r12, " + nom + "\n";
         } else { // gérer si valeur immédiate ou en mémoire
-            return "";
+            if(nom.startsWith("[")){ // mémoire
+                String[] donnees = nom.replace("[", "").replace("]","").split(", ");
+                return "\tLDR r12, " + "???" + ", " + donnees[1] + "\n"; 
+            } else { // valeur immédiate
+                return "\tMOV r12, #" + nom + "\n";
+            }
         }
         
     }

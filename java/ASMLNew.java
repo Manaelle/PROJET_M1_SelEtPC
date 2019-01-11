@@ -44,7 +44,7 @@ public class ASMLNew implements ASMLExp{
 
     @Override
     public String genererAssembleur() {
-        return "NEW NON IMPLEMENTE";
+        return "NEW NON IMPLEMENTE\n";
     }
     
 }

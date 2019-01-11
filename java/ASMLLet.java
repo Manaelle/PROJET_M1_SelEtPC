@@ -86,14 +86,20 @@ public class ASMLLet implements ASMLExp {
         return res;
     }
 
+    
+    // amélioration possible : 
+    // actuellement on calcule le résultat de l'expression à droite et on le met dans r12, puis on déplace ce résultat.
+    // il serait bien de mettre le résultat directement au bon endroit
     @Override
     public String genererAssembleur() {
         String code = "";
         code += op2.genererAssembleur();
         if(op1.getNom().startsWith("r")){
-            code += "LD " + op1 + ", r12\n";
+            code += "\tldr " + op1 + ", r12\n";
         } else {
             // il faut mettre r12 à l'emplacement mémoire de op1
+            String[] donnees = op1.getNom().replace("[", "").replace("]","").split(", ");
+            code += "\tstr r12, " + "r11" + ", " + donnees[1] + "\n";
         }
         return code;
     }

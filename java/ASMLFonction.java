@@ -19,6 +19,8 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
     private ArrayList<ASMLOperande> parametres;
     private ArrayList<ASMLExp> expressions;
     
+    private int cptPile;
+    
     public ASMLFonction(String instruction){
         expressions = new ArrayList<>();
         parametres = new ArrayList<>();
@@ -34,7 +36,6 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         HashMap<String, String> allocateur = new HashMap<>(); // ancien nom -> nouveau nom
         int cptReg;
         int cptRegMax;
-        int cptPile;
         
         // renommage des paramètres
         cptReg = 0;
@@ -72,8 +73,6 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         cptReg = 4; // 4-10, puis pile
         if(nomsVariables.size() < 9){ // On garde juste le r12 pour le résultat d'une instruction
             cptRegMax = 10;
-        } else if(nomsVariables.size() == 9){ // On garde r12 pour le résultat et r10 pour le chargement depuis la mémoire
-            cptRegMax = 9;
         } else { // on garde r12 pour le résultat, et r9 + r10 pour le chargement depuis la mémoire
             cptRegMax = 8;
         }
@@ -94,13 +93,70 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
     }
     
     public String genererAssembleur(){
-        String code = "";
+        String code = nom + ":\n";
+        if(nom == "_"){ // main
+            code += "\tpush {fp, lr}\n";
+            code += "\tadd fp, sp, #4\n";
+        } else { // autres fonctions
+            code += "\tstr fp, [sp, #-4]\n";
+            code += "\tadd fp, sp, #0\n";
+        }
+
+        // sauvegarde des registres r4-r10 et r12-r13
+        code += "\tpush {r4-r10,r12-r13}\n";
+        
+        // paramètres
+        int cptParamsPile = parametres.size()-4;
+        if(cptParamsPile > 0){ // trop de paramètres => sur la pile
+            code += "\tsub sp, sp, #" + (4*cptParamsPile) + "\n";
+        }
+        
+        
+        // code à exécuter
         for(ASMLExp exp : this.expressions){
             code += exp.genererAssembleur();
         }
-        code += "MOV r0, r12\n"; // résultat de la fonction
+        
+        // restauration des registres
+        code += "\tpop {r4-r10,r12-r13}\n";
+        
+        // fin
+        code += "\tbx lr\n";
+        
         return code;
     }
+    
+    /*public String genererAssembleur(){
+        String code = nom + ":\n";
+        code += "@ sauvegarde des registres r4-r13\n";
+        code += "\tpush {r4-r13}\n";
+        /*for(int i = 4; i <= 13; i++){
+            if(i != 11){
+                code += "\tstr r" + i + ", r11, #" + cptPile + "\n";
+                cptPile -= 4;               
+            }
+        }
+        code += "\tstr r11, r11, #" + cptPile + "\n";
+        
+        code += "@ code de la fonction\n";
+        for(ASMLExp exp : this.expressions){
+            code += exp.genererAssembleur();
+        }
+        
+        code += "@ resultat de la fonction\n";
+        code += "\tmov r0, r12\n"; // résultat de la fonction
+        
+        code += "@ restauration des registres\n";
+        code += "\tpop {r4-r13}\n";
+        /*code += "\tldr r11, r11, #8\n";
+        for(int i = 4; i <= 13; i++){
+            if(i != 11){
+                code += "\tldr r" + i + ", r11, #" + cptPile + "\n";
+                cptPile += 4;
+            }
+        }
+        return code;
+    }*/
 
     @Override
     public void ajouterInstruction(ASMLExp expression) {

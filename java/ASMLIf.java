@@ -83,7 +83,7 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
 
     @Override
     public String genererAssembleur() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "\tIF NON IMPLEMENTE\n";
     }
     
     

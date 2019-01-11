@@ -53,7 +53,28 @@ public class ASMLCall implements ASMLExp {
 
     @Override
     public String genererAssembleur() {
-        return "CALL NON IMPLEMENTE";
+        String code = "";
+        // 1-sauvegarder registres r0-r3, r14
+        code += "\tpush {r0-r3,r14}\n";
+        // 2-empiler paramètres
+        for(ASMLOperande p : parametres){
+            if(p.estVariable()){
+                if(p.getNom().startsWith("r")){ // registre 
+                    code += "\tpush {" + p.getNom() + "}\n";
+                } else { // pile
+                    code += "\tldr r12, sp, " + p.getNom();
+                    code += "\tpush {r12}\n";
+                }
+            } else { // valeur immédiate
+                code += "\tmov r12, " + p.getNom() + "\n";
+                code += "\tpush {r12}\n";
+            }
+        }
+        // 3-appeler la fonction
+        code += "\tbl " + this.labelFonction + "\n";
+        // 4-restaurer les registres
+        code += "\tpop {r0-r3,r14}\n";
+        return code;
     }
     
     

@@ -61,7 +61,7 @@ public class ASMLMem implements ASMLExp {
 
     @Override
     public String genererAssembleur() {
-        return "MEM NON IMPLEMENTE";
+        return "MEM NON IMPLEMENTE\n";
     }
     
 }

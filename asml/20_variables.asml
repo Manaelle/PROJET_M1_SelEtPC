@@ -1,5 +1,5 @@
 let _f a b c d e f =
-	add a = b
+	add a b
 	
 let _ =
 	let a = 0 in
