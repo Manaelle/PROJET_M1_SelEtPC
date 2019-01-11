@@ -22,7 +22,7 @@ public class GenerateurASML implements ObjVisitor<String> { //Doc ASML/md pour c
     
     
     public String newVariable(int i){
-		return String.format("v%s", i);
+	return String.format("v%s", i);
     }
     
     @Override
@@ -70,12 +70,56 @@ public class GenerateurASML implements ObjVisitor<String> { //Doc ASML/md pour c
 
     @Override
     public String visit(Add e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res = new String();
+    	if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                    res += String.format("add %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e2.accept(this));
+                    res += String.format("add %s %s ", newVariable(vn),e.e1.accept(this));
+                    vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e1.accept(this));
+                    res += String.format("add %s %s ", newVariable(vn),e.e2.accept(this));
+                    vn++;
+            } else {
+                    String v1=newVariable(vn);
+                    vn++;
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                    res += String.format("add %s %s ",v1,newVariable(vn));
+                    vn++;
+            }
+        }
+    	return res ;
     }
 
     @Override
     public String visit(Sub e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+        if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                        res += String.format("sub %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e2.accept(this));
+                    res += String.format("sub %s %s", newVariable(vn),e.e1.accept(this));
+                    vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e1.accept(this));
+                    res += String.format("sub %s %s", newVariable(vn),e.e2.accept(this));
+                    vn++;
+            } else {
+                    String v1=newVariable(vn);
+                    vn++;
+                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                    res += String.format("sub %s %s",v1,newVariable(vn));
+                    vn++;
+            }
+        }
+        return res ;
     }
 
     @Override
@@ -95,17 +139,86 @@ public class GenerateurASML implements ObjVisitor<String> { //Doc ASML/md pour c
 
     @Override
     public String visit(FAdd e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+        if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                res += String.format("fadd %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                String v = newVariable(vn++);
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",v,e.e2.accept(this));
+                res += String.format("fadd _%s %s", newVariable(vn),e.e1.accept(this));
+                vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
+                res += String.format("fadd _%s %s", newVariable(vn),e.e2.accept(this));
+                vn++;
+            } else {
+                String v1=newVariable(vn);
+                vn++;
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                res += String.format("fadd _%s _%s",v1,newVariable(vn));
+                vn++;
+            }
+        }
+        return res ;
     }
 
     @Override
     public String visit(FSub e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+        if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                res += String.format("fsub %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                String v = newVariable(vn++);
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",v,e.e2.accept(this));
+                res += String.format("fsub _%s %s", newVariable(vn),e.e1.accept(this));
+                vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
+                res += String.format("fsub _%s %s", newVariable(vn),e.e2.accept(this));
+                vn++;
+            } else {
+                String v1=newVariable(vn);
+                vn++;
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                res += String.format("fsub _%s _%s",v1,newVariable(vn));
+                vn++;
+            }
+        }
+        return res ;
     }
 
     @Override
     public String visit(FMul e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+        if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                res += String.format("fmul %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                String v = newVariable(vn++);
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",v,e.e2.accept(this));
+                res += String.format("fmul _%s %s", newVariable(vn),e.e1.accept(this));
+                vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
+                res += String.format("fmul _%s %s", newVariable(vn),e.e2.accept(this));
+                vn++;
+            } else {
+                String v1=newVariable(vn);
+                vn++;
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                res += String.format("fmul _%s _%s",v1,newVariable(vn));
+                vn++;
+            }
+        }
+        return res ;
     }
 
     @Override
