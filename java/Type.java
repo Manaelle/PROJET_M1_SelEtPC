@@ -13,6 +13,10 @@ abstract class Type {
     }
     public abstract String ToString();
     
+    /*public boolean equals(Type t){
+       return this.ToString().equals(t);
+    }*/
+    
 }
 
 class TUnit extends Type { 
@@ -69,7 +73,11 @@ class TFun extends Type {
     public Type typeRetour;
     
     public TFun(ArrayList<Type> arguments ,Type typeRetour){
-        this.arguments= arguments;
+        this.arguments = new ArrayList<Type>(arguments);
+        if(arguments.isEmpty()){
+            this.arguments.add(Type.gen());
+        }
+        //this.arguments= arguments;
         this.typeRetour = typeRetour;
         
     }
@@ -118,7 +126,7 @@ class TFun extends Type {
         System.out.println();
         System.out.println();
 
-        return (this.typeRetour instanceof TVar);
+        return !(this.typeRetour instanceof TVar);
     }
     
     
