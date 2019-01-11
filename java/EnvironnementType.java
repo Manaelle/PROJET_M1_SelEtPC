@@ -90,7 +90,6 @@ public class EnvironnementType implements Cloneable {
         arguments.add(inte);
         gamma.add(new VarEnv("print_int",new TFun(arguments,new TUnit())));
         gamma.add(new VarEnv("float_of_int",new TFun(arguments,new TFloat()))); //fonction qui prend un entier et renvoie un float 
-        
         arguments = new ArrayList<Type>();
         TFloat floatt = new TFloat();
         arguments.add(floatt);
