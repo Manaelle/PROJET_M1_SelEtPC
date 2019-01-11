@@ -259,7 +259,6 @@ public class GenerateurDEquation {
         if((listeEquation.isEmpty())||(bienTypee == false)){
             return;
         }
-                System.out.println("**->"+listeEquation.toString());
 
         // la premiere equation 
         if((listeEquation.isEmpty())){
@@ -270,7 +269,6 @@ public class GenerateurDEquation {
 	Type type2 = e.getArrive(); 
         // supprimer la premiere equation 
         //System.out.println(" "+listeEquation.toString());
-        System.out.println("*** "+type1+ " *** "+type2);
        
        /* String ctype1 = type1.toString();
         String ctype2 = type2.toString();*/
@@ -353,8 +351,6 @@ public class GenerateurDEquation {
                 // ajouter le type de retour 
                 //   System.out.println("type de retour de " +fun1.ToString()+" est "+fun1.typeRetour.ToString());
                 //    System.out.println("type de retour de " +fun2.ToString()+" est "+fun2.typeRetour.ToString());
-                   System.out.println("---"+fun1.ToString()+" "+fun1.arguments.toString() +"     "+fun1.typeRetour);
-                   System.out.println("---"+fun2.ToString()+" "+fun2 .arguments.toString() +"     "+fun2.typeRetour);
                     Equation e1 = new Equation(fun1.typeRetour,fun2.typeRetour);
                     listeEquation.add(e1);
                     resoudreEquation(listeEquation);
@@ -373,7 +369,6 @@ public class GenerateurDEquation {
                 type1 = type3;    
             }
             if(type1 instanceof TVar){
-                System.out.println("je suis la ");
                 if(type2 instanceof TArray ){
                     if((((TArray)type2).getType() instanceof TVar)){
                         //listeEquation.add(e);
