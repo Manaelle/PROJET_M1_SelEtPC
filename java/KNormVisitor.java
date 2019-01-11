@@ -237,14 +237,18 @@ class KNormVisitor implements ObjVisitor<Exp> {
     @Override
     public Tuple visit(Tuple e){
         //TO DO
-        List<Exp> es = e.es;
-        return null;
+        List<Exp> list_tuple_es = new ArrayList<Exp>();
+        for (int i = 0; i < e.es.size(); i++){
+            Exp tuple_cpt = e.es.get(i);
+            list_tuple_es.add(tuple_cpt.accept(this));
+        }
+        return new Tuple(list_tuple_es);
     }
 
     @Override
     public LetTuple visit(LetTuple e){
         //TO DO
-        return null;
+        return new LetTuple(e.ids, e.ts, e.e1.accept(this), e.e2.accept(this));
     }
 
     @Override
