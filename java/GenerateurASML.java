@@ -223,7 +223,30 @@ public class GenerateurASML implements ObjVisitor<String> { //Doc ASML/md pour c
 
     @Override
     public String visit(FDiv e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+        if(e.e1 instanceof Var){
+            if(e.e2 instanceof Var){
+                res += String.format("fdiv %s %s",e.e1.accept(this), e.e2.accept(this));
+            } else {
+                String v = newVariable(vn++);
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",v,e.e2.accept(this));
+                res += String.format("fdiv _%s %s", newVariable(vn),e.e1.accept(this));
+                vn++;
+            }
+        } else {
+            if(e.e2 instanceof Var){
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
+                res += String.format("fdiv _%s %s", newVariable(vn),e.e2.accept(this));
+                vn++;
+            } else {
+                String v1=newVariable(vn);
+                vn++;
+                GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
+                res += String.format("fdiv _%s _%s",v1,newVariable(vn));
+                vn++;
+            }
+        }
+        return res ;
     }
 
     @Override
@@ -273,22 +296,48 @@ public class GenerateurASML implements ObjVisitor<String> { //Doc ASML/md pour c
 
     @Override
     public String visit(LetTuple e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.format("let %s = 1 in \n\tlet %s = call _min_caml_create_array %s %s in %s",newVariable(vn),printIds(e.ids,""),newVariable(vn++), e.e1.accept(this),e.e2.accept(this));
     }
 
     @Override
     public String visit(Array e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String res ="";
+    	String v1 = "";
+    	String v2 = "";
+    	String v =newVariable(vn++);
+    	if(e.e1 instanceof Int){
+            v2 = newVariable(vn++);
+            GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v2,e.e1.accept(this));
+    	} else if (e.e1 instanceof Var){
+            v2 = e.e1.accept(this);
+    	} 
+    	if(e.e2 instanceof Int){
+            v1 = newVariable(vn++);
+            GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v1,e.e2.accept(this));
+            res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+    	} else if (e.e2 instanceof Var){
+            v1 = e.e2.accept(this);
+            res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+    	} else if (e.e2 instanceof Float){
+            v1 = newVariable(vn++);
+            String v3 = newVariable(vn++);
+            GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in\n\tlet %s = mem(%s + 0) in",v1,v1,v3,v1);
+            GenerateurASML.floatDeclaration += String.format("\nlet _%s = %s",v1,e.e2.accept(this));
+            res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+    	} 
+    	return res;
     }
 
     @Override
     public String visit(Get e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String v = newVariable(vn);
+    	GenerateurASML.entryPoint += String.format("\n\tlet %s = mem(%s + %s) in",v, e.e1.accept(this), e.e2.accept(this));
+    	return v;
     }
 
     @Override
     public String visit(Put e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return String.format("mem(%s + %s) <- %s", e.e1.accept(this), e.e2.accept(this),e.e3.accept(this));
     }
     
     
