@@ -259,6 +259,8 @@ public class GenerateurDEquation {
         if((listeEquation.isEmpty())||(bienTypee == false)){
             return;
         }
+                System.out.println("**->"+listeEquation.toString());
+
         // la premiere equation 
         if((listeEquation.isEmpty())){
             return;  
@@ -268,7 +270,7 @@ public class GenerateurDEquation {
 	Type type2 = e.getArrive(); 
         // supprimer la premiere equation 
         //System.out.println(" "+listeEquation.toString());
-  
+        System.out.println("*** "+type1+ " *** "+type2);
        
        /* String ctype1 = type1.toString();
         String ctype2 = type2.toString();*/
@@ -279,13 +281,14 @@ public class GenerateurDEquation {
         Class<?> c1 = type1.getClass();
         Class<?> c2 = type2.getClass();
        // System.out.println("type1 = "+type1+"type2="+type2);
-        if((c1.equals(c2)) || (c2.getName().toString().equals("TUnit"))){
+        if((c1.equals(c2))|| ((c2.getName().toString().equals("TUnit"))) ){
             if(((type1 instanceof TInt)||(type1 instanceof TFloat)||(type1 instanceof TBool)||(type1 instanceof TUnit))){
                 resoudreEquation(listeEquation);  
-            }else if(type1 instanceof TVar){
+            }else if((type1 instanceof TVar)){
                 if(((TVar)type1).equals((type2))){ //?t = ?t 
                     resoudreEquation(listeEquation);
                  }else{ ////?t = ?s 
+
                     ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
                     // remplacer toutes les equations 
                     // remplacement !  
@@ -312,7 +315,7 @@ public class GenerateurDEquation {
                ArrayList<Type> list1 = tuple1.getList();
                ArrayList<Type> list2 = tuple2.getList();
                int taille1 = list1.size();
-               int taille2 = list1.size();
+               int taille2 = list2.size();
                // on verifie deja la taille des deux struct
                if(taille1 == taille2){
                 int i = 0; 
@@ -328,15 +331,19 @@ public class GenerateurDEquation {
                }else{
                    this.bienTypee = false ;
                }    //fonction    
-           }else if(type1 instanceof TFun){
+           }else if((type1 instanceof TFun)&&(!(c2.getName().toString().equals("TUnit")))){
+                System.out.println("fun");
                TFun fun1 = (TFun) type1;
                TFun fun2 = (TFun) type2;
                ArrayList<Type> list1 = fun1.getArgument();
                ArrayList<Type> list2 = fun2.getArgument();
+                System.out.println("  "+list1.toString()+" "+list1.size());
+                System.out.println("  "+list2.toString()+" "+list2.size());
                int taille1 = list1.size();
-               int taille2 = list1.size();
+               int taille2 = list2.size();
                // on verifie deja la taille des deux arguments 
-               if(taille1 == taille2){
+               if(taille1 ==taille2){
+                   System.out.println("je suis la ");
                     int i = 0; 
                     while(i<taille1){
                         Equation e1 = new Equation(list1.get(i),list2.get(i));
@@ -346,6 +353,8 @@ public class GenerateurDEquation {
                 // ajouter le type de retour 
                 //   System.out.println("type de retour de " +fun1.ToString()+" est "+fun1.typeRetour.ToString());
                 //    System.out.println("type de retour de " +fun2.ToString()+" est "+fun2.typeRetour.ToString());
+                   System.out.println("---"+fun1.ToString()+" "+fun1.arguments.toString() +"     "+fun1.typeRetour);
+                   System.out.println("---"+fun2.ToString()+" "+fun2 .arguments.toString() +"     "+fun2.typeRetour);
                     Equation e1 = new Equation(fun1.typeRetour,fun2.typeRetour);
                     listeEquation.add(e1);
                     resoudreEquation(listeEquation);
@@ -353,7 +362,7 @@ public class GenerateurDEquation {
                    this.bienTypee = false ;
                }        
            }
-        }else{    
+        }else{ 
             // des types differents + TVAR 
            // System.out.println("tVAR "+type1+" "+type2);
             if(type2 instanceof TVar){
@@ -364,6 +373,7 @@ public class GenerateurDEquation {
                 type1 = type3;    
             }
             if(type1 instanceof TVar){
+                System.out.println("je suis la ");
                 if(type2 instanceof TArray ){
                     if((((TArray)type2).getType() instanceof TVar)){
                         //listeEquation.add(e);
@@ -375,13 +385,14 @@ public class GenerateurDEquation {
                         int taille = listeEquation.size();
                         for(int i = 0 ; i< taille ; i++){
                             Type t1  = remplacer(listeEquation.get(i).getDepart(),type2,(TVar)type1);
+                                                        
                             Type t2  = remplacer(listeEquation.get(i).getArrive(),type2,(TVar)type1);
                             l.add(new Equation(t1,t2));
                         }
                         listeEquation = l;     
                     }
 
-                }else if(type2 instanceof TFun ){
+                }else if(type2 instanceof TFun ){             
                     if(((TFun)type2).contientTvar()){
                         // je pense je dois creer une fonction pour ce bout de code je l'ai copie coller plusieurs fois 
                         ArrayList<Equation> l = new ArrayList<Equation>();// list pour remplacer tout 
