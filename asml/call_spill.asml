@@ -1,0 +1,15 @@
+let _f a b c d e f =
+	add a b
+	
+let _ =
+	let a = 0 in
+	let b = 1 in
+	let c = 2 in
+	let d = 3 in
+	let e = 4 in
+	let f = 5 in
+	let g = 6 in
+	let h = 7 in 
+	let i = 8 in 
+	let j = 9 in
+	call _f a b c d j 100

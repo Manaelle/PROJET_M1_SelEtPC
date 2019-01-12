@@ -99,7 +99,7 @@ public class ASMLLet implements ASMLExp {
         } else {
             // il faut mettre r12 à l'emplacement mémoire de op1
             String[] donnees = op1.getNom().replace("[", "").replace("]","").split(", ");
-            code += "\tstr r12, " + "r11" + ", " + donnees[1] + "\n";
+            code += "\tstr r12, " + "fp" + ", " + donnees[1] + "\n";
         }
         return code;
     }

@@ -82,8 +82,8 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
                 allocateur.put(nomOp, "r" + cptReg);
                 cptReg += 1;
             } else {
+                cptPile -=4;
                 allocateur.put(nomOp, "[fp, #" + cptPile + "]");
-                cptPile -= 4;
             }
         }   
         // on a remplis l'allocateur, on peut désormais renommer les variables (l'allocation)
@@ -92,23 +92,21 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         }
     }
     
+
     public String genererAssembleur(){
-        String code = nom + ":\n";
-        if(nom == "_"){ // main
+        String code = "";
+        if(nom.equals("_")){ // main
+            code += "main:\n";
             code += "\tpush {fp, lr}\n";
             code += "\tadd fp, sp, #4\n";
+            code += "\tsub sp, sp, #" + Math.abs(8-cptPile) + "\n"; // place pour les variables qui débordent + 8 (return + fp)
         } else { // autres fonctions
+            code += nom + ":\n";
             code += "\tstr fp, [sp, #-4]\n";
             code += "\tadd fp, sp, #0\n";
-        }
-
-        // sauvegarde des registres r4-r10 et r12-r13
-        code += "\tpush {r4-r10,r12-r13}\n";
-        
-        // paramètres
-        int cptParamsPile = parametres.size()-4;
-        if(cptParamsPile > 0){ // trop de paramètres => sur la pile
-            code += "\tsub sp, sp, #" + (4*cptParamsPile) + "\n";
+            code += "\tsub sp, sp, #" + Math.abs(4-cptPile) + "\n"; // place pour les variables qui débordent + 4 (fp)
+            // sauvegarde des registres r4-r10 et r12-r13
+            code += "\tpush {r4-r10,r12-r13}\n";
         }
         
         
@@ -121,6 +119,7 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         code += "\tpop {r4-r10,r12-r13}\n";
         
         // fin
+        code += "\tldr fp, [sp], #4\n"; // restaure fp
         code += "\tbx lr\n";
         
         return code;

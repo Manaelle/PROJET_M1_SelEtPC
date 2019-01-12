@@ -56,14 +56,30 @@ public class ASMLArith implements ASMLExp {
             code += "\t" + operateur + " r12, " + op1 + " " + op2 + "\n";
         } else {
             if(!op1.getNom().startsWith("r") && !op2.getNom().startsWith("r")){ // op1 et op2 doivent être chargé en registre
-                code += "\tldr r9, " + op1 + "\n";
-                code += "\tldr r10, " + op2 + "\n";
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else {
+                    code += "`\tmov r9, " + op1 + "\n";
+                }
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else {
+                    code += "\tmov r10, " + op2 + "\n";
+                }
                 code += "\t" + operateur + " r12, r9, r10\n";
             } else if(!op1.getNom().startsWith("r")){ // op1 doit être chargé en mémoire
-                code +="\tldr r10, " + op1 + "\n";
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else {
+                    code += "`\tmov r9, " + op1 + "\n";
+                }
                 code += "\t" + operateur + " r12, r10, " + op2 + "\n";
             } else { // op2 doit être chargé en mémoire
-                code += "\tldr r10, " + op2 + "\n";
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else {
+                    code += "\tmov r10, " + op2 + "\n";
+                }
                 code += "\t" + operateur + " r12, " + op1 + ", r10\n";
             }
         }

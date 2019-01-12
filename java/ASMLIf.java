@@ -83,7 +83,62 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
 
     @Override
     public String genererAssembleur() {
-        return "\tIF NON IMPLEMENTE\n";
+        // le code est généré en 3 parties : le code de la comparaison, celui du else, et celui du then
+        // la façon dont j'ai conçu la génération de code force la fonction a séparer les 3 morceaux du code,
+        // c'est une petite erreur de conception. Fort heureusement, l'incident n'a fait aucune victime !
+        
+        // if    
+        String code = "";
+        if(op1.getNom().startsWith("r") && op2.getNom().startsWith("r")){ // tout est dans les registres
+            code += "\tcmp " + op1 + " " + op2 + "\n";
+        } else {
+            if(!op1.getNom().startsWith("r") && !op2.getNom().startsWith("r")){ // op1 et op2 doivent être chargé en registre
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else { // valeur immédiate
+                    code += "\tmov r9, " + op1 + "\n";
+                }
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else { // valeur immédiate
+                    code += "\tmov r10, " + op2 + "\n";
+                }
+                code += "\tcmp r9, r10\n";
+            } else if(!op1.getNom().startsWith("r")){ // op1 doit être chargé en mémoire
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else { // valeur immédiate
+                    code += "\tmov r9, " + op1 + "\n";
+                }
+                code += "\tcmp r10, " + op2 + "\n";
+            } else { // op2 doit être chargé en mémoire
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else { // valeur immédiate
+                    code += "\tmov r10, " + op2 + "\n";
+                }
+                code += "\tcmp " + op1 + ", r10\n";
+            }
+        }
+        switch(comparateur){ // /!\ les floats ne sont pas gérés
+            case "=":
+                code += "\tbne TAG_ELSE\n";
+                code += "\tb TAG_THEN\n";
+                break;
+            case "<=":
+                break;
+            case "<":
+                break;
+            case ">=":
+                break;
+            case ">":
+                break;
+        }
+        
+        
+        // else
+        code += "ELSE:\n";
+        return code;
     }
     
     
