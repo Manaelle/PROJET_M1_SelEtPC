@@ -54,8 +54,8 @@ public class ASMLCall implements ASMLExp {
     @Override
     public String genererAssembleur() {
         String code = "";
-        // 1-sauvegarder registres r0-r3, r14
-        code += "\tpush {r0-r3,r14}\n";
+        // 1-sauvegarder registres r0-r3
+        code += "\tpush {r0-r3}\n";
         // 2- paramètres
         ASMLOperande p;
         for(int i = 0; i < parametres.size(); i++){
@@ -87,7 +87,7 @@ public class ASMLCall implements ASMLExp {
         // 3-appeler la fonction
         code += "\tbl " + this.labelFonction + "\n";
         // 4-restaurer les registres
-        code += "\tpop {r0-r3,r14}\n";
+        code += "\tpop {r0-r3}\n";
         return code;
     }
     

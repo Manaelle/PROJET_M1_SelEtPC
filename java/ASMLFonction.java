@@ -115,12 +115,15 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
             code += exp.genererAssembleur();
         }
         
-        // restauration des registres
-        code += "\tpop {r4-r10,r12-r13}\n";
+        if(!(nom.equals("_"))){
+            // restauration des registres
+            code += "\tpop {r4-r10,r12-r13}\n";           
+        }
         
         // fin
         code += "\tldr fp, [sp], #4\n"; // restaure fp
         code += "\tbx lr\n";
+       
         
         return code;
     }

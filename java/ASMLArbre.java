@@ -42,6 +42,7 @@ public class ASMLArbre {
                 break;
             case IF:
                 ASMLIf a_if = new ASMLIf(instruction);
+                brancheActuelle.ajouterInstruction(a_if);
                 brancheActuelle = a_if;
                 break;
             case ELSE:
@@ -90,6 +91,8 @@ public class ASMLArbre {
     
     public String genererAssembleur(){
         String code = "";
+        code += "\t.text\n";
+        code += "\t.global main\n";
         for(ASMLFunDefs a : labels){
             code += a.genererAssembleur();
         }

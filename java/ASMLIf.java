@@ -30,7 +30,7 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
         op1 = new ASMLOperande(donnees[1], 
                                donnees[1].matches("[0-9]+") ? TypeOperande.IMM : TypeOperande.VAR);
         comparateur = donnees[2];
-        op1 = new ASMLOperande(donnees[3], 
+        op2 = new ASMLOperande(donnees[3], 
                                donnees[3].matches("[0-9]+") ? TypeOperande.IMM : TypeOperande.VAR);
         expThen = new ArrayList<>(); // remplissage lors de la 
         expElse = new ArrayList<>(); // lecture des autres instructions
@@ -83,10 +83,6 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
 
     @Override
     public String genererAssembleur() {
-        // le code est généré en 3 parties : le code de la comparaison, celui du else, et celui du then
-        // la façon dont j'ai conçu la génération de code force la fonction a séparer les 3 morceaux du code,
-        // c'est une petite erreur de conception. Fort heureusement, l'incident n'a fait aucune victime !
-        
         // if    
         String code = "";
         if(op1.getNom().startsWith("r") && op2.getNom().startsWith("r")){ // tout est dans les registres
@@ -120,24 +116,37 @@ public class ASMLIf extends ASMLBranche implements ASMLExp{
                 code += "\tcmp " + op1 + ", r10\n";
             }
         }
+        
         switch(comparateur){ // /!\ les floats ne sont pas gérés
             case "=":
-                code += "\tbne TAG_ELSE\n";
-                code += "\tb TAG_THEN\n";
+                code += "\tbne TAG_ELSE_" + this.hashCode() + "\n";
                 break;
             case "<=":
+                code += "\tbgt TAG_ELSE_" + this.hashCode() + "\n";
                 break;
             case "<":
+                code += "\tbge TAG_ELSE_" + this.hashCode() + "\n";
                 break;
             case ">=":
+                code += "\tblt TAG_ELSE_" + this.hashCode() + "\n";
                 break;
             case ">":
+                code += "\tble TAG_ELSE_" + this.hashCode() + "\n";
                 break;
         }
         
+        // then
+        for(ASMLExp exp : expThen){
+            code += exp.genererAssembleur();
+        }
         
-        // else
-        code += "ELSE:\n";
+        code += "TAG_ELSE_" + this.hashCode() + ":\n";
+        for(ASMLExp exp : expElse){
+            code += exp.genererAssembleur();
+        }
+        
+        code += "TAG_SUITE_" + this.hashCode() + ":\n";
+        
         return code;
     }
     
