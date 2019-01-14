@@ -15,17 +15,18 @@ chmod +x $MINCAMLC
 echo '\n------------------ TEST ----------------------'
 echo 'Bienvenue à la phase de test. Pour commencer, selectionner le mode :'
 echo "-h : affichage de l'aide"
-echo "-v : affichage de la version."
+echo "-v : affichage de la version.\n "
 
 echo "-p : test de la syntaxe (parsing)."
-echo "-t : test du typage."
+echo "-t : test du typage. \n"
 
 echo "-kn : test de la K-normalisation."
-echo "-ar : test pour A-conversion."
+echo "-ac : test pour A-conversion."
 echo "-br : test pour B-reduction."
+echo "-lr : test pour Let-reduction. \n"
 
 echo "-asml : test de conversion en fichier .asml."
-echo "-o : test de conversion en fichier .s (assembleur)."
+echo "-o : test de conversion en fichier .s (assembleur). \n"
 
 echo "-q : quitter"
 
@@ -44,6 +45,7 @@ do
 							echo "-kn : test de la K-normalisation."
 							echo "-ar : test pour A-conversion."
 							echo "-br : test pour B-reduction."
+							echo "-br : test pour Let-reduction."
 
 							echo "-asml : test de conversion en fichier .asml."
 							echo "-o : test de conversion en fichier .s (assembleur)."
@@ -156,7 +158,7 @@ do
 									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
 									name_file_knorm=tests/aconv/valid_correct/$name_file.aconv
 									
-									$MINCAMLC "-kn" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									$MINCAMLC "-ac" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
 									
 									#extraction du code dans knorm.txt
 									sed '1d' test.txt > aconv.txt
@@ -178,6 +180,132 @@ do
 							rm aconv.txt
 							rm test.txt
 							;;
+"-br" | "br")   echo '\n----------------TEST B-RED ------------------'
+							printf "\n \033[90m TEST DE LA B-REDUCTION [CAS VALIDE]: \033[0m \n"
+
+							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
+							for test_case in tests/bred/valid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
+									name_file_knorm=tests/bred/valid_correct/$name_file.bred
+									
+									$MINCAMLC "-br" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									
+									#extraction du code dans knorm.txt
+									sed '1d' test.txt > bred.txt
+									
+									
+									if diff -q $name_file_knorm bred.txt 1>/dev/null;
+									then		 
+											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
+									else 
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+											printf "\033[34m CODE OBTENU\033[0m \n" 
+											cat bred.txt
+											
+											printf "\033[34m CODE ATTENDU\033[0m \n" 
+											cat $name_file_knorm
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							rm bred.txt
+							rm test.txt
+							;;
+"-lr" | "lr")   echo '\n----------------TEST LET-RED ------------------'
+							printf "\n \033[90m TEST DE LA LET-REDUCTION [CAS VALIDE]: \033[0m \n"
+
+							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
+							for test_case in tests/lred/valid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
+									name_file_knorm=tests/lred/valid_correct/$name_file.lred
+									
+									$MINCAMLC "-lr" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									
+									#extraction du code dans knorm.txt
+									sed '1d' test.txt > lred.txt
+									
+									
+									if diff -q $name_file_knorm lred.txt 1>/dev/null;
+									then		 
+											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
+									else 
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+											printf "\033[34m CODE OBTENU\033[0m \n" 
+											cat lred.txt
+											
+											printf "\033[34m CODE ATTENDU\033[0m \n" 
+											cat $name_file_knorm
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							rm lred.txt
+							rm test.txt
+							;;
+"-asml" | "asml")   echo '\n----------------TEST ASML ------------------'
+							printf "\n \033[90m TEST DE ASML [CAS VALIDE]: \033[0m \n"
+
+							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
+							for test_case in tests/asml/valid/*.ml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
+									name_file_knorm=tests/asml/valid_correct/$name_file.asml
+									
+									$MINCAMLC "-asml" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									
+									#extraction du code dans knorm.txt
+									sed '1d' test.txt > asml.txt
+									
+									
+									if diff -q $name_file_knorm asml.txt 1>/dev/null;
+									then		 
+											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
+									else 
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+											printf "\033[34m CODE OBTENU\033[0m \n" 
+											cat asml.txt
+											
+											printf "\033[34m CODE ATTENDU\033[0m \n" 
+											cat $name_file_knorm
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							rm asml.txt
+							rm test.txt
+							;;							
+							
+"-o" | "o")   echo '\n----------------TEST ARM ------------------'
+							printf "\n \033[90m TEST DE ARM [CAS VALIDE]: \033[0m \n"
+
+							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
+							for test_case in tests/arm/valid/*.asml
+							do	
+									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
+									name_file_knorm=tests/arm/valid_correct/$name_file.s
+									
+									$MINCAMLC "-o" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
+									
+									#extraction du code dans knorm.txt
+									sed '1d' test.txt > arm.txt
+									
+									
+									if diff -q $name_file_knorm arm.txt 1>/dev/null;
+									then		 
+											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
+									else 
+											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
+											printf "\033[34m CODE OBTENU\033[0m \n" 
+											cat arm.txt
+											
+											printf "\033[34m CODE ATTENDU\033[0m \n" 
+											cat $name_file_knorm
+									fi
+							done
+							echo '\n---------------FIN DES TESTS------------------ \n'
+							rm arm.txt
+							rm test.txt
+							;;							
+							
 	*) 					echo "Commande invalide, veuillez consulter l'aide pour en savoir plus."
 							;;
 							
