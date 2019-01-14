@@ -102,7 +102,7 @@ public class Main {
                 //CREATION DU .ASML (AVEC LET-REDUCTION ET CLOSURE) (option -asml)
                 if( argv[0].equals("-asml")){
                     String asml =  expression.accept(new GenerateurASML());
-                    asml = GenerateurASML.hautf + GenerateurASML.haut + GenerateurASML.inter + asml ;
+                    asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
                     String nomFichierAvecAsml = nomFichierSansMl + ".asml";
                     System.out.println(asml);
                     PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
@@ -157,10 +157,10 @@ public class Main {
                     
                     //ASML:
                     String asml =  expression.accept(new GenerateurASML());
-                    asml = GenerateurASML.hautf + GenerateurASML.haut + GenerateurASML.inter + asml ;
+                    asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
                     String nomFichierAvecAsml = nomFichierSansMl + ".asml";
                     System.out.println(asml);
-                    PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
+                    PrintWriter w = new PrintWriter( new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
                     w.print(asml);
                     w.close();
                     
