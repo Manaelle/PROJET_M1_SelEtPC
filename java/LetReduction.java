@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 /**
- *
+ * documentation  4.6
  * @author benmousn
  */
 public class LetReduction implements ObjVisitor<Exp> {
@@ -36,83 +36,83 @@ public class LetReduction implements ObjVisitor<Exp> {
 
     @Override
     public Exp visit(Not e) {
-            Var e1 = (Var)e.e.accept(this);
+            Exp e1 = e.e.accept(this);
             return new Not(e1);
             
     }
 
     @Override
     public Exp visit(Neg e) {
-        Var e1 = (Var)e.e.accept(this);
+        Exp e1 = e.e.accept(this);
         return new Neg(e1);
     }
 
     @Override
     public Exp visit(Add e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new Add(e1,e2);
     }
 
     @Override
     public Exp visit(Sub e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new Sub(e1,e2);
     }
 
     @Override
     public Exp visit(FNeg e) {
-        Var e1 = (Var)e.e.accept(this);
+        Exp e1 = e.e.accept(this);
         return new FNeg(e1);
     }
 
     @Override
     public Exp visit(FAdd e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new FAdd(e1,e2);
     }
 
     @Override
     public Exp visit(FSub e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new FSub(e1,e2);
     }
 
     @Override
     public Exp visit(FMul e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new FMul(e1,e2);
     }
 
     @Override
     public Exp visit(FDiv e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new FDiv(e1,e2);    }
 
     @Override
     public Exp visit(Eq e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new Eq(e1,e2);
     }
 
     @Override
     public Exp visit(LE e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new LE(e1,e2);
     }
 
     @Override
     public Exp visit(If e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
-        Var e3 = (Var)e.e3.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
+        Exp e3 = e.e3.accept(this);
         return  new If(e1,e2,e3);
     }
 
@@ -208,7 +208,38 @@ public class LetReduction implements ObjVisitor<Exp> {
 
     @Override
     public Exp visit(LetTuple e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Exp e1 = e.e1.accept(this);
+        List<Type> types = e.ts;
+        List<Id> ids = e.ids;
+        
+        if(e1 instanceof Let  ){
+            Let let = (Let) e1;
+            Type type = let.t;
+            Id i = let.id;
+            Exp e2 = let.e1;
+            Exp e3 = let.e2;
+            Exp e4 = e.e2.accept(this);
+            return new Let(i,type,e2,new LetTuple(ids,types, e3,e4).accept(this));
+        }else if(e1 instanceof LetTuple){
+            LetTuple ltuple = (LetTuple)e1; 
+            Exp e2 = ltuple.e1;
+            Exp e3 = ltuple.e2;
+            Exp e4 = ltuple.e2.accept(this);
+            return new LetTuple(ltuple.ids,ltuple.ts,e2,new LetTuple(ids,types,e3,e4));
+                  
+        } else if (e1 instanceof LetRec){
+            LetRec lrec = (LetRec)e1;
+            Exp e2 = lrec.e;
+            Exp e3  = e.e2.accept(this);
+            FunDef f = lrec.fd;
+            return new LetRec(f,new LetTuple(ids,types,e2,e3).accept(this));    
+        }else{
+            return new LetTuple(ids,types,e1,e.e2.accept(this)); 
+   
+        }
+        
+        
+    
     }
 
     @Override
@@ -220,16 +251,16 @@ public class LetReduction implements ObjVisitor<Exp> {
 
     @Override
     public Exp visit(Get e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
         return  new Get(e1,e2);   
     }
 
     @Override
     public Exp visit(Put e) {
-        Var e1 = (Var)e.e1.accept(this);
-        Var e2 = (Var)e.e2.accept(this);
-        Var e3 = (Var)e.e3.accept(this);
+        Exp e1 = e.e1.accept(this);
+        Exp e2 = e.e2.accept(this);
+        Exp e3 = e.e3.accept(this);
 
         return  new Put(e1,e2,e3);
     }

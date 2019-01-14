@@ -72,6 +72,14 @@ public class Main {
                     alphaC.accept(new PrintVisitor());
                     System.out.println();
                 }
+                 //LetReduction (option -lr)
+                if( argv[0].equals("-lr")  ){
+                    Exp knorm = expression.accept(new KNormVisitor());
+                    Exp letred = knorm.accept(new LetReduction());
+                    letred.accept(new PrintVisitor());
+                    System.out.println();
+                   
+                }
                 
                 //B-REDUCTION (option -br)
                 if( argv[0].equals("-br")  ){
