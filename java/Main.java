@@ -7,14 +7,27 @@ public class Main {
     static public void main(String argv[]) { 
         
         String fichier = new String();
+        String nomFichier = null;
+        String[] pathTab;
+        String[] nameTab;
+        String nomFichierSansMl = null;
         
         //Nom du fichier .ml à compiler
         if(argv.length == 2){
-            fichier = argv[1] ;
+            fichier = argv[1];
+            pathTab = argv[1].split("/");
+            nomFichier = pathTab[pathTab.length-1];
+            System.out.println(nomFichier);
+            nameTab = nomFichier.split(".ml");
+            nomFichierSansMl = nameTab[0];
         }
         //cas sans options
         else if(argv.length == 1){
             fichier = argv[0] ;
+            pathTab = argv[0].split("/");
+            nomFichier = pathTab[pathTab.length-1];
+            nameTab = nomFichier.split(".ml");
+            nomFichierSansMl = nameTab[0];
         }
   
         try{
@@ -87,8 +100,14 @@ public class Main {
                 }
                 
                 //CREATION DU .ASML (AVEC LET-REDUCTION ET CLOSURE) (option -asml)
-                if( argv[0].equals("-asml")  ){
-                    //A COMPLETER
+                if( argv[0].equals("-asml")){
+                    String asml =  expression.accept(new GenerateurASML());
+                    asml = GenerateurASML.hautf + GenerateurASML.haut + GenerateurASML.inter + asml ;
+                    String nomFichierAvecAsml = nomFichierSansMl + ".asml";
+                    System.out.println(asml);
+                    PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
+                    w.print(asml);
+                    w.close();
                 }
                 
                 //CREATION DE l'ASSEMBLEUR (option -o)
@@ -135,6 +154,15 @@ public class Main {
                     System.out.println();
                     
                     //B-REDUCTION : A COMPLETER
+                    
+                    //ASML:
+                    String asml =  expression.accept(new GenerateurASML());
+                    asml = GenerateurASML.hautf + GenerateurASML.haut + GenerateurASML.inter + asml ;
+                    String nomFichierAvecAsml = nomFichierSansMl + ".asml";
+                    System.out.println(asml);
+                    PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
+                    w.print(asml);
+                    w.close();
                     
                     //BACKEND : A COMPLETER 
             }
