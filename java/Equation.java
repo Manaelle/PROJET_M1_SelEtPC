@@ -5,7 +5,7 @@
  */
 
 /**
- *
+ * Classe pour définir une equation 
  * @author boulakhf
  */
 public class Equation {

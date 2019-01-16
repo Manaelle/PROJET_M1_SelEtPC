@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 /**
- * 
+ * Classe de Genration et résolution des equations de type
  * @author boulakhf
  */
 public class GenerateurDEquation {
@@ -20,7 +20,10 @@ public class GenerateurDEquation {
     public GenerateurDEquation(){
         listeEquation = new ArrayList<>();
     }
-    
+    /**
+     * 
+     * @return retourne la liste des Equations de type 
+     */
     public ArrayList<Equation> getListeEquation(){
         return this.listeEquation;
     }
@@ -33,13 +36,22 @@ public class GenerateurDEquation {
         resultat+="]";
         return resultat;
     }
-
+    /**
+     * 
+     * @return renvoie un booleen pour dire si c'est bien typé ou non 
+     */
     public boolean isBienTypee() {
         return bienTypee;
     }
     
     
     //Voir Doc Typing.ml : Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
+    /**
+     * Fonction qui genere toutes les equations (de type) de l'expression e de type presumé t
+     * @param env environnement de type 
+     * @param e l'expression 
+     * @param t le type 
+     */
     public void GenererEquations(EnvironnementType env, Exp e, Type t){
         //TODO 
         
@@ -254,7 +266,10 @@ public class GenerateurDEquation {
             GenererEquations(env1, ((LetTuple) e).e2, t);
         }
     }
-    
+    /**
+     * Fonction qui résout toutes les equations (de type) 
+     * @param listeEquation des types genérés par la fonction "void GenererEquations(EnvironnementType env, Exp e, Type t)"
+     */
     public void resoudreEquation(ArrayList<Equation> listeEquation){
         if((listeEquation.isEmpty())||(bienTypee == false)){
             return;
@@ -445,6 +460,13 @@ public class GenerateurDEquation {
     
     
     // remplacer toutes les occurences de tvar  dans type1 par type2   
+    /**
+     * remplace toutes les occurences de tvar  dans type1 par type2   
+     * @param type1  l'éxpression de  type ou  on va remplacer 
+     * @param type2 le type remplacant 
+     * @param tvar  le type remplacé 
+     * @return 
+     */
     public Type remplacer(Type type1 , Type type2 , TVar tvar ){
         if(type1.equals(tvar)){
             return type2;

@@ -8,19 +8,23 @@ import java.util.ArrayList;
  */
 
 /**
- *
+ * Classe pour la Construction d'un environnement de type
  * @author boulakhf
  */
 
 //-------------------------------------------------------
 //ENVIRONNEMENT : Construction d'un environnement de type
+
 public class EnvironnementType implements Cloneable {
     private ArrayList<VarEnv> gamma; //liste des var dans l'env Gamma
     
     public EnvironnementType(){
         this.predef();
     }
-    
+    /**
+     * 
+     * @return renvoie l'objet cloné
+     */
     public Object clone(){
         EnvironnementType newEnv = null;
 		try {
@@ -54,13 +58,21 @@ public class EnvironnementType implements Cloneable {
         return res;
     }
     
-    //Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent
+    /**
+     * Permet d'ajouter une variable à l'environnement en vérifiant qu'il n'est pas déjà présent
+     * @param C 
+     */
     public void add(VarEnv C){
             this.gamma.add(C);
     } 
     
     
-    //Vérifie si la variable est dans l'environnement
+    
+    /**
+     * Vérifie si la variable est dans l'environnement
+     * @param v
+     * @return 
+     */
     public Boolean check(String v){   
         Boolean found = false;
         for(VarEnv vEnv : gamma){
@@ -71,7 +83,12 @@ public class EnvironnementType implements Cloneable {
         return found;
     }
     
-    //Pour une variable v dans l'environnement renvoit le type associé
+    
+    /**
+     * Pour une variable v dans l'environnement renvoit le type associé
+     * @param v
+     * @return renvoie le type associé de chaque variable 
+     */
     public Type correspondanceVarType(String v){ // A completer
         Type tResultat = null;
         for(VarEnv vEnv : gamma){
@@ -82,7 +99,10 @@ public class EnvironnementType implements Cloneable {
         return tResultat;
     }
     
-    // des types prédéfinies dans l'env
+    
+    /**
+     * des types prédéfinies dans l'environnement initial 
+     */
     public void predef(){
         gamma = new ArrayList<VarEnv>();
         ArrayList<Type> arguments  = new ArrayList<Type>();
