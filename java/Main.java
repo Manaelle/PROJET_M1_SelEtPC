@@ -77,8 +77,8 @@ public class Main {
                     System.out.println();
                 }
                 
-                //A-CONVERSION (option -ar)
-                if( argv[0].equals("-ar")  ){
+                //A-CONVERSION (option -ac)
+                if( argv[0].equals("-ac")  ){
                     System.out.println("------------- A-CONV --------------");
                     Exp alphaC = expression.accept(new AlphaConversionVisitor());
                     alphaC.accept(new PrintVisitor());
@@ -93,8 +93,7 @@ public class Main {
                 //LetReduction (option -lr)
                 if( argv[0].equals("-lr")  ){
                     System.out.println("------------- LET-REDUCTION --------------");
-                    Exp lrec = expression.accept(new KNormVisitor());
-                    Exp letred = lrec.accept(new LetReduction());
+                    Exp letred = expression.accept(new LetReduction());
                     letred.accept(new PrintVisitor());
                     System.out.println();   
                 }
