@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototypeasml;
 
 import java.util.ArrayList;
-import prototypeasml.ASMLOperande.TypeOperande;
 
 /**
  *
@@ -30,7 +28,7 @@ public class ASMLNew implements ASMLExp{
     }
 
     @Override
-    public ArrayList<ASMLOperande> getOperandes(ASMLOperande.TypeOperande type) {
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
         ArrayList<ASMLOperande> a = new ArrayList<>();
         if(op.getType() == type) {
             a.add(op);

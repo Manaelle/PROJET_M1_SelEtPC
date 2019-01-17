@@ -3,9 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototypeasml;
-
-import prototypeasml.ASMLOperande.TypeOperande;
 
 /**
  *
@@ -19,7 +16,7 @@ public class ASMLFloat implements ASMLFunDefs {
     public ASMLFloat(String instruction){
         String[] donnees = instruction.split(" ");
         this.op = new ASMLOperande(donnees[1],TypeOperande.VAR);
-        this.valeur = Float.parseFloat(donnees[3]);            
+        //this.valeur = Float.parseFloat(donnees[3]);            
     }
     
     public String toString(){
