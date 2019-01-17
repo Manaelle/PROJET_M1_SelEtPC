@@ -70,8 +70,8 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         }
         
         // renommage des variables
-        cptReg = 4; // 4-10, puis pile
-        if(nomsVariables.size() < 9){ // On garde juste le r12 pour le résultat d'une instruction
+        cptReg = 5; // 5-10, puis pile
+        if(nomsVariables.size() < 8){ // On garde juste le r12 pour le résultat d'une instruction
             cptRegMax = 10;
         } else { // on garde r12 pour le résultat, et r9 + r10 pour le chargement depuis la mémoire
             cptRegMax = 8;
@@ -97,6 +97,8 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         String code = "";
         if(nom.equals("_")){ // main
             code += "main:\n";
+            code += "\tadd r4, sp, #0\n"; // r4 = pointeur vers le tas
+            code += "\tsub sp, sp, #1000\n"; // tas
             code += "\tpush {fp, lr}\n";
             code += "\tadd fp, sp, #4\n";
             code += "\tsub sp, sp, #" + Math.abs(8-cptPile) + "\n"; // place pour les variables qui débordent + 8 (return + fp)
@@ -105,8 +107,8 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
             code += "\tstr fp, [sp, #-4]\n";
             code += "\tadd fp, sp, #0\n";
             code += "\tsub sp, sp, #" + Math.abs(4-cptPile) + "\n"; // place pour les variables qui débordent + 4 (fp)
-            // sauvegarde des registres r4-r10 et r12-r13
-            code += "\tpush {r4-r10,r12-r13}\n";
+            // sauvegarde des registres r5-r10 et r12-r13
+            code += "\tpush {r5-r10,r12-r13}\n";
         }
         
         
@@ -117,7 +119,7 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         
         if(!(nom.equals("_"))){
             // restauration des registres
-            code += "\tpop {r4-r10,r12-r13}\n";           
+            code += "\tpop {r5-r10,r12-r13}\n";           
         }
         
         // fin
@@ -128,38 +130,6 @@ public class ASMLFonction extends ASMLBranche implements ASMLFunDefs {
         return code;
     }
     
-    /*public String genererAssembleur(){
-        String code = nom + ":\n";
-        code += "@ sauvegarde des registres r4-r13\n";
-        code += "\tpush {r4-r13}\n";
-        /*for(int i = 4; i <= 13; i++){
-            if(i != 11){
-                code += "\tstr r" + i + ", r11, #" + cptPile + "\n";
-                cptPile -= 4;               
-            }
-        }
-        code += "\tstr r11, r11, #" + cptPile + "\n";
-        
-        code += "@ code de la fonction\n";
-        for(ASMLExp exp : this.expressions){
-            code += exp.genererAssembleur();
-        }
-        
-        code += "@ resultat de la fonction\n";
-        code += "\tmov r0, r12\n"; // résultat de la fonction
-        
-        code += "@ restauration des registres\n";
-        code += "\tpop {r4-r13}\n";
-        /*code += "\tldr r11, r11, #8\n";
-        for(int i = 4; i <= 13; i++){
-            if(i != 11){
-                code += "\tldr r" + i + ", r11, #" + cptPile + "\n";
-                cptPile += 4;
-            }
-        }
-        return code;
-    }*/
-
     @Override
     public void ajouterInstruction(ASMLExp expression) {
         this.expressions.add(expression);

@@ -61,7 +61,53 @@ public class ASMLMem implements ASMLExp {
 
     @Override
     public String genererAssembleur() {
-        return "MEM NON IMPLEMENTE\n";
+        String code = "";
+        if(op1.getNom().startsWith("r") && op2.getNom().startsWith("r")){ // tout est dans les registres
+            code += "\tadd r12, " + op1 + " " + op2 + "\n";
+        } else {
+            if(!op1.getNom().startsWith("r") && !op2.getNom().startsWith("r")){ // op1 et op2 doivent être chargé en registre
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else {
+                    code += "\tmov r9, " + op1 + "\n";
+                }
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else {
+                    code += "\tmov r10, " + op2 + "\n";
+                }
+                code += "\tadd r12, r9, r10\n";
+            } else if(!op1.getNom().startsWith("r")){ // op1 doit être chargé en mémoire
+                if(op1.estVariable()){
+                    code += "\tldr r9, " + op1 + "\n";
+                } else {
+                    code += "\tmov r9, " + op1 + "\n";
+                }
+                code += "\tadd r12, r10, " + op2 + "\n";
+            } else { // op2 doit être chargé en mémoire
+                if(op2.estVariable()){
+                    code += "\tldr r10, " + op2 + "\n";
+                } else {
+                    code += "\tmov r10, " + op2 + "\n";
+                }
+                code += "\tadd r12, " + op1 + ", r10\n";
+            }
+        }
+        // r12 contient l'adresse mémoire     
+        
+        if(op3 != null){ // on affecte la valeur à droite de la flèche à la zone mémoire
+            if(op3.getNom().startsWith("r")){ // 
+                code += "\tldr " + op3 + ", r4, r12\n"; // affectation
+            } else {
+                if(op3.estVariable()){ // en mémoire
+                    code += "\tstr " + op2.getNom() + ", r4, r12\n"; // affectation
+                } else { // valeur immédiate
+                    code += "\tstr " + op3 + ", r4, r12\n"; // affectation
+                }
+            }
+        }
+        
+        return code;
     }
     
 }

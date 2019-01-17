@@ -44,7 +44,10 @@ public class ASMLNew implements ASMLExp{
 
     @Override
     public String genererAssembleur() {
-        return "NEW NON IMPLEMENTE\n";
+        String code = "";
+        code += "\tldr r12, r4\n"; // permet de retourner l'adresse de début de l'allocation
+        code += "\tsub r4, r4, #" + op + "\n"; // déplacement du pointeur de tas 
+        return code;
     }
     
 }
