@@ -173,6 +173,7 @@ do
 											
 											printf "\033[34m CODE ATTENDU\033[0m \n" 
 											cat $name_file_knorm
+											printf "\n"
 									fi
 							done
 							echo '\n---------------FIN DES TESTS------------------ \n'
