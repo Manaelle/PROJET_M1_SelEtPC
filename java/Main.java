@@ -169,7 +169,6 @@ public class Main {
                     String asml =  expression.accept(new GenerateurASML());
                     asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
                     String nomFichierAvecAsml = nomFichierSansMl + ".asml";
-                    System.out.println(nomFichierAvecAsml);
                     System.out.println(asml);
                     PrintWriter w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
                     w.print(asml);
