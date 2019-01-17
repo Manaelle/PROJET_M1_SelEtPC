@@ -109,12 +109,20 @@ public class Main {
                     PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
                     w.print(asml);
                     w.close();
+					//CREATION DE l'ASSEMBLEUR (option -o)
+					if( argv[0].equals("-o")  ){
+						
+						ASMLArbre arbreASML = new ASMLArbre(asml);
+						arbreASML.registerAllocation_Spill();
+						String arm = arbreASML.genererAssembleur();
+						String nomFichierAvecArm = nomFichierSansMl + ".s";
+						w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
+						w.print(arm);
+						w.close();
+					}
                 }
                 
-                //CREATION DE l'ASSEMBLEUR (option -o)
-                if( argv[0].equals("-o")  ){
-                    //A COMPLETER
-                }
+
                 
             }
             
