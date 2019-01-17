@@ -85,22 +85,24 @@ public class Main {
                     alphaC.accept(new PrintVisitor());
                     System.out.println();
                 }
-                 //LetReduction (option -lr)
-                if( argv[0].equals("-lr")  ){
-                    Exp knorm = expression.accept(new KNormVisitor());
-                    Exp letred = knorm.accept(new LetReduction());
-                    letred.accept(new PrintVisitor());
-                    System.out.println();
-                   
-                }
                 
                 //B-REDUCTION (option -br)
                 if( argv[0].equals("-br")  ){
                     //A COMPLETER
                 }
                 
+                //LetReduction (option -lr)
+                if( argv[0].equals("-lr")  ){
+                    System.out.println("------------- LET-REDUCTION --------------");
+                    Exp lrec = expression.accept(new KNormVisitor());
+                    Exp letred = lrec.accept(new LetReduction());
+                    letred.accept(new PrintVisitor());
+                    System.out.println();   
+                }
+                
                 //CREATION DU .ASML (AVEC LET-REDUCTION ET CLOSURE) (option -asml)
                 if( argv[0].equals("-asml")){
+                    System.out.println("------------- GEN. ASML --------------");
                     String asml =  expression.accept(new GenerateurASML());
                     asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
                     String nomFichierAvecAsml = nomFichierSansMl + ".asml";
@@ -155,7 +157,15 @@ public class Main {
                     
                     //B-REDUCTION : A COMPLETER
                     
-                    //ASML:
+                    //LET-REDUCTION
+                    System.out.println("------------- LET-REDUCTION --------------");
+                    Exp lrec = expression.accept(new KNormVisitor());
+                    Exp letred = lrec.accept(new LetReduction());
+                    letred.accept(new PrintVisitor());
+                    System.out.println();   
+
+                    //ASML :
+                    System.out.println("------------- GEN. ASML --------------");
                     String asml =  expression.accept(new GenerateurASML());
                     asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
                     String nomFichierAvecAsml = nomFichierSansMl + ".asml";
