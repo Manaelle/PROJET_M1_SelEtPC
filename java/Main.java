@@ -176,8 +176,12 @@ public class Main {
                     //BACKEND : A COMPLETER 
 					ASMLArbre arbreASML = new ASMLArbre(asml);
 					arbreASML.registerAllocation_Spill();
-					arbreASML.genererAssembleur();
-            }
+					String arm = arbreASML.genererAssembleur();
+					String nomFichierAvecArm = nomFichierSansMl + ".s";
+					w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
+					w.print(arm);
+					w.close();
+			}
 
         } catch (Exception e) {
             e.printStackTrace();
