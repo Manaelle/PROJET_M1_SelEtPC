@@ -77,8 +77,8 @@ public class Main {
                     System.out.println();
                 }
                 
-                //A-CONVERSION (option -ar)
-                if( argv[0].equals("-ar")  ){
+                //A-CONVERSION (option -ac)
+                if( argv[0].equals("-ac")  ){
                     System.out.println("------------- A-CONV --------------");
                     Exp alphaC = expression.accept(new AlphaConversionVisitor());
                     alphaC.accept(new PrintVisitor());
