@@ -4,6 +4,10 @@ abstract class Exp {
     abstract void accept(Visitor v);
 
     abstract <E> E accept(ObjVisitor<E> v);
+
+    boolean inIF() {
+        return false;
+    }
 }
 
 class Unit extends Exp {
@@ -278,7 +282,12 @@ class Let extends Exp {
         this.e1 = e1;
         this.e2 = e2;
     }
-
+    
+    public boolean inIF()
+    {
+        return true ;
+    }
+    
     <E> E accept(ObjVisitor<E> v) {
         return v.visit(this);
     }

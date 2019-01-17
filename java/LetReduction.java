@@ -9,7 +9,8 @@ import java.util.List;
  */
 
 /**
- * documentation  4.6
+ * documentation  4.6 et http://esumii.github.io/min-caml/index-e.html : Reduction of Nested let (assoc.ml)
+ * Classe pour réduire les expressions de Let 
  * @author benmousn
  */
 public class LetReduction implements ObjVisitor<Exp> {

@@ -1,7 +1,10 @@
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Classe Type
+ * @author benmousn
+ */
 abstract class Type {
     private static int x = 0;
     /**
@@ -18,7 +21,10 @@ abstract class Type {
     }*/
     
 }
-
+/**
+ * Classe TUnit  pour le type unit 
+ * @author benmousn
+ */
 class TUnit extends Type { 
     public boolean isUnit(Object o){
         return(o instanceof TUnit );
@@ -31,7 +37,10 @@ class TUnit extends Type {
 
   
 }
-
+/**
+ * Classe TBool pour le type  booleen
+ * @author benmousn
+ */
 class TBool extends Type {
     
     public boolean isBool(Object o){
@@ -43,7 +52,10 @@ class TBool extends Type {
         return "bool";  
     }
 }
-
+/**
+ * Classe TInt pour le type  entier 
+ * @author benmousn
+ */
 class TInt extends Type { 
     public boolean isInt(Object o){
         return(o instanceof TInt );
@@ -55,7 +67,10 @@ class TInt extends Type {
     }
         
 }
-
+/**
+ * Classe TFloat pour le type float  
+ * @author benmousn
+ */
 class TFloat extends Type { 
  
     public boolean isFloat(Object o){
@@ -67,7 +82,10 @@ class TFloat extends Type {
 	return "float";
     }
 }
-
+/**
+ * Classe TFun pour le type fonction 
+ * @author benmousn
+ */
 class TFun extends Type {
     public ArrayList<Type> arguments;
     public Type typeRetour;
@@ -86,7 +104,11 @@ class TFun extends Type {
         this.arguments = arguments ; 
     }
     */
- 
+    /**
+     * 
+     * @param o
+     * @return renvoie vrai si l'objet testé est une fonction
+     */
     public boolean isFun(Object o){
         if(!(o instanceof TFun)){
             return false ; 
@@ -111,7 +133,10 @@ class TFun extends Type {
     public ArrayList<Type> getArgument(){
         return this.arguments;
     }
-
+    /**
+     * 
+     * @return renvoie faux si la fonction contient un type Tvar
+     */
     boolean contientTvar() {
         int taille =  getArgument().size();
         for(int i = 0; i<taille ; i++){
@@ -131,7 +156,10 @@ class TFun extends Type {
     
     
 }
-
+/**
+ * Classe TTuple pour le type tuple (, , , ...)
+ * @author benmousn
+ */
 class TTuple extends Type { 
     public ArrayList<Type> list; 
     /**
@@ -159,7 +187,11 @@ class TTuple extends Type {
         return s;
        
     }
-    
+     /**
+     * 
+     * @param o
+     * @return renvoie vrai si l'objet testé est une fonction
+     */
    public boolean isTuple(Object o){
        if(!(o instanceof TTuple)){
            return false; 
@@ -170,7 +202,10 @@ class TTuple extends Type {
     public ArrayList<Type> getList(){
 	return list;
     }
-
+    /**
+     * 
+     * @return  renvoie vrai si le tuple contient le type Tvar ?
+     */
     boolean contientTvar() {
        int taille =  this.list.size();
        for(int i = 0 ; i< taille ; i++){
@@ -184,7 +219,10 @@ class TTuple extends Type {
 	
     
 }
-
+/**
+ * Classe TArray pour le type tableau  
+ * @author benmousn
+ */
 class TArray extends Type {
     public Type type;
     
@@ -211,7 +249,10 @@ class TArray extends Type {
         return this.type;
     }
 }
-
+/**
+ * Classe TVar pour le type var ?
+ * @author benmousn
+ */
 class TVar extends Type {
     Type t; 
     String v;
