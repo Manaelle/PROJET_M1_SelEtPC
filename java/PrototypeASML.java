@@ -25,12 +25,12 @@ public class PrototypeASML {
         File dir = new File(dirPath);
         String[] files = dir.list();
         for (String aFile : files) {
-            if(aFile.endsWith("if_then_else.asml")){
+            if(aFile.endsWith(".asml")){
                 System.out.println(aFile);
                 String data = new String(Files.readAllBytes(Paths.get(dirPath + aFile)));
                 ASMLArbre a = new ASMLArbre(data);
                 a.registerAllocation_Spill();
-                System.out.println(a);
+                //System.out.println(a);
                 System.out.println(a.genererAssembleur());
             }
         }    
