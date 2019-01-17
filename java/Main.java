@@ -17,7 +17,6 @@ public class Main {
             fichier = argv[1];
             pathTab = argv[1].split("/");
             nomFichier = pathTab[pathTab.length-1];
-            System.out.println(nomFichier);
             nameTab = nomFichier.split(".ml");
             nomFichierSansMl = nameTab[0];
         }
@@ -166,6 +165,9 @@ public class Main {
                     w.close();
                     
                     //BACKEND : A COMPLETER 
+					ASMLArbre arbreASML = new ASMLArbre(asml);
+					arbreASML.registerAllocation_Spill();
+					arbreASML.genererAssembleur();
             }
 
         } catch (Exception e) {
