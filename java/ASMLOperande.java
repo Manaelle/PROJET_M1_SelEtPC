@@ -13,10 +13,6 @@ import java.util.ArrayList;
 public class ASMLOperande implements ASMLExp {
 
 
-    public enum TypeOperande{
-        VAR,
-        IMM
-    };
     
     private String nom; // nom si variable / valeur si valeur immédiate
     private TypeOperande type;

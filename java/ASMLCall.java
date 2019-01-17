@@ -5,7 +5,6 @@
  */
 
 import java.util.ArrayList;
-import ASMLOperande.TypeOperande;
 
 /**
  *
