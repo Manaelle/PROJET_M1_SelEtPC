@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import prototypeasml.ASMLOperande.TypeOperande;
+import ASMLOperande.TypeOperande;
 
 /**
  *

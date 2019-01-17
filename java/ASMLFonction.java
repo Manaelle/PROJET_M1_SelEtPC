@@ -6,7 +6,7 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import prototypeasml.ASMLOperande.TypeOperande;
+import ASMLOperande.TypeOperande;
 
 /**
  *
