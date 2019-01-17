@@ -5,7 +5,7 @@ abstract class Exp {
 
     abstract <E> E accept(ObjVisitor<E> v);
 
-    boolean isVIFB() {
+    boolean inIF() {
         return false;
     }
 }
@@ -283,7 +283,7 @@ class Let extends Exp {
         this.e2 = e2;
     }
     
-    public boolean isVIFB()
+    public boolean inIF()
     {
         return true ;
     }
