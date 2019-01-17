@@ -24,7 +24,7 @@ public class ASMLLabel implements ASMLExp {
     }
 
     @Override
-    public ArrayList<ASMLOperande> getOperandes(ASMLOperande.TypeOperande type) {
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
         return new ArrayList<ASMLOperande>();
     }
     

@@ -28,7 +28,7 @@ public class ASMLNew implements ASMLExp{
     }
 
     @Override
-    public ArrayList<ASMLOperande> getOperandes(ASMLOperande.TypeOperande type) {
+    public ArrayList<ASMLOperande> getOperandes(TypeOperande type) {
         ArrayList<ASMLOperande> a = new ArrayList<>();
         if(op.getType() == type) {
             a.add(op);
