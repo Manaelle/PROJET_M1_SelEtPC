@@ -93,8 +93,7 @@ public class Main {
                 //LetReduction (option -lr)
                 if( argv[0].equals("-lr")  ){
                     System.out.println("------------- LET-REDUCTION --------------");
-                    Exp lrec = expression.accept(new KNormVisitor());
-                    Exp letred = lrec.accept(new LetReduction());
+                    Exp letred = expression.accept(new LetReduction());
                     letred.accept(new PrintVisitor());
                     System.out.println();   
                 }
