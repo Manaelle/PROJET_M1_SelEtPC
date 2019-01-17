@@ -22,7 +22,6 @@ echo "-t : test du typage. \n"
 
 echo "-kn : test de la K-normalisation."
 echo "-ac : test pour A-conversion."
-echo "-br : test pour B-reduction."
 echo "-lr : test pour Let-reduction. \n"
 
 echo "-asml : test de conversion en fichier .asml."
@@ -180,37 +179,7 @@ do
 							rm aconv.txt
 							rm test.txt
 							;;
-"-br" | "br")   echo '\n----------------TEST B-RED ------------------'
-							printf "\n \033[90m TEST DE LA B-REDUCTION [CAS VALIDE]: \033[0m \n"
 
-							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
-							for test_case in tests/bred/valid/*.ml
-							do	
-									name_file=$(echo $test_case | cut -d'/' -f4 | cut -d'.' -f1 )
-									name_file_knorm=tests/bred/valid_correct/$name_file.bred
-									
-									$MINCAMLC "-br" $test_case  1>test.txt 2>/dev/null #knorm sera donc le résultat donnée par mincamlc
-									
-									#extraction du code dans knorm.txt
-									sed '1d' test.txt > bred.txt
-									
-									
-									if diff -q $name_file_knorm bred.txt 1>/dev/null;
-									then		 
-											 printf "%-30s : \033[32m [OK] \033[0m \n" $name_file
-									else 
-											printf "%-30s : \033[31m [ERROR] \033[0m \n" $name_file
-											printf "\033[34m CODE OBTENU\033[0m \n" 
-											cat bred.txt
-											
-											printf "\033[34m CODE ATTENDU\033[0m \n" 
-											cat $name_file_knorm
-									fi
-							done
-							echo '\n---------------FIN DES TESTS------------------ \n'
-							rm bred.txt
-							rm test.txt
-							;;
 "-lr" | "lr")   echo '\n----------------TEST LET-RED ------------------'
 							printf "\n \033[90m TEST DE LA LET-REDUCTION [CAS VALIDE]: \033[0m \n"
 
