@@ -109,17 +109,26 @@ public class Main {
                     w.print(asml);
                     w.close();
 					//CREATION DE l'ASSEMBLEUR (option -o)
-					if( argv[0].equals("-o")  ){
-						
-						ASMLArbre arbreASML = new ASMLArbre(asml);
-						arbreASML.registerAllocation_Spill();
-						String arm = arbreASML.genererAssembleur();
-						String nomFichierAvecArm = nomFichierSansMl + ".s";
-						w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
-						w.print(arm);
-						w.close();
-					}
+				
                 }
+                if( argv[0].equals("-o")  ){
+
+                    System.out.println("------------- GEN. Arm --------------");
+                    String asml =  expression.accept(new GenerateurASML());
+                    asml = GenerateurASML.declarationFloat + GenerateurASML.declaration + GenerateurASML.entryPoint + asml ;
+                    String nomFichierAvecAsml = nomFichierSansMl + ".asml";
+                    System.out.println(asml);
+                    PrintWriter w = new PrintWriter( new BufferedWriter( new FileWriter(nomFichierAvecAsml)));
+                    w.print(asml);
+                    w.close();
+                    ASMLArbre arbreASML = new ASMLArbre(asml);
+                    arbreASML.registerAllocation_Spill();
+                    String arm = arbreASML.genererAssembleur();
+                    String nomFichierAvecArm = nomFichierSansMl + ".s";
+                    w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
+                    w.print(arm);
+                    w.close();
+                                }
                 
 
                 
