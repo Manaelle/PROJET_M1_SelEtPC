@@ -192,13 +192,13 @@ public class Main {
                     w.close();
                     
                     //BACKEND : A COMPLETER 
-					ASMLArbre arbreASML = new ASMLArbre(asml);
-					arbreASML.registerAllocation_Spill();
-					String arm = arbreASML.genererAssembleur();
-					String nomFichierAvecArm = nomFichierSansMl + ".s";
-					w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
-					w.print(arm);
-					w.close();
+                    ASMLArbre arbreASML = new ASMLArbre(asml);
+                    arbreASML.registerAllocation_Spill();
+                    String arm = arbreASML.genererAssembleur();
+                    String nomFichierAvecArm = nomFichierSansMl + ".s";
+                    w = new PrintWriter(new BufferedWriter(new FileWriter(nomFichierAvecAsml)));
+                    w.print(arm);
+                    w.close();
 			}
             
 

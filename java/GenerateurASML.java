@@ -51,15 +51,15 @@ public class GenerateurASML implements ObjVisitor<String> {
         }
 
         public String visit(Neg e) {
-            String retour ="";
+            String res ="";
             if(e.e instanceof Var){
-                retour += String.format("neg %s",e.e.accept(this));
+                res += String.format("neg %s",e.e.accept(this));
             } else {
                 GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e.accept(this));
-                retour += String.format("neg %s",newVariable(vn));
+                res += String.format("neg %s",newVariable(vn));
                 vn++;
             }
-            return retour ;
+            return res ;
         }
         
         public String visit(FNeg e) {
@@ -77,30 +77,30 @@ public class GenerateurASML implements ObjVisitor<String> {
         }
 
         public String visit(Add e) {
-            String retour ="";
+            String res ="";
             if(!defined){
                 if(e.e1 instanceof Var){
                         if(e.e2 instanceof Var){
-                            retour += String.format("add %s %s",e.e1.accept(this), e.e2.accept(this));
+                            res += String.format("add %s %s",e.e1.accept(this), e.e2.accept(this));
                         } else {
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e2.accept(this));
-                            retour += String.format("add %s %s ", newVariable(vn),e.e1.accept(this));
+                            res += String.format("add %s %s ", newVariable(vn),e.e1.accept(this));
                             vn++;
                         }
                 } else {
                         if(e.e2 instanceof Var){
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e1.accept(this));
-                            retour += String.format("add %s %s ", newVariable(vn),e.e2.accept(this));
+                            res += String.format("add %s %s ", newVariable(vn),e.e2.accept(this));
                             vn++;
                         } else {
                             String v1=newVariable(vn);
                             vn++;
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                            retour += String.format("add %s %s ",v1,newVariable(vn));
+                            res += String.format("add %s %s ",v1,newVariable(vn));
                             vn++;
                         }
                 }
-                return retour ;
+                return res ;
                 }
             else {
     		if(e.e1 instanceof Int) {
@@ -110,7 +110,7 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v1=newVariable(vn);
                         vn++;
                         GenerateurASML.declaration += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                        retour += String.format("add %s %s ",v1,newVariable(vn));
+                        res += String.format("add %s %s ",v1,newVariable(vn));
                         vn++;
                     }
     		}
@@ -119,30 +119,30 @@ public class GenerateurASML implements ObjVisitor<String> {
         }
 
         public String visit(Sub e) {
-            String retour ="";
+            String res ="";
             if(!defined){
             if(e.e1 instanceof Var){
                     if(e.e2 instanceof Var){
-                            retour += String.format("sub %s %s",e.e1.accept(this), e.e2.accept(this));
+                            res += String.format("sub %s %s",e.e1.accept(this), e.e2.accept(this));
                     } else {
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e2.accept(this));
-                            retour += String.format("sub %s %s", newVariable(vn),e.e1.accept(this));
+                            res += String.format("sub %s %s", newVariable(vn),e.e1.accept(this));
                             vn++;
                     }
             } else {
                     if(e.e2 instanceof Var){
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.e1.accept(this));
-                            retour += String.format("sub %s %s", newVariable(vn),e.e2.accept(this));
+                            res += String.format("sub %s %s", newVariable(vn),e.e2.accept(this));
                             vn++;
                     } else {
                             String v1=newVariable(vn);
                             vn++;
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                            retour += String.format("sub %s %s",v1,newVariable(vn));
+                            res += String.format("sub %s %s",v1,newVariable(vn));
                             vn++;
                     }
             }
-            return retour ;
+            return res ;
             }
             else{
     		if(e.e1 instanceof Int) {
@@ -152,7 +152,7 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v1=newVariable(vn);
                         vn++;
                         GenerateurASML.declaration += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                        retour += String.format("sub %s %s",v1,newVariable(vn));
+                        res += String.format("sub %s %s",v1,newVariable(vn));
                         vn++;
                     }
     		}
@@ -162,41 +162,41 @@ public class GenerateurASML implements ObjVisitor<String> {
 
 
         public String visit(FAdd e){
-            String retour ="";
+            String res ="";
             if(!defined){
                 if(e.e1 instanceof Var){
                         if(e.e2 instanceof Var){
-                                retour += String.format("fadd %s %s",e.e1.accept(this), e.e2.accept(this));
+                                res += String.format("fadd %s %s",e.e1.accept(this), e.e2.accept(this));
                         } else {
                                 String v = newVariable(vn++);
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e2.accept(this));
-                                retour += String.format("fadd _%s %s", newVariable(vn),e.e1.accept(this));
+                                res += String.format("fadd _%s %s", newVariable(vn),e.e1.accept(this));
                                 vn++;
                         }
                 } else {
                         if(e.e2 instanceof Var){
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fadd _%s %s", newVariable(vn),e.e2.accept(this));
+                                res += String.format("fadd _%s %s", newVariable(vn),e.e2.accept(this));
                                 vn++;
                         } else {
                                 String v1=newVariable(vn);
                                 vn++;
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fadd _%s _%s",v1,newVariable(vn));
+                                res += String.format("fadd _%s _%s",v1,newVariable(vn));
                                 vn++;
                         }
                 }
-                return retour ;
+                return res ;
             }
             else {
     		if(e.e1 instanceof Var){
                     if(e.e2 instanceof Var){
-                        retour += String.format("fadd %s %s",e.e1.accept(this), e.e2.accept(this));
+                        res += String.format("fadd %s %s",e.e1.accept(this), e.e2.accept(this));
                     } else {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e2.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fadd %s %s",newVariable(vn),e.e1.accept(this));
+                        res += String.format("fadd %s %s",newVariable(vn),e.e1.accept(this));
                         vn++;
                     }
                 } else {
@@ -204,7 +204,7 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fadd %s %s",newVariable(vn),e.e2.accept(this));
+                        res += String.format("fadd %s %s",newVariable(vn),e.e2.accept(this));
                         vn++;
                     } else {
                         String v1=newVariable(vn++);
@@ -212,11 +212,11 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v2 = newVariable(vn);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), v2,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in \n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v1,v1, newVariable(vn),v1,v2,v2,newVariable(vn++),v2);
-                        retour += String.format("fadd %s %s",newVariable(vn),newVariable(vn--));
+                        res += String.format("fadd %s %s",newVariable(vn),newVariable(vn--));
                         vn++;
                     }
 		}
-		return retour ;
+		return res ;
             }
         }
 
@@ -279,41 +279,41 @@ public class GenerateurASML implements ObjVisitor<String> {
         }
 
         public String visit(FMul e) {
-            String retour ="";
+            String res ="";
             if(!defined){
                 
                 if(e.e1 instanceof Var){
                         if(e.e2 instanceof Var){
-                                retour += String.format("fmul %s %s",e.e1.accept(this), e.e2.accept(this));
+                                res += String.format("fmul %s %s",e.e1.accept(this), e.e2.accept(this));
                         } else {
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",newVariable(vn),e.e2.accept(this));
-                                retour += String.format("fmul _%s %s", newVariable(vn),e.e1.accept(this));
+                                res += String.format("fmul _%s %s", newVariable(vn),e.e1.accept(this));
                                 vn++;
                         }
                 } else {
                         if(e.e2 instanceof Var){
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fmul _%s %s", newVariable(vn),e.e2.accept(this));
+                                res += String.format("fmul _%s %s", newVariable(vn),e.e2.accept(this));
                                 vn++;
                         } else {
                                 String v1=newVariable(vn);
                                 vn++;
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fmul _%s _%s",v1,newVariable(vn));
+                                res += String.format("fmul _%s _%s",v1,newVariable(vn));
                                 vn++;
                         }
                 }
-                return retour ;
+                return res ;
             }
             else{
     		if(e.e1 instanceof Var){
                     if(e.e2 instanceof Var){
-                        retour += String.format("fmul %s %s",e.e1.accept(this), e.e2.accept(this));
+                        res += String.format("fmul %s %s",e.e1.accept(this), e.e2.accept(this));
                     } else {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e2.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fmul %s %s",newVariable(vn),e.e1.accept(this));
+                        res += String.format("fmul %s %s",newVariable(vn),e.e1.accept(this));
                         vn++;
                     }
                 } else {
@@ -321,7 +321,7 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fmul %s %s",newVariable(vn),e.e2.accept(this));
+                        res += String.format("fmul %s %s",newVariable(vn),e.e2.accept(this));
                         vn++;
                     } else {
                         String v1=newVariable(vn++);
@@ -329,51 +329,51 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v2 = newVariable(vn);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), v2,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in \n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v1,v1, newVariable(vn),v1,v2,v2,newVariable(vn++),v2);
-                        retour += String.format("fmul %s %s",newVariable(vn),newVariable(vn--));
+                        res += String.format("fmul %s %s",newVariable(vn),newVariable(vn--));
                         vn++;
                     }
     		}
-		return retour ;
+		return res ;
             }
         }
 
 
         public String visit(FDiv e){
-            String retour ="";
+            String res ="";
             if(!defined){
               
                 if(e.e1 instanceof Var){
                         if(e.e2 instanceof Var){
-                                retour += String.format("fdiv %s %s",e.e1.accept(this), e.e2.accept(this));
+                                res += String.format("fdiv %s %s",e.e1.accept(this), e.e2.accept(this));
                         } else {
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",newVariable(vn),e.e2.accept(this));
-                                retour += String.format("fdiv _%s %s", newVariable(vn),e.e1.accept(this));
+                                res += String.format("fdiv _%s %s", newVariable(vn),e.e1.accept(this));
                                 vn++;
                         }
                 } else {
                         if(e.e2 instanceof Var){
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fdiv _%s %s", newVariable(vn),e.e2.accept(this));
+                                res += String.format("fdiv _%s %s", newVariable(vn),e.e2.accept(this));
                                 vn++;
                         } else {
                                 String v1=newVariable(vn);
                                 vn++;
                                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), newVariable(vn),e.e1.accept(this));
-                                retour += String.format("fdiv _%s _%s",v1,newVariable(vn));
+                                res += String.format("fdiv _%s _%s",v1,newVariable(vn));
                                 vn++;
                         }
                 }
-                return retour ;
+                return res ;
             }
             else {
     		if(e.e1 instanceof Var){
                     if(e.e2 instanceof Var){
-                        retour += String.format("fdiv %s %s",e.e1.accept(this), e.e2.accept(this));
+                        res += String.format("fdiv %s %s",e.e1.accept(this), e.e2.accept(this));
                     } else {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e2.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fdiv %s %s",newVariable(vn),e.e1.accept(this));
+                        res += String.format("fdiv %s %s",newVariable(vn),e.e1.accept(this));
                         vn++;
                     }
                 } else {
@@ -381,7 +381,7 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v = newVariable(vn++);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v,v, newVariable(vn),v);
-                        retour += String.format("fdiv %s %s",newVariable(vn),e.e2.accept(this));
+                        res += String.format("fdiv %s %s",newVariable(vn),e.e2.accept(this));
                         vn++;
                     } else {
                         String v1= newVariable(vn++);
@@ -389,11 +389,11 @@ public class GenerateurASML implements ObjVisitor<String> {
                         String v2 = newVariable(vn);
                         GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \nlet _%s = %s",v1,e.e2.accept(this), v2,e.e1.accept(this));
                         GenerateurASML.declaration += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in \n\tlet %s = _%s in \n\tlet %s = mem(%s + 0) in",v1,v1, newVariable(vn),v1,v2,v2,newVariable(vn++),v2);
-                        retour += String.format("fdiv %s %s",newVariable(vn),newVariable(vn--));
+                        res += String.format("fdiv %s %s",newVariable(vn),newVariable(vn--));
                         vn++;
                     }
 		}
-		return retour ;
+		return res ;
             }
         }
 
@@ -521,13 +521,13 @@ public class GenerateurASML implements ObjVisitor<String> {
 	}
 
         public String visit(LE e){
-            String retour ="";
+            String res ="";
             String v1="";
             String v2="";
             if(!defined){        
                 if(e.e1 instanceof Float){
                     GenerateurASML.declaration = String.format("\nlet _z%s = %s \nlet _z%s = %s",cp++,e.e1.accept(this),cp++,e.e2.accept(this));
-                    retour += String.format("_z%s <= _z%s", cp--,cp++);
+                    res += String.format("_z%s <= _z%s", cp--,cp++);
                 } else if(e.e1 instanceof Bool || e.e1 instanceof Int) {
                     if(e.e2 instanceof Int || e.e2 instanceof Bool) {
                         String v = newVariable(vn) ;
@@ -535,10 +535,10 @@ public class GenerateurASML implements ObjVisitor<String> {
                          v1 = newVariable(vn++) ;
                         GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = %s in ",v,e.e1.accept(this),v1,e.e2.accept(this));
                         if(not){
-                            retour += String.format("%s >= %s", v,v1);
+                            res += String.format("%s >= %s", v,v1);
                             not = false ;
                         } else {
-                            retour += String.format("%s <= %s", v,v1);
+                            res += String.format("%s <= %s", v,v1);
                         }
                         vn++;
                     } else {
@@ -546,10 +546,10 @@ public class GenerateurASML implements ObjVisitor<String> {
                         vn++;
                         GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v,e.e1.accept(this));
                         if(not){
-                            retour += String.format("%s >= %s", v,e.e2.accept(this));
+                            res += String.format("%s >= %s", v,e.e2.accept(this));
                             not = false ;
                         } else {
-                            retour += String.format("%s <= %s", v,e.e2.accept(this));
+                            res += String.format("%s <= %s", v,e.e2.accept(this));
                         }
                 }
 
@@ -570,25 +570,25 @@ public class GenerateurASML implements ObjVisitor<String> {
                         v2 = e.e2.accept(this);
                     }
                     if(not){
-                        retour += String.format("%s >= %s", v1,v2);
+                        res += String.format("%s >= %s", v1,v2);
                         not = false ;
                     } else {
-                        retour += String.format("%s <= %s", v1,v2);
+                        res += String.format("%s <= %s", v1,v2);
                         }
                 } else if(not){
-                    retour += String.format("%s >= %s", e.e1.accept(this),e.e2.accept(this));
+                    res += String.format("%s >= %s", e.e1.accept(this),e.e2.accept(this));
                     not = false ;
                 } 
 
                 else {
-                    retour += String.format("%s <= %s", e.e1.accept(this),e.e2.accept(this));
+                    res += String.format("%s <= %s", e.e1.accept(this),e.e2.accept(this));
                 }
-                return retour;
+                return res;
             }
             else{
     		if(e.e1 instanceof Float){
                     GenerateurASML.declaration = String.format("\nlet _z%s = %s \nlet _z%s = %s",cp++,e.e1.accept(this),cp++,e.e2.accept(this));
-                    retour += String.format("_z%s <= _z%s", cp--,cp++);
+                    res += String.format("_z%s <= _z%s", cp--,cp++);
     		} else if(e.e1 instanceof Bool || e.e1 instanceof Int) {
                     if(e.e2 instanceof Int || e.e2 instanceof Bool) {
                         String v = newVariable(vn) ;
@@ -596,10 +596,10 @@ public class GenerateurASML implements ObjVisitor<String> {
                         v1 = newVariable(vn++) ;
                         GenerateurASML.declaration += String.format("\n\tlet %s = %s in \n\t let %s = %s in ",v,e.e1.accept(this),v1,e.e2.accept(this));
             		if(not){
-                            retour += String.format("%s >= %s", v,v1);
+                            res += String.format("%s >= %s", v,v1);
                             not = false ;
                         } else {
-                            retour += String.format("%s <= %s", v,v1);
+                            res += String.format("%s <= %s", v,v1);
                         }
             		vn++;
     			} else {
@@ -607,10 +607,10 @@ public class GenerateurASML implements ObjVisitor<String> {
                             vn++;
                             GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v,e.e1.accept(this));
                             if(not){
-                                retour += String.format("%s >= %s", v,e.e2.accept(this));
+                                res += String.format("%s >= %s", v,e.e2.accept(this));
                                 not = false ;
                             }else {
-                                retour += String.format("%s <= %s", v,e.e2.accept(this));
+                                res += String.format("%s <= %s", v,e.e2.accept(this));
                             }
     			}
     		} else if(e.e1 instanceof App || e.e2 instanceof App) {
@@ -629,21 +629,21 @@ public class GenerateurASML implements ObjVisitor<String> {
                         v2 = e.e2.accept(this);
                     }
                     if(not){
-                        retour += String.format("%s >= %s", v1,v2);
+                        res += String.format("%s >= %s", v1,v2);
                         not = false ;
                     } 
                     else {
-                        retour += String.format("%s <= %s", v1,v2);
+                        res += String.format("%s <= %s", v1,v2);
                     }
           	} else {
                     if(not){
-                        retour += String.format("%s >= %s", e.e1.accept(this),e.e2.accept(this));
+                        res += String.format("%s >= %s", e.e1.accept(this),e.e2.accept(this));
                         not = false ;
                     } else {
-                        retour += String.format("%s <= %s", e.e1.accept(this),e.e2.accept(this));   
+                        res += String.format("%s <= %s", e.e1.accept(this),e.e2.accept(this));   
                     }
     		}
-    		return retour;}
+    		return res;}
       }
 
         public String visit(If e){
@@ -739,56 +739,56 @@ public class GenerateurASML implements ObjVisitor<String> {
 
         public String visit(Let e) {
             String haut ="";
-            String retour ="";
+            String res ="";
             if(!defined){
                 
                 if((e.e1) instanceof Float)
                 {
                     GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",e.id,e.e1.accept(this));
-                    retour += String.format("let %s = _%s in \n\tlet %s = mem(%s +0) in ", e.id,e.id,newVariable(vn),e.id);
+                    res += String.format("let %s = _%s in \n\tlet %s = mem(%s +0) in ", e.id,e.id,newVariable(vn),e.id);
                     if(e.e1.inIF() || e.e1 instanceof If){
-                        retour += "\n\t";
+                        res += "\n\t";
                     }
                     if(!e.e2.inIF() && !(e.e2 instanceof App)){
-                        retour += String.format("%s \n\t ",e.e2.accept(this));
+                        res += String.format("%s \n\t ",e.e2.accept(this));
                     } else {
-                        retour += String.format("\n\t %s",e.e2.accept(this));
+                        res += String.format("\n\t %s",e.e2.accept(this));
                     }
 
 
                 } else if (e.e1 instanceof If) {
                     iff = true ; 
                     asml = e.id.id ; 
-                    retour += String.format("%s in ",e.e1.accept(this));
+                    res += String.format("%s in ",e.e1.accept(this));
                     if(!e.e2.inIF() && !(e.e2 instanceof App)){
-                        retour += String.format("%s \n\t ",e.e2.accept(this));
+                        res += String.format("%s \n\t ",e.e2.accept(this));
                     } else {
-                        retour += String.format("\n\t %s",e.e2.accept(this));
+                        res += String.format("\n\t %s",e.e2.accept(this));
                     }
                     iff = false ;
                 } else {
-                    retour += String.format("\n\tlet %s = ",e.id);
+                    res += String.format("\n\tlet %s = ",e.id);
                     if(e.e1.inIF() || e.e1 instanceof If){
-                        retour += "\n\t";
+                        res += "\n\t";
                     }
-                    retour += String.format("%s in %s ",e.e1.accept(this),e.e2.accept(this));
+                    res += String.format("%s in %s ",e.e1.accept(this),e.e2.accept(this));
                 } 
-                return retour;
+                return res;
             }
             else{
                 if(e.e1 instanceof Float){
                     GenerateurASML.declarationFloat += String.format("\nlet _%s = %s \n", e.id,e.e1.accept(this)) ;
-                    retour += String.format("let %s = _%s in \n\tlet %s = mem(%s +0) in ", e.id,e.id,newVariable(vn),e.id);
+                    res += String.format("let %s = _%s in \n\tlet %s = mem(%s +0) in ", e.id,e.id,newVariable(vn),e.id);
                     if(e.e2 instanceof Var) {
-                        retour += String.format("%s \n", e.e2.accept(this));
+                        res += String.format("%s \n", e.e2.accept(this));
                     } else {
-                        retour += String.format("\n %s", e.e2.accept(this));
+                        res += String.format("\n %s", e.e2.accept(this));
                     }
                 } else {
-                    retour += String.format("\n\tlet %s = %s in %s", e.id.id,e.e1.accept(this),e.e2.accept(this));
+                    res += String.format("\n\tlet %s = %s in %s", e.id.id,e.e1.accept(this),e.e2.accept(this));
                 } 
             }
-            return retour;
+            return res;
         }
 
 
@@ -822,44 +822,44 @@ public class GenerateurASML implements ObjVisitor<String> {
                     if(e instanceof Var){
                         t += e + " ";  
                         } else if (e instanceof Float) {
-                                String v = newVariable(vn++) ;
-                                GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,((Float)e).f);
-                                GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s +0) in",v,v,newVariable(vn),v);
-                                t += newVariable(vn++) ;
+                            String v = newVariable(vn++) ;
+                            GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v,((Float)e).f);
+                            GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in \n\tlet %s = mem(%s +0) in",v,v,newVariable(vn),v);
+                            t += newVariable(vn++) ;
                         } else if (e instanceof App || e instanceof Not || e instanceof Neg || e instanceof FNeg || e instanceof Eq ||
                                 e instanceof LE || e instanceof Add || e instanceof Sub || e instanceof FAdd || e instanceof FSub
                                  || e instanceof FMul || e instanceof FDiv ||  e instanceof If) {
-                                if(inApp) {
+                            if(inApp) {
                                 inApp = false ;
                                 txt = e.accept(this);
                                 inApp = true ;
-                        } else {
+                            } else {
                                 txt = e.accept(this);
-                        }
-                                if(inApp){
-                                        txt += String.format("in call _min_caml_%s %s ",id,t) ;
-                        t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
-                                } else if(e instanceof Eq || e instanceof LE || e instanceof Add || e instanceof Sub || e instanceof FAdd || e instanceof FSub
+                            }
+                            if(inApp){
+                                txt += String.format("in call _min_caml_%s %s ",id,t) ;
+                                t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
+                            } else if(e instanceof Eq || e instanceof LE || e instanceof Add || e instanceof Sub || e instanceof FAdd || e instanceof FSub
                                  || e instanceof FMul || e instanceof FDiv ){
-                                        opBinaire = true;
-                                        txt += String.format(" in call _min_caml_%s %s ",id,t) ;
-                                        t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
+                                opBinaire = true;
+                                txt += String.format(" in call _min_caml_%s %s ",id,t) ;
+                                t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
                                 } else if(e instanceof Not || e instanceof Neg || e instanceof FNeg) {
-                                        opBinaire = true;
-                                        String v = newVariable(vn++);
-                                        GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = call _min_caml_%s %s in ",v,txt,newVariable(vn),id,v) ;
+                                    opBinaire = true;
+                                    String v = newVariable(vn++);
+                                    GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in \n\tlet %s = call _min_caml_%s %s in ",v,txt,newVariable(vn),id,v) ;
                                 } else if (e instanceof If){
-                                        t += String.format(" in call _min_caml_%s %s ",id,t) ;
-                                        t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
+                                    t += String.format(" in call _min_caml_%s %s ",id,t) ;
+                                    t = String.format("\n\tlet %s = %s ",newVariable(vn),txt);
                                 } else { 
                         GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),txt);
                                 }
-                                t += newVariable(vn) + " ";
-                        vn++;
+                            t += newVariable(vn) + " ";
+                            vn++;
                         } else {
-                        GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.accept(this));
-                        t += newVariable(vn) + " ";
-                        vn++;
+                            GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in ",newVariable(vn),e.accept(this));
+                            t += newVariable(vn) + " ";
+                            vn++;
                         }
     		}
                 else{
@@ -897,33 +897,33 @@ public class GenerateurASML implements ObjVisitor<String> {
             String a = e.fd.e.accept(this);
             GenerateurASML.declaration += String.format ("%s",a);
             defined=false;
-            String retour = e.e.accept(this);
-            return retour;
+            String res = e.e.accept(this);
+            return res;
         }
 
         public String visit(App e){
-            String retour ="";
+            String res ="";
                     if(e.e instanceof Var && (((Var)e.e).id.id.equals("print_int") || ((Var)e.e).id.id.equals("print_float") || ((Var)e.e).id.id.equals("truncate") || ((Var)e.e).id.id.equals("print_newline") || ((Var)e.e).id.id.equals("int_of_float") || ((Var)e.e).id.id.equals("float_of_int"))){
                         for(Exp r : e.es){
                             inApp = true ;
-                            retour += printExps(e.es, " ",e.e.accept(this));
+                            res += printExps(e.es, " ",e.e.accept(this));
                         } 
                         if(((Var)e.e).id.id.equals("print_float") ){
                             String v = newVariable(vn++) ;
-                            retour += String.format("\n\tlet %s = call _min_caml_int_of_float %s in ",v,printExps(e.es, " ",e.e.accept(this)),newVariable(vn),v);
-                            retour += String.format("call _min_caml_print_int %s ",v);
+                            res += String.format("\n\tlet %s = call _min_caml_int_of_float %s in ",v,printExps(e.es, " ",e.e.accept(this)),newVariable(vn),v);
+                            res += String.format("call _min_caml_print_int %s ",v);
                         } else if(!inApp){
                             String txt = printExps(e.es, " ",e.e.accept(this));
                             if(opBinaire){
-                                retour += txt ;
+                                res += txt ;
                             } else  
-                                retour += String.format("call _min_caml_%s %s ",e.e.accept(this),txt);
+                                res += String.format("call _min_caml_%s %s ",e.e.accept(this),txt);
                         }
                     } else {
                             for(Exp r : e.es){
                             if ((!(r instanceof Var) && !(r instanceof Int) )){
                                 inApp = true ;
-                                retour += printExps(e.es, " ",e.e.accept(this));
+                                res += printExps(e.es, " ",e.e.accept(this));
                                 inApp = true ;
                             }
                             }
@@ -932,14 +932,14 @@ public class GenerateurASML implements ObjVisitor<String> {
                                 String str2 = "call";
                                 if(txt.toLowerCase().contains(str2.toLowerCase())){
                                     GenerateurASML.entryPoint += String.format("let %s = %s in",newVariable(vn),txt);
-                                    retour += String.format("call _%s %s ",newVariable(vn++),printExps(e.es, " ",e.e.accept(this)));
+                                    res += String.format("call _%s %s ",newVariable(vn++),printExps(e.es, " ",e.e.accept(this)));
                                 } else
-                                    retour += String.format("call _%s %s ",txt,printExps(e.es, " ",e.e.accept(this)));
+                                    res += String.format("call _%s %s ",txt,printExps(e.es, " ",e.e.accept(this)));
 
                             }
                             inApp = false;
                     }
-                    return retour ;
+                    return res ;
         }
 
         public String visit(Tuple e){
@@ -951,7 +951,7 @@ public class GenerateurASML implements ObjVisitor<String> {
         }
 
         public String visit(Array e){
-            String retour ="";
+            String res ="";
             String v1 = "";
             String v2 = "";
             String v =newVariable(vn++);
@@ -964,18 +964,18 @@ public class GenerateurASML implements ObjVisitor<String> {
             if(e.e2 instanceof Int){
                 v1 = newVariable(vn++);
                 GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v1,e.e2.accept(this));
-                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } else if (e.e2 instanceof Var){
                 v1 = e.e2.accept(this);
-                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } else if (e.e2 instanceof Float){
                 v1 = newVariable(vn++);
                 String v3 = newVariable(vn++);
                 GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in\n\tlet %s = mem(%s + 0) in",v1,v1,v3,v1);
                 GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v1,e.e2.accept(this));
-                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                res += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } 
-            return retour;
+            return res;
         }
 
         public String visit(Get e){
