@@ -813,7 +813,7 @@ public class GenerateurASML implements ObjVisitor<String> {
 
         }
 
-        // print sequence of Exp
+        // print sequence d'Exp
         public String printExps(List<Exp> l, String op,String id) {
             String t ="";
             String txt="";
@@ -904,37 +904,36 @@ public class GenerateurASML implements ObjVisitor<String> {
         public String visit(App e){
             String retour ="";
                     if(e.e instanceof Var && (((Var)e.e).id.id.equals("print_int") || ((Var)e.e).id.id.equals("print_float") || ((Var)e.e).id.id.equals("truncate") || ((Var)e.e).id.id.equals("print_newline") || ((Var)e.e).id.id.equals("int_of_float") || ((Var)e.e).id.id.equals("float_of_int"))){
-                            for(Exp r : e.es){
+                        for(Exp r : e.es){
                             inApp = true ;
                             retour += printExps(e.es, " ",e.e.accept(this));
-
-                    } 
-                            if(((Var)e.e).id.id.equals("print_float") ){
-                                    String v = newVariable(vn++) ;
+                        } 
+                        if(((Var)e.e).id.id.equals("print_float") ){
+                            String v = newVariable(vn++) ;
                             retour += String.format("\n\tlet %s = call _min_caml_int_of_float %s in ",v,printExps(e.es, " ",e.e.accept(this)),newVariable(vn),v);
                             retour += String.format("call _min_caml_print_int %s ",v);
-                            } else if(!inApp){
+                        } else if(!inApp){
                             String txt = printExps(e.es, " ",e.e.accept(this));
                             if(opBinaire){
-                                    retour += txt ;
-                            } else
-                            retour += String.format("call _min_caml_%s %s ",e.e.accept(this),txt);
-                            }
+                                retour += txt ;
+                            } else  
+                                retour += String.format("call _min_caml_%s %s ",e.e.accept(this),txt);
+                        }
                     } else {
                             for(Exp r : e.es){
                             if ((!(r instanceof Var) && !(r instanceof Int) )){
-                                    inApp = true ;
-                                    retour += printExps(e.es, " ",e.e.accept(this));
-                                    inApp = true ;
+                                inApp = true ;
+                                retour += printExps(e.es, " ",e.e.accept(this));
+                                inApp = true ;
                             }
                             }
                             if(!inApp) {
-                                    String txt = e.e.accept(this);
-                                    String str2 = "call";
-                                    if(txt.toLowerCase().contains(str2.toLowerCase())){
-                                            GenerateurASML.entryPoint += String.format("let %s = %s in",newVariable(vn),txt);
+                                String txt = e.e.accept(this);
+                                String str2 = "call";
+                                if(txt.toLowerCase().contains(str2.toLowerCase())){
+                                    GenerateurASML.entryPoint += String.format("let %s = %s in",newVariable(vn),txt);
                                     retour += String.format("call _%s %s ",newVariable(vn++),printExps(e.es, " ",e.e.accept(this)));
-                                    } else
+                                } else
                                     retour += String.format("call _%s %s ",txt,printExps(e.es, " ",e.e.accept(this)));
 
                             }
@@ -957,24 +956,24 @@ public class GenerateurASML implements ObjVisitor<String> {
             String v2 = "";
             String v =newVariable(vn++);
             if(e.e1 instanceof Int){
-                            v2 = newVariable(vn++);
-                            GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v2,e.e1.accept(this));
+                v2 = newVariable(vn++);
+                GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v2,e.e1.accept(this));
             } else if (e.e1 instanceof Var){
-                            v2 = e.e1.accept(this);
+                v2 = e.e1.accept(this);
             } 
             if(e.e2 instanceof Int){
-                            v1 = newVariable(vn++);
-                            GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v1,e.e2.accept(this));
-                    retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                v1 = newVariable(vn++);
+                GenerateurASML.entryPoint += String.format("\n\tlet %s = %s in",v1,e.e2.accept(this));
+                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } else if (e.e2 instanceof Var){
-                            v1 = e.e2.accept(this);
-                    retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                v1 = e.e2.accept(this);
+                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } else if (e.e2 instanceof Float){
-                            v1 = newVariable(vn++);
-                            String v3 = newVariable(vn++);
-                            GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in\n\tlet %s = mem(%s + 0) in",v1,v1,v3,v1);
-                            GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v1,e.e2.accept(this));
-                    retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
+                v1 = newVariable(vn++);
+                String v3 = newVariable(vn++);
+                GenerateurASML.entryPoint += String.format("\n\tlet %s = _%s in\n\tlet %s = mem(%s + 0) in",v1,v1,v3,v1);
+                GenerateurASML.declarationFloat += String.format("\nlet _%s = %s",v1,e.e2.accept(this));
+                retour += String.format(" call _min_caml_create_float_array %s %s",v,v2,v1);
             } 
             return retour;
         }
