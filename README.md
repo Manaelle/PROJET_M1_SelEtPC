@@ -2,13 +2,13 @@
 
 ## Membres du groupe
 
-* Guillaume CAILHE : Front-end
-* Nadia BENMOUSSA : Front-end
-* Faris BOULAKHSOUMI : Front-end + test
-* Florian ARGAUD : Front-end + test
+* Guillaume CAILHE : Front-end (A-CONV)
+* Nadia BENMOUSSA : Typechecking + Front-end (LET-RED)
+* Faris BOULAKHSOUMI : Typechecking + Front-end (ASML)
+* Florian ARGAUD : Front-end (KNORM)
 
 * Fabien LEFEBVRE : Back-end
-* Manal BENAISSA : Back-end
+* Manal BENAISSA : Tests + typechecking + secrétariat
 
 ## Installation (avec Netbeans)
 
