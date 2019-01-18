@@ -29,6 +29,36 @@
 - faire un make sur la console (éventuellement donner les droits : chmod +x jflex/bin/jflex)
 - fini !
 
+
+## Compilation
+
+Exécuter make dans le dossier java/
+
+> cd java/
+> make
+
+## Exécution
+
+Script permettant les tests en série (les instructions suivantes sont donnés à l'exécution du script) :
+
+> ./scripts/mincaml-test.sh
+
+Exécution manuelle :
+
+> ./java/mincamlc [-OPTION] [FICHIER A CONVERTIR]
+
+Les options sont les mêmes que ceux du script. (Si il n'y a pas d'option, toutes les étapes seront exécutées) :
+
+> -p : test de la syntaxe (parsing).
+> -t : test du typage.
+> -kn : test de la K-normalisation.
+> -ac : test pour A-conversion.
+> -lr : test pour Let-reduction.
+> -asml : test de conversion en fichier .asml.
+> -o : test de conversion en fichier .s (assembleur).
+
+Les fichiers tests sont dans les dossiers valid/ ou invalid/ situés dans tests/.
+
 ## Test
 ### Liste de ce qu'il faut tester
 #### Constantes
