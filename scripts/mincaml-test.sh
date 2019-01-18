@@ -149,7 +149,7 @@ do
 							rm test.txt
 							;;
 "-ac" | "ac")   echo '\n----------------TEST A-CONV ------------------'
-							printf "\n \033[90m TEST DE LA K-NORMALISTION [CAS VALIDE]: \033[0m \n"
+							printf "\n \033[90m TEST DE LA KA-CONVERSION [CAS VALIDE]: \033[0m \n"
 
 							#vérification de la différence entre fichier.ml et fichier.knorm.ml 
 							for test_case in tests/aconv/valid/*.ml

@@ -1,0 +1,21 @@
+let _succ x1 = 
+	
+	let v3 = x1 in 
+	let v4 = 1 in add v3 v4 
+let _double x2 = 
+	
+	let v5 = 2 in 
+	let v6 = x2 in fmul v5 v6
+let _ = 
+	
+	let x = 
+	
+	let y = 
+	
+	let v1 = 1 in 
+	let v2 = 2 in add v1 v2   in y  in 
+	let v7 = 
+	
+	let v8 = 
+	
+	let v9 = x in call _double Var@60e53b93    in call _succ Var@5e2de80c    in Var@1d44bcfa

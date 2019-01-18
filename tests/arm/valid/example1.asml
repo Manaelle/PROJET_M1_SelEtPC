@@ -1,0 +1,6 @@
+let _f.3 x.4 =
+   x.4
+let _ = 
+   let ti1.6 = 1 in
+   let ti2.5 = call _f.3 ti1.6 in
+   call _min_caml_print_int ti2.5

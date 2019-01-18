@@ -1,0 +1,12 @@
+let _first.5 x.6 =
+   let u.11 = mem(x.6 + 0) in
+   u.11
+let _ = 
+   let ti1.9 = 2 in
+   let ti2.10 = 3 in
+   let t.13 = new 8 in
+   let tu15 = mem(t.13 + 4) <- ti2.10 in
+   let tu14 = mem(t.13 + 0) <- ti1.9 in
+   let tt3.8 = t.13 in
+   let ti4.7 = call _first.5 tt3.8 in
+   call _min_caml_print_int ti4.7
