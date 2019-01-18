@@ -1,0 +1,13 @@
+
+let _sum x = 
+	
+	let v0 = sub x 1 in 
+	if x <= 0 then ( 
+		0 
+	)else(
+		 add v0 x 
+	)
+let _ = 
+	
+	let v1 = 10000 in 
+	let v2 = call _sum v1  in call _min_caml_print_int   v2 
