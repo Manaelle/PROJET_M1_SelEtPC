@@ -12,42 +12,34 @@ chmod +x $MINCAMLC
 
 # TODO extends this script to run test in subdirectories
 # 
-echo '\n------------------ TEST ----------------------'
-echo 'Bienvenue à la phase de test. Pour commencer, selectionner le mode :'
-echo "-h : affichage de l'aide"
-echo "-v : affichage de la version.\n "
 
-echo "-p : test de la syntaxe (parsing)."
-echo "-t : test du typage. \n"
+echo 'Bienvenue à la phase de test.'
 
-echo "-kn : test de la K-normalisation."
-echo "-ac : test pour A-conversion."
-echo "-lr : test pour Let-reduction. \n"
+messageAide="\n------------------ TEST ----------------------\n
+Voici les modes disponibles :\n
+echo -h : affichage de l'aide\n
+echo -v : affichage de la version.\n 
 
-echo "-asml : test de conversion en fichier .asml."
-echo "-o : test de conversion en fichier .s (assembleur). \n"
+echo -p : test de la syntaxe (parsing).\n
+echo -t : test du typage. \n\n
 
-echo "-q : quitter"
+echo -kn : test de la K-normalisation.\n
+echo -ac : test pour A-conversion.\n
+echo -lr : test pour Let-reduction. \n\n
+
+echo -asml : test de conversion en fichier .asml.\n
+echo -o : test de conversion en fichier .s (assembleur). \n\n
+
+echo -q : quitter\n"
+
+echo $messageAide
 
 read mode
 
 while [ "$mode" != "q" ] && [ "$mode" != "-q" ]
 do
 	case $mode in 
-	"-h" | "h") echo '\n------------------ AIDE ----------------------'
-							echo "-h : affichage de l'aide"
-							echo "-v : affichage de la version."
-
-							echo "-p : test de la syntaxe (parsing)."
-							echo "-t : test du typage."
-							
-							echo "-kn : test de la K-normalisation."
-							echo "-ar : test pour A-conversion."
-							echo "-br : test pour B-reduction."
-							echo "-br : test pour Let-reduction."
-
-							echo "-asml : test de conversion en fichier .asml."
-							echo "-o : test de conversion en fichier .s (assembleur)."
+	"-h" | "h") echo $messageAide
 							;;
 			
 	"-v" | "v") echo "1.0.0"
