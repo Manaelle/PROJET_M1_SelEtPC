@@ -35,6 +35,7 @@
 Exécuter make dans le dossier java/
 
 > cd java/
+
 > make
 
 ## Exécution
@@ -50,11 +51,17 @@ Exécution manuelle :
 Les options sont les mêmes que ceux du script. (Si il n'y a pas d'option, toutes les étapes seront exécutées) :
 
 > -p : test de la syntaxe (parsing).
+
 > -t : test du typage.
+
 > -kn : test de la K-normalisation.
+
 > -ac : test pour A-conversion.
+
 > -lr : test pour Let-reduction.
+
 > -asml : test de conversion en fichier .asml.
+
 > -o : test de conversion en fichier .s (assembleur).
 
 Les fichiers tests sont dans les dossiers valid/ ou invalid/ situés dans tests/.
